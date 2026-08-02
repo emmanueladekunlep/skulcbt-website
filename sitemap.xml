@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+
+    <!-- ====== MAIN PAGES ====== -->
+    
+    <url>
+        <loc>https://skulcbt.plccglobal.com/</loc>
+        <lastmod>2025-01-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+        <image:image>
+            <image:loc>https://skulcbt.plccglobal.com/images/og-image.jpg</image:loc>
+            <image:title>SkulCBT - Nigeria's #1 Offline-First School Platform</image:title>
+        </image:image>
+    </url>
+
+    <url>
+        <loc>https://skulcbt.plccglobal.com/features.html</loc>
+        <lastmod>2025-01-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+        <image:image>
+            <image:loc>https://skulcbt.plccglobal.com/images/feature-cbt.jpg</image:loc>
+            <image:title>SkulCBT CBT Exam Hosting Feature</image:title>
+        </image:image>
+    </url>
+
+    <url>
+        <loc>https://skulcbt.plccglobal.com/pricing.html</loc>
+        <lastmod>2025-01-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://skulcbt.plccglobal.com/about.html</loc>
+        <lastmod>2025-01-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://skulcbt.plccglobal.com/contact.html</loc>
+        <lastmod>2025-01-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://skulcbt.plccglobal.com/blog.html</loc>
+        <lastmod>2025-01-01</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://skulcbt.plccglobal.com/demo-request.html</loc>
+        <lastmod>2025-01-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://skulcbt.plccglobal.com/thank-you.html</loc>
+        <lastmod>2025-01-01</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+
+    <!-- ====== BLOG POSTS ====== -->
+
+    <url>
+        <loc>https://skulcbt.plccglobal.com/blog/post-1.html</loc>
+        <lastmod>2025-01-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+        <image:image>
+            <image:loc>https://skulcbt.plccglobal.com/images/blog-post-1.jpg</image:loc>
+            <image:title>Complete Guide to SkulCBT Fee Management System</image:title>
+        </image:image>
+    </url>
+
+    <url>
+        <loc>https://skulcbt.plccglobal.com/blog/post-2.html</loc>
+        <lastmod>2025-01-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+        <image:image>
+            <image:loc>https://skulcbt.plccglobal.com/images/blog-post-2.jpg</image:loc>
+            <image:title>How to Conduct CBT Exams Without a Computer Lab</image:title>
+        </image:image>
+    </url>
+
+    <url>
+        <loc>https://skulcbt.plccglobal.com/blog/post-3.html</loc>
+        <lastmod>2025-01-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+        <image:image>
+            <image:loc>https://skulcbt.plccglobal.com/images/blog-post-3.jpg</image:loc>
+            <image:title>How to Create Professional Report Cards in Minutes</image:title>
+        </image:image>
+    </url>
+
+</urlset>

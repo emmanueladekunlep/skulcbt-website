@@ -1,0 +1,24 @@
+# ====== SKULCBT - ROBOTS.TXT ======
+# Nigeria's #1 Offline-First School Platform
+
+User-agent: *
+Allow: /
+
+# Allow all search engines to crawl everything
+# No restrictions needed for this marketing site
+
+# Sitemap location
+Sitemap: https://skulcbt.plccglobal.com/sitemap.xml
+
+# Crawl delay to be respectful of server resources
+Crawl-delay: 1
+
+# Block unwanted bots (optional)
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
