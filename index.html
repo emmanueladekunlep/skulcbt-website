@@ -114,15 +114,16 @@
 </header>
 
 <!-- ====== HERO SECTION ====== -->
-<section class="hero-section relative overflow-hidden">
+<!-- ====== HERO SECTION ====== -->
+<section class="hero-section relative overflow-hidden min-h-screen flex items-center">
     <!-- Hero Background Image -->
-    <div class="hero-bg absolute inset-0 z-0" style="background-image: url('images/hero-bg.jpg'); background-size: cover; background-position: center;"></div>
-    <!-- Overlay -->
-    <div class="absolute inset-0 bg-[#1a237e] bg-opacity-85 z-10"></div>
+    <div class="absolute inset-0 z-0">
+        <img src="images/hero-bg.jpg" alt="SkulCBT - Nigerian school management platform" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-r from-[#1a237e]/90 to-[#0d1442]/85 z-10"></div>
+    </div>
     
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 relative z-20">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <!-- Left Content -->
             <div>
                 <div class="inline-flex items-center space-x-2 bg-[#008751] bg-opacity-20 text-[#f9a825] px-4 py-2 rounded-full mb-6">
                     <span class="w-2 h-2 bg-[#f9a825] rounded-full animate-pulse"></span>
@@ -139,7 +140,6 @@
                     One-time payment. No subscriptions.
                 </p>
                 
-                <!-- Key Stats -->
                 <div class="flex flex-wrap gap-6 mb-8">
                     <div>
                         <div class="text-2xl font-bold text-[#f9a825]">100+</div>
@@ -155,14 +155,12 @@
                     </div>
                 </div>
                 
-                <!-- CTA Buttons -->
                 <div class="flex flex-wrap gap-4">
                     <a href="demo-request.html" class="btn-primary-large">Get Started Now</a>
                     <a href="features.html" class="btn-secondary-large">Explore Features</a>
                 </div>
             </div>
             
-            <!-- Right Content - Feature Highlights -->
             <div class="grid grid-cols-2 gap-4">
                 <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6 text-center border border-white border-opacity-20">
                     <div class="text-4xl mb-3">📱</div>
