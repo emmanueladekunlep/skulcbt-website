@@ -85,31 +85,6 @@
         }
     }
     </script>
-
-    <!-- Blog Post Schema -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "ItemList",
-        "itemListElement": [
-            {
-                "@type": "ListItem",
-                "position": 1,
-                "url": "https://skulcbt.plccglobal.com/blog/post-1.html"
-            },
-            {
-                "@type": "ListItem",
-                "position": 2,
-                "url": "https://skulcbt.plccglobal.com/blog/post-2.html"
-            },
-            {
-                "@type": "ListItem",
-                "position": 3,
-                "url": "https://skulcbt.plccglobal.com/blog/post-3.html"
-            }
-        ]
-    }
-    </script>
 </head>
 <body>
 
@@ -163,78 +138,455 @@
     </div>
 </section>
 
-<!-- ====== BLOG POSTS ====== -->
-<section class="py-16 md:py-24 bg-white">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- ====== FILTER / CATEGORY TABS ====== -->
+<section class="py-6 bg-white border-b border-gray-200">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-wrap gap-2 justify-center">
+            <button class="filter-btn active px-4 py-2 rounded-full text-sm font-semibold bg-champagne text-navy" data-category="all">All Posts</button>
+            <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-champagne/20 transition-colors" data-category="timetable">Timetable</button>
+            <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-champagne/20 transition-colors" data-category="cbt">CBT Exams</button>
+            <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-champagne/20 transition-colors" data-category="report-cards">Report Cards</button>
+            <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-champagne/20 transition-colors" data-category="fees">Fees</button>
+            <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-champagne/20 transition-colors" data-category="assessment">Assessment</button>
+            <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-champagne/20 transition-colors" data-category="management">Management</button>
+            <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-champagne/20 transition-colors" data-category="analytics">Analytics</button>
+            <button class="filter-btn px-4 py-2 rounded-full text-sm font-semibold bg-gray-100 text-gray-600 hover:bg-champagne/20 transition-colors" data-category="ai">AI</button>
+        </div>
+    </div>
+</section>
 
-            <!-- Blog Post 1: AI Timetable Generator -->
-            <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-shadow hover:border-champagne/30">
-                <a href="blog/post-1.html">
-                    <img src="images/blog-post-1.jpg" alt="AI Timetable Generator - Automate School Scheduling in Minutes" class="w-full h-56 object-cover">
+<!-- ====== BLOG POSTS ====== -->
+<section class="py-16 md:py-24 bg-alabaster">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="blog-grid">
+
+            <!-- Post 1: Why Manual Timetables Fail -->
+            <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-all hover:border-champagne/30" data-category="timetable">
+                <a href="blog/why-manual-timetables-fail-nigerian-schools.html">
+                    <img src="images/blog-timetable.jpg" alt="Why Manual Timetables Fail Nigerian Schools" class="w-full h-56 object-cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%230D6841%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%22200%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23D4AF37%22 font-size=%2224%22 font-family=%22Inter%22%3ETimetable%3C/text%3E%3C/svg%3E'">
                 </a>
                 <div class="p-6">
                     <div class="flex items-center space-x-2 text-sm text-gray-500 mb-3">
-                        <span class="bg-champagne/20 text-champagne px-3 py-1 rounded-full text-xs font-semibold">AI Feature</span>
-                        <span>12 min read</span>
+                        <span class="bg-champagne/20 text-champagne px-3 py-1 rounded-full text-xs font-semibold">Timetable</span>
+                        <span>8 min read</span>
                     </div>
-                    <a href="blog/post-1.html" class="block">
+                    <a href="blog/why-manual-timetables-fail-nigerian-schools.html" class="block">
                         <h2 class="text-xl font-bold text-navy hover:text-champagne transition-colors mb-2">
-                            AI Timetable Generator - Automate School Scheduling in Minutes
+                            Why Manual Timetables Fail Nigerian Schools
                         </h2>
                     </a>
                     <p class="text-gray-600 text-sm mb-4">
-                        Discover how SkulCBT's AI Timetable Generator creates clash-free timetables in seconds. Say goodbye to hours of manual scheduling with teacher constraints and subject requirements.
+                        Discover why manual timetables fail and how AI generates clash-free timetables in 1.4 seconds. Save 20 hours per term.
                     </p>
-                    <a href="blog/post-1.html" class="text-champagne font-semibold hover:text-navy transition-colors text-sm">
+                    <a href="blog/why-manual-timetables-fail-nigerian-schools.html" class="text-champagne font-semibold hover:text-navy transition-colors text-sm">
                         Read More →
                     </a>
                 </div>
             </article>
 
-            <!-- Blog Post 2: Weekly Assessment & Champion of the Week -->
-            <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-shadow hover:border-champagne/30">
-                <a href="blog/post-2.html">
-                    <img src="images/blog-post-2.jpg" alt="Weekly Assessment and Champion of the Week Feature Guide" class="w-full h-56 object-cover">
+            <!-- Post 2: Stop Subscription Software -->
+            <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-all hover:border-champagne/30" data-category="management">
+                <a href="blog/stop-subscription-school-software-one-time-payment.html">
+                    <img src="images/blog-subscription.jpg" alt="Stop Subscription Software - One-Time Payment" class="w-full h-56 object-cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%230D6841%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%22200%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23D4AF37%22 font-size=%2224%22 font-family=%22Inter%22%3EPricing%3C/text%3E%3C/svg%3E'">
+                </a>
+                <div class="p-6">
+                    <div class="flex items-center space-x-2 text-sm text-gray-500 mb-3">
+                        <span class="bg-champagne/20 text-champagne px-3 py-1 rounded-full text-xs font-semibold">Management</span>
+                        <span>6 min read</span>
+                    </div>
+                    <a href="blog/stop-subscription-school-software-one-time-payment.html" class="block">
+                        <h2 class="text-xl font-bold text-navy hover:text-champagne transition-colors mb-2">
+                            Stop Subscription Software: One-Time Payment Explained
+                        </h2>
+                    </a>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Why Nigerian schools should choose one-time payment over subscription. Save money and get lifetime updates.
+                    </p>
+                    <a href="blog/stop-subscription-school-software-one-time-payment.html" class="text-champagne font-semibold hover:text-navy transition-colors text-sm">
+                        Read More →
+                    </a>
+                </div>
+            </article>
+
+            <!-- Post 3: Host CBT Exams on Phone -->
+            <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-all hover:border-champagne/30" data-category="cbt">
+                <a href="blog/how-to-host-cbt-exams-from-phone-no-computer-lab.html">
+                    <img src="images/blog-cbt-phone.jpg" alt="Host CBT Exams on Phone - No Computer Lab" class="w-full h-56 object-cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%230D6841%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%22200%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23D4AF37%22 font-size=%2224%22 font-family=%22Inter%22%3ECBT%3C/text%3E%3C/svg%3E'">
+                </a>
+                <div class="p-6">
+                    <div class="flex items-center space-x-2 text-sm text-gray-500 mb-3">
+                        <span class="bg-champagne/20 text-champagne px-3 py-1 rounded-full text-xs font-semibold">CBT Exams</span>
+                        <span>10 min read</span>
+                    </div>
+                    <a href="blog/how-to-host-cbt-exams-from-phone-no-computer-lab.html" class="block">
+                        <h2 class="text-xl font-bold text-navy hover:text-champagne transition-colors mb-2">
+                            How to Host CBT Exams from Your Phone
+                        </h2>
+                    </a>
+                    <p class="text-gray-600 text-sm mb-4">
+                        No computer lab? No problem. Host CBT exams directly from your phone. Students join on any device. 100% offline.
+                    </p>
+                    <a href="blog/how-to-host-cbt-exams-from-phone-no-computer-lab.html" class="text-champagne font-semibold hover:text-navy transition-colors text-sm">
+                        Read More →
+                    </a>
+                </div>
+            </article>
+
+            <!-- Post 4: Automated Report Cards -->
+            <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-all hover:border-champagne/30" data-category="report-cards">
+                <a href="blog/automated-report-cards-ai-comments-save-10-hours.html">
+                    <img src="images/blog-report-cards.jpg" alt="Automated Report Cards with AI Comments" class="w-full h-56 object-cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%230D6841%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%22200%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23D4AF37%22 font-size=%2224%22 font-family=%22Inter%22%3EReport Cards%3C/text%3E%3C/svg%3E'">
+                </a>
+                <div class="p-6">
+                    <div class="flex items-center space-x-2 text-sm text-gray-500 mb-3">
+                        <span class="bg-champagne/20 text-champagne px-3 py-1 rounded-full text-xs font-semibold">Report Cards</span>
+                        <span>7 min read</span>
+                    </div>
+                    <a href="blog/automated-report-cards-ai-comments-save-10-hours.html" class="block">
+                        <h2 class="text-xl font-bold text-navy hover:text-champagne transition-colors mb-2">
+                            Automated Report Cards with AI Comments
+                        </h2>
+                    </a>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Generate professional report cards with AI-powered teacher and principal comments. Save 10 hours per term.
+                    </p>
+                    <a href="blog/automated-report-cards-ai-comments-save-10-hours.html" class="text-champagne font-semibold hover:text-navy transition-colors text-sm">
+                        Read More →
+                    </a>
+                </div>
+            </article>
+
+            <!-- Post 5: Fee Management -->
+            <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-all hover:border-champagne/30" data-category="fees">
+                <a href="blog/school-fee-management-track-payments-receipts.html">
+                    <img src="images/blog-fees.jpg" alt="School Fee Management - Track Payments & Receipts" class="w-full h-56 object-cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%230D6841%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%22200%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23D4AF37%22 font-size=%2224%22 font-family=%22Inter%22%3EFees%3C/text%3E%3C/svg%3E'">
+                </a>
+                <div class="p-6">
+                    <div class="flex items-center space-x-2 text-sm text-gray-500 mb-3">
+                        <span class="bg-champagne/20 text-champagne px-3 py-1 rounded-full text-xs font-semibold">Fees</span>
+                        <span>9 min read</span>
+                    </div>
+                    <a href="blog/school-fee-management-track-payments-receipts.html" class="block">
+                        <h2 class="text-xl font-bold text-navy hover:text-champagne transition-colors mb-2">
+                            School Fee Management: Track Payments & Receipts
+                        </h2>
+                    </a>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Professional PDF receipts with auto-balance tracking. Previous balance, new balance, all automatically calculated.
+                    </p>
+                    <a href="blog/school-fee-management-track-payments-receipts.html" class="text-champagne font-semibold hover:text-navy transition-colors text-sm">
+                        Read More →
+                    </a>
+                </div>
+            </article>
+
+            <!-- Post 6: Weekly Assessment -->
+            <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-all hover:border-champagne/30" data-category="assessment">
+                <a href="blog/weekly-assessment-identify-best-students-every-week.html">
+                    <img src="images/blog-weekly-assessment.jpg" alt="Weekly Assessment - Champion of the Week" class="w-full h-56 object-cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%230D6841%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%22200%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23D4AF37%22 font-size=%2224%22 font-family=%22Inter%22%3EAssessment%3C/text%3E%3C/svg%3E'">
                 </a>
                 <div class="p-6">
                     <div class="flex items-center space-x-2 text-sm text-gray-500 mb-3">
                         <span class="bg-champagne/20 text-champagne px-3 py-1 rounded-full text-xs font-semibold">Assessment</span>
-                        <span>10 min read</span>
+                        <span>8 min read</span>
                     </div>
-                    <a href="blog/post-2.html" class="block">
+                    <a href="blog/weekly-assessment-identify-best-students-every-week.html" class="block">
                         <h2 class="text-xl font-bold text-navy hover:text-champagne transition-colors mb-2">
-                            Weekly Assessment & Champion of the Week - Student Excellence
+                            Weekly Assessment & Champion of the Week
                         </h2>
                     </a>
                     <p class="text-gray-600 text-sm mb-4">
-                        Learn how SkulCBT's Weekly Assessment automatically identifies the Champion of the Week, top 3 students, best performing subjects, and provides detailed analytics for primary schools.
+                        Identify the best students every week. Track performance, see top 3 students, best and poorest performing subjects.
                     </p>
-                    <a href="blog/post-2.html" class="text-champagne font-semibold hover:text-navy transition-colors text-sm">
+                    <a href="blog/weekly-assessment-identify-best-students-every-week.html" class="text-champagne font-semibold hover:text-navy transition-colors text-sm">
                         Read More →
                     </a>
                 </div>
             </article>
 
-            <!-- Blog Post 3: Student Transcript -->
-            <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-shadow hover:border-champagne/30">
-                <a href="blog/post-3.html">
-                    <img src="images/blog-post-3.jpg" alt="Student Transcript - Complete Academic History Tracking" class="w-full h-56 object-cover">
+            <!-- Post 7: Student Transcript -->
+            <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-all hover:border-champagne/30" data-category="management">
+                <a href="blog/student-transcript-academic-history-tracking.html">
+                    <img src="images/blog-transcript.jpg" alt="Student Transcript - Academic History Tracking" class="w-full h-56 object-cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%230D6841%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%22200%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23D4AF37%22 font-size=%2224%22 font-family=%22Inter%22%3ETranscript%3C/text%3E%3C/svg%3E'">
                 </a>
                 <div class="p-6">
                     <div class="flex items-center space-x-2 text-sm text-gray-500 mb-3">
-                        <span class="bg-champagne/20 text-champagne px-3 py-1 rounded-full text-xs font-semibold">Transcript</span>
-                        <span>8 min read</span>
+                        <span class="bg-champagne/20 text-champagne px-3 py-1 rounded-full text-xs font-semibold">Management</span>
+                        <span>6 min read</span>
                     </div>
-                    <a href="blog/post-3.html" class="block">
+                    <a href="blog/student-transcript-academic-history-tracking.html" class="block">
                         <h2 class="text-xl font-bold text-navy hover:text-champagne transition-colors mb-2">
-                            Student Transcript - Complete Academic History Tracking
+                            Student Transcript - Complete Academic History
                         </h2>
                     </a>
                     <p class="text-gray-600 text-sm mb-4">
-                        Learn how SkulCBT's Student Transcript provides a complete academic history across all terms, with per subject scores, term averages, cumulative performance, and PDF export.
+                        Complete academic history across all terms. Per subject scores, term averages, cumulative performance, and PDF export.
                     </p>
-                    <a href="blog/post-3.html" class="text-champagne font-semibold hover:text-navy transition-colors text-sm">
+                    <a href="blog/student-transcript-academic-history-tracking.html" class="text-champagne font-semibold hover:text-navy transition-colors text-sm">
+                        Read More →
+                    </a>
+                </div>
+            </article>
+
+            <!-- Post 8: Offline-First Software -->
+            <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-all hover:border-champagne/30" data-category="management">
+                <a href="blog/why-offline-first-school-software-critical-nigeria.html">
+                    <img src="images/blog-offline.jpg" alt="Why Offline-First School Software is Critical for Nigeria" class="w-full h-56 object-cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%230D6841%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%22200%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23D4AF37%22 font-size=%2224%22 font-family=%22Inter%22%3EOffline%3C/text%3E%3C/svg%3E'">
+                </a>
+                <div class="p-6">
+                    <div class="flex items-center space-x-2 text-sm text-gray-500 mb-3">
+                        <span class="bg-champagne/20 text-champagne px-3 py-1 rounded-full text-xs font-semibold">Management</span>
+                        <span>5 min read</span>
+                    </div>
+                    <a href="blog/why-offline-first-school-software-critical-nigeria.html" class="block">
+                        <h2 class="text-xl font-bold text-navy hover:text-champagne transition-colors mb-2">
+                            Why Offline-First Software is Critical for Nigeria
+                        </h2>
+                    </a>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Every feature works offline. Built specifically for Nigerian schools where internet is unreliable.
+                    </p>
+                    <a href="blog/why-offline-first-school-software-critical-nigeria.html" class="text-champagne font-semibold hover:text-navy transition-colors text-sm">
+                        Read More →
+                    </a>
+                </div>
+            </article>
+
+            <!-- Post 9: Import Exam Questions -->
+            <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-all hover:border-champagne/30" data-category="cbt">
+                <a href="blog/how-to-import-exam-questions-word-pdf-one-click.html">
+                    <img src="images/blog-import.jpg" alt="Import Exam Questions from Word/PDF" class="w-full h-56 object-cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%230D6841%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%22200%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23D4AF37%22 font-size=%2224%22 font-family=%22Inter%22%3EImport%3C/text%3E%3C/svg%3E'">
+                </a>
+                <div class="p-6">
+                    <div class="flex items-center space-x-2 text-sm text-gray-500 mb-3">
+                        <span class="bg-champagne/20 text-champagne px-3 py-1 rounded-full text-xs font-semibold">CBT Exams</span>
+                        <span>6 min read</span>
+                    </div>
+                    <a href="blog/how-to-import-exam-questions-word-pdf-one-click.html" class="block">
+                        <h2 class="text-xl font-bold text-navy hover:text-champagne transition-colors mb-2">
+                            How to Import Exam Questions from Word/PDF
+                        </h2>
+                    </a>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Upload from Word, PDF, or TXT - auto-detects question types. Save hours of manual data entry.
+                    </p>
+                    <a href="blog/how-to-import-exam-questions-word-pdf-one-click.html" class="text-champagne font-semibold hover:text-navy transition-colors text-sm">
+                        Read More →
+                    </a>
+                </div>
+            </article>
+
+            <!-- Post 10: Parent Portal -->
+            <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-all hover:border-champagne/30" data-category="management">
+                <a href="blog/parent-portal-keep-parents-informed-real-time.html">
+                    <img src="images/blog-parent-portal.jpg" alt="Parent Portal - Keep Parents Informed" class="w-full h-56 object-cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%230D6841%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%22200%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23D4AF37%22 font-size=%2224%22 font-family=%22Inter%22%3EParents%3C/text%3E%3C/svg%3E'">
+                </a>
+                <div class="p-6">
+                    <div class="flex items-center space-x-2 text-sm text-gray-500 mb-3">
+                        <span class="bg-champagne/20 text-champagne px-3 py-1 rounded-full text-xs font-semibold">Management</span>
+                        <span>7 min read</span>
+                    </div>
+                    <a href="blog/parent-portal-keep-parents-informed-real-time.html" class="block">
+                        <h2 class="text-xl font-bold text-navy hover:text-champagne transition-colors mb-2">
+                            Parent Portal - Keep Parents Informed in Real-Time
+                        </h2>
+                    </a>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Parents access results, fees, report cards, and newsletters in real-time. Better communication, better engagement.
+                    </p>
+                    <a href="blog/parent-portal-keep-parents-informed-real-time.html" class="text-champagne font-semibold hover:text-navy transition-colors text-sm">
+                        Read More →
+                    </a>
+                </div>
+            </article>
+
+            <!-- Post 11: Staff Payroll -->
+            <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-all hover:border-champagne/30" data-category="management">
+                <a href="blog/staff-payroll-software-manage-salaries-offline.html">
+                    <img src="images/blog-payroll.jpg" alt="Staff Payroll - Manage Salaries Offline" class="w-full h-56 object-cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%230D6841%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%22200%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23D4AF37%22 font-size=%2224%22 font-family=%22Inter%22%3EPayroll%3C/text%3E%3C/svg%3E'">
+                </a>
+                <div class="p-6">
+                    <div class="flex items-center space-x-2 text-sm text-gray-500 mb-3">
+                        <span class="bg-champagne/20 text-champagne px-3 py-1 rounded-full text-xs font-semibold">Management</span>
+                        <span>8 min read</span>
+                    </div>
+                    <a href="blog/staff-payroll-software-manage-salaries-offline.html" class="block">
+                        <h2 class="text-xl font-bold text-navy hover:text-champagne transition-colors mb-2">
+                            Staff Payroll - Manage Salaries Offline
+                        </h2>
+                    </a>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Add payroll records with earnings and deductions. Net pay auto-calculates. View payroll history with stats summary.
+                    </p>
+                    <a href="blog/staff-payroll-software-manage-salaries-offline.html" class="text-champagne font-semibold hover:text-navy transition-colors text-sm">
+                        Read More →
+                    </a>
+                </div>
+            </article>
+
+            <!-- Post 12: Library Management -->
+            <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-all hover:border-champagne/30" data-category="management">
+                <a href="blog/library-management-software-nigeria-schools-guide.html">
+                    <img src="images/blog-library.jpg" alt="Library Management Software Guide" class="w-full h-56 object-cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%230D6841%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%22200%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23D4AF37%22 font-size=%2224%22 font-family=%22Inter%22%3ELibrary%3C/text%3E%3C/svg%3E'">
+                </a>
+                <div class="p-6">
+                    <div class="flex items-center space-x-2 text-sm text-gray-500 mb-3">
+                        <span class="bg-champagne/20 text-champagne px-3 py-1 rounded-full text-xs font-semibold">Management</span>
+                        <span>7 min read</span>
+                    </div>
+                    <a href="blog/library-management-software-nigeria-schools-guide.html" class="block">
+                        <h2 class="text-xl font-bold text-navy hover:text-champagne transition-colors mb-2">
+                            Library Management Software Guide
+                        </h2>
+                    </a>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Add books, track borrowings, manage returns, and overdue tracking with fines. Available copies auto-update.
+                    </p>
+                    <a href="blog/library-management-software-nigeria-schools-guide.html" class="text-champagne font-semibold hover:text-navy transition-colors text-sm">
+                        Read More →
+                    </a>
+                </div>
+            </article>
+
+            <!-- Post 13: Laboratory Management -->
+            <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-all hover:border-champagne/30" data-category="management">
+                <a href="blog/laboratory-management-track-equipment-usage-schools.html">
+                    <img src="images/blog-lab.jpg" alt="Laboratory Management - Track Equipment Usage" class="w-full h-56 object-cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%230D6841%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%22200%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23D4AF37%22 font-size=%2224%22 font-family=%22Inter%22%3ELab%3C/text%3E%3C/svg%3E'">
+                </a>
+                <div class="p-6">
+                    <div class="flex items-center space-x-2 text-sm text-gray-500 mb-3">
+                        <span class="bg-champagne/20 text-champagne px-3 py-1 rounded-full text-xs font-semibold">Management</span>
+                        <span>6 min read</span>
+                    </div>
+                    <a href="blog/laboratory-management-track-equipment-usage-schools.html" class="block">
+                        <h2 class="text-xl font-bold text-navy hover:text-champagne transition-colors mb-2">
+                            Laboratory Management - Track Equipment Usage
+                        </h2>
+                    </a>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Add labs, equipment with condition tracking, usage logs, and status indicators. See what was last used.
+                    </p>
+                    <a href="blog/laboratory-management-track-equipment-usage-schools.html" class="text-champagne font-semibold hover:text-navy transition-colors text-sm">
+                        Read More →
+                    </a>
+                </div>
+            </article>
+
+            <!-- Post 14: School Analytics -->
+            <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-all hover:border-champagne/30" data-category="analytics">
+                <a href="blog/school-analytics-dashboard-track-performance-fees.html">
+                    <img src="images/blog-analytics.jpg" alt="School Analytics Dashboard" class="w-full h-56 object-cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%230D6841%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%22200%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23D4AF37%22 font-size=%2224%22 font-family=%22Inter%22%3EAnalytics%3C/text%3E%3C/svg%3E'">
+                </a>
+                <div class="p-6">
+                    <div class="flex items-center space-x-2 text-sm text-gray-500 mb-3">
+                        <span class="bg-champagne/20 text-champagne px-3 py-1 rounded-full text-xs font-semibold">Analytics</span>
+                        <span>9 min read</span>
+                    </div>
+                    <a href="blog/school-analytics-dashboard-track-performance-fees.html" class="block">
+                        <h2 class="text-xl font-bold text-navy hover:text-champagne transition-colors mb-2">
+                            School Analytics Dashboard - Track Performance & Fees
+                        </h2>
+                    </a>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Real-time insights into student performance, fee collection, attendance, and school-wide metrics.
+                    </p>
+                    <a href="blog/school-analytics-dashboard-track-performance-fees.html" class="text-champagne font-semibold hover:text-navy transition-colors text-sm">
+                        Read More →
+                    </a>
+                </div>
+            </article>
+
+            <!-- Post 15: WAEC/JAMB/NECO CBT Practice -->
+            <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-all hover:border-champagne/30" data-category="cbt">
+                <a href="blog/waec-jamb-neco-cbt-practice-without-internet-guide.html">
+                    <img src="images/blog-waec.jpg" alt="WAEC/JAMB/NECO CBT Practice Without Internet" class="w-full h-56 object-cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%230D6841%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%22200%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23D4AF37%22 font-size=%2224%22 font-family=%22Inter%22%3EWAEC%3C/text%3E%3C/svg%3E'">
+                </a>
+                <div class="p-6">
+                    <div class="flex items-center space-x-2 text-sm text-gray-500 mb-3">
+                        <span class="bg-champagne/20 text-champagne px-3 py-1 rounded-full text-xs font-semibold">CBT Exams</span>
+                        <span>10 min read</span>
+                    </div>
+                    <a href="blog/waec-jamb-neco-cbt-practice-without-internet-guide.html" class="block">
+                        <h2 class="text-xl font-bold text-navy hover:text-champagne transition-colors mb-2">
+                            WAEC/JAMB/NECO CBT Practice Without Internet
+                        </h2>
+                    </a>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Students can practice WAEC, JAMB, and NECO style CBT exams offline. No internet needed. Instant results.
+                    </p>
+                    <a href="blog/waec-jamb-neco-cbt-practice-without-internet-guide.html" class="text-champagne font-semibold hover:text-navy transition-colors text-sm">
+                        Read More →
+                    </a>
+                </div>
+            </article>
+
+            <!-- Post 16: Bulk Import Students & Staff -->
+            <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-all hover:border-champagne/30" data-category="management">
+                <a href="blog/how-to-bulk-import-students-staff-from-csv.html">
+                    <img src="images/blog-bulk-import.jpg" alt="Bulk Import Students & Staff from CSV" class="w-full h-56 object-cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%230D6841%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%22200%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23D4AF37%22 font-size=%2224%22 font-family=%22Inter%22%3EImport%3C/text%3E%3C/svg%3E'">
+                </a>
+                <div class="p-6">
+                    <div class="flex items-center space-x-2 text-sm text-gray-500 mb-3">
+                        <span class="bg-champagne/20 text-champagne px-3 py-1 rounded-full text-xs font-semibold">Management</span>
+                        <span>5 min read</span>
+                    </div>
+                    <a href="blog/how-to-bulk-import-students-staff-from-csv.html" class="block">
+                        <h2 class="text-xl font-bold text-navy hover:text-champagne transition-colors mb-2">
+                            How to Bulk Import Students & Staff from CSV
+                        </h2>
+                    </a>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Download CSV templates, fill data, upload and validate. Bulk import students and staff in minutes.
+                    </p>
+                    <a href="blog/how-to-bulk-import-students-staff-from-csv.html" class="text-champagne font-semibold hover:text-navy transition-colors text-sm">
+                        Read More →
+                    </a>
+                </div>
+            </article>
+
+            <!-- Post 17: School Compliance Reports -->
+            <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-all hover:border-champagne/30" data-category="analytics">
+                <a href="blog/school-compliance-reports-staff-nominal-roll-enrolment.html">
+                    <img src="images/blog-compliance.jpg" alt="School Compliance Reports - Government Ready" class="w-full h-56 object-cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%230D6841%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%22200%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23D4AF37%22 font-size=%2224%22 font-family=%22Inter%22%3ECompliance%3C/text%3E%3C/svg%3E'">
+                </a>
+                <div class="p-6">
+                    <div class="flex items-center space-x-2 text-sm text-gray-500 mb-3">
+                        <span class="bg-champagne/20 text-champagne px-3 py-1 rounded-full text-xs font-semibold">Analytics</span>
+                        <span>8 min read</span>
+                    </div>
+                    <a href="blog/school-compliance-reports-staff-nominal-roll-enrolment.html" class="block">
+                        <h2 class="text-xl font-bold text-navy hover:text-champagne transition-colors mb-2">
+                            School Compliance Reports - Government Ready
+                        </h2>
+                    </a>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Staff Nominal Roll, Student Enrolment, Infrastructure Report, Financial Summary - all government compliant.
+                    </p>
+                    <a href="blog/school-compliance-reports-staff-nominal-roll-enrolment.html" class="text-champagne font-semibold hover:text-navy transition-colors text-sm">
+                        Read More →
+                    </a>
+                </div>
+            </article>
+
+            <!-- Post 18: AI Assistant -->
+            <article class="blog-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-all hover:border-champagne/30" data-category="ai">
+                <a href="blog/ai-assistant-school-administrators-ask-questions-get-answers.html">
+                    <img src="images/blog-ai-assistant.jpg" alt="AI Assistant for School Administrators" class="w-full h-56 object-cover" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%230D6841%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%22200%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23D4AF37%22 font-size=%2224%22 font-family=%22Inter%22%3EAI%3C/text%3E%3C/svg%3E'">
+                </a>
+                <div class="p-6">
+                    <div class="flex items-center space-x-2 text-sm text-gray-500 mb-3">
+                        <span class="bg-champagne/20 text-champagne px-3 py-1 rounded-full text-xs font-semibold">AI</span>
+                        <span>7 min read</span>
+                    </div>
+                    <a href="blog/ai-assistant-school-administrators-ask-questions-get-answers.html" class="block">
+                        <h2 class="text-xl font-bold text-navy hover:text-champagne transition-colors mb-2">
+                            AI Assistant - Ask Questions, Get Answers
+                        </h2>
+                    </a>
+                    <p class="text-gray-600 text-sm mb-4">
+                        Ask questions about your school data. The AI learns from your school and gets smarter over time.
+                    </p>
+                    <a href="blog/ai-assistant-school-administrators-ask-questions-get-answers.html" class="text-champagne font-semibold hover:text-navy transition-colors text-sm">
                         Read More →
                     </a>
                 </div>
@@ -242,9 +594,9 @@
 
         </div>
 
-        <!-- More Blog Posts Section -->
+        <!-- Post Count -->
         <div class="text-center mt-12">
-            <p class="text-gray-500 text-sm">More articles coming soon. Subscribe to stay updated!</p>
+            <p class="text-gray-500 text-sm">Showing <span id="post-count">18</span> articles</p>
         </div>
     </div>
 </section>
@@ -332,7 +684,48 @@
     </div>
 </footer>
 
+<!-- ====== JAVASCRIPT ====== -->
 <script src="js/main.js"></script>
+
+<!-- Category Filter Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const blogCards = document.querySelectorAll('.blog-card');
+        const postCount = document.getElementById('post-count');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('active', 'bg-champagne', 'text-navy');
+                    btn.classList.add('bg-gray-100', 'text-gray-600');
+                });
+
+                // Add active class to clicked button
+                this.classList.add('active', 'bg-champagne', 'text-navy');
+                this.classList.remove('bg-gray-100', 'text-gray-600');
+
+                const category = this.dataset.category;
+                let visibleCount = 0;
+
+                blogCards.forEach(card => {
+                    if (category === 'all' || card.dataset.category === category) {
+                        card.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                postCount.textContent = visibleCount;
+            });
+        });
+
+        // Trigger click on "All Posts" to show all
+        document.querySelector('.filter-btn[data-category="all"]').click();
+    });
+</script>
 
 <!-- WhatsApp Floating Button -->
 <script>
