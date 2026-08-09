@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-L96XJEPV33"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-L96XJEPV33');
+    </script>
+
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '2246213586201635');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=2246213586201635&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratory Management: Track Equipment & Usage for Schools | SkulCBT</title>
+    <meta name="description" content="Track laboratory equipment, manage usage logs, monitor equipment condition, and maintain lab inventory. Complete laboratory management for Nigerian schools.">
+    <meta name="keywords" content="laboratory management, lab equipment tracking, school lab management, science lab software, SkulCBT laboratories">
+
+    <link rel="canonical" href="https://skulcbt.plccglobal.com/blog/laboratory-management-track-equipment-usage-schools.html">
+
+    <meta property="og:title" content="Laboratory Management: Track Equipment & Usage for Schools">
+    <meta property="og:description" content="Track laboratory equipment, manage usage logs, monitor equipment condition, and maintain lab inventory. Complete laboratory management for Nigerian schools.">
+    <meta property="og:image" content="https://skulcbt.plccglobal.com/images/og-image.jpg">
+    <meta property="og:url" content="https://skulcbt.plccglobal.com/blog/laboratory-management-track-equipment-usage-schools.html">
+    <meta property="og:type" content="article">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Laboratory Management: Track Equipment & Usage for Schools">
+    <meta name="twitter:description" content="Track laboratory equipment, manage usage logs, monitor equipment condition. Complete lab management for Nigerian schools.">
+    <meta name="twitter:image" content="https://skulcbt.plccglobal.com/images/og-image.jpg">
+
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+    <link rel="apple-touch-icon" href="../images/favicon.ico">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#006B45',
+                        'primary-dark': '#005A3C',
+                        gold: '#F2B900',
+                        'gold-dark': '#D4A600',
+                        dark: '#172033',
+                        light: '#F5F7F9',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #172033;
+            background: #F5F7F9;
+        }
+        .btn-primary {
+            display: inline-block;
+            padding: 14px 32px;
+            background: #F2B900;
+            color: #172033;
+            font-weight: 700;
+            border-radius: 9999px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(242, 185, 0, 0.3);
+        }
+        .btn-primary:hover {
+            background: #D4A600;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(242, 185, 0, 0.4);
+        }
+        .btn-secondary {
+            display: inline-block;
+            padding: 14px 32px;
+            background: transparent;
+            color: #006B45;
+            font-weight: 600;
+            border-radius: 9999px;
+            border: 2px solid #006B45;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .btn-secondary:hover {
+            background: #006B45;
+            color: #FFFFFF;
+            transform: translateY(-2px);
+        }
+        .blog-content h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #172033;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .blog-content h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #006B45;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .blog-content p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+        .blog-content ul, .blog-content ol {
+            margin: 1rem 0 1.5rem 1.5rem;
+        }
+        .blog-content li {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        .blog-content .highlight-box {
+            background: #F5F7F9;
+            border-left: 4px solid #F2B900;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        .blog-content .highlight-box strong {
+            color: #006B45;
+        }
+        .blog-content .stat-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .blog-content .stat-item {
+            background: #FFFFFF;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        .blog-content .stat-item .number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #006B45;
+        }
+        .blog-content .stat-item .label {
+            font-size: 0.9rem;
+            color: #4a5568;
+            margin-top: 0.25rem;
+        }
+        .blog-content .equipment-status {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        .blog-content .equipment-status .status {
+            padding: 0.5rem;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .blog-content .equipment-status .good { background: #d1fae5; color: #006B45; }
+        .blog-content .equipment-status .fair { background: #fef3c7; color: #92400e; }
+        .blog-content .equipment-status .poor { background: #fecaca; color: #991b1b; }
+        .blog-content .equipment-status .broken { background: #fef2f2; color: #dc2626; }
+        .whatsapp-float {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 50;
+        }
+        .whatsapp-float a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: #25D366;
+            color: white;
+            border-radius: 50%;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s ease;
+        }
+        .whatsapp-float a:hover {
+            transform: scale(1.1);
+        }
+        .whatsapp-float svg {
+            width: 32px;
+            height: 32px;
+        }
+        @media (max-width: 768px) {
+            .blog-content h2 {
+                font-size: 1.5rem;
+            }
+            .blog-content p, .blog-content li {
+                font-size: 0.95rem;
+            }
+            .btn-primary, .btn-secondary {
+                padding: 12px 24px;
+                font-size: 0.95rem;
+                width: 100%;
+            }
+        }
+        .header {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,107,69,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header.scrolled {
+            box-shadow: 0 4px 30px rgba(0,107,69,0.1);
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+
+    <!-- Article Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Laboratory Management: Track Equipment & Usage for Schools",
+        "description": "Track laboratory equipment, manage usage logs, monitor equipment condition, and maintain lab inventory. Complete laboratory management for Nigerian schools.",
+        "author": {
+            "@type": "Organization",
+            "name": "SkulCBT"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "SkulCBT",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://skulcbt.plccglobal.com/images/skulcbt-logo.png"
+            }
+        },
+        "datePublished": "2026-01-27",
+        "dateModified": "2026-01-27",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://skulcbt.plccglobal.com/blog/laboratory-management-track-equipment-usage-schools.html"
+        }
+    }
+    </script>
+
+    <!-- FAQ Schema -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "What is laboratory management software?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Laboratory management software helps schools track lab equipment, manage usage logs, monitor equipment condition, and maintain inventory. It prevents equipment loss and ensures lab safety."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I track equipment condition?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. SkulCBT tracks equipment condition as Good, Fair, Poor, or Broken. You can update equipment status and see visual indicators for each item."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Can I log equipment usage?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. You can log who used equipment, when, and what action was taken (Used, Maintained, Checked, Reported Issue). This creates a complete usage history."
+                }
+            }
+        ]
+    }
+    </script>
+</head>
+<body>
+
+<!-- ====== HEADER ====== -->
+<header class="header" id="header">
+    <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+        <a href="../index.html" class="flex items-center space-x-3">
+            <img src="../images/skulcbt-logo.png" alt="SkulCBT Logo" class="h-12 w-auto">
+            <span class="text-2xl font-extrabold text-dark tracking-tight">Skul<span class="text-gold">CBT</span></span>
+        </a>
+        <div class="hidden md:flex items-center space-x-8">
+            <a href="../index.html" class="text-dark font-semibold hover:text-primary transition-colors">Home</a>
+            <a href="../features.html" class="text-dark font-semibold hover:text-primary transition-colors">Features</a>
+            <a href="../pricing.html" class="text-dark font-semibold hover:text-primary transition-colors">Pricing</a>
+            <a href="../about.html" class="text-dark font-semibold hover:text-primary transition-colors">About</a>
+            <a href="../blog.html" class="text-gold font-semibold border-b-2 border-gold">Blog</a>
+            <a href="../contact.html" class="text-dark font-semibold hover:text-primary transition-colors">Contact</a>
+            <a href="../demo-request.html" class="btn-primary">Request Demo</a>
+        </div>
+        <button id="mobile-menu-toggle" class="md:hidden text-dark focus:outline-none">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+    </nav>
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200 shadow-lg">
+        <div class="container mx-auto px-4 py-6 flex flex-col space-y-4">
+            <a href="../index.html" class="text-dark font-semibold hover:text-primary transition-colors py-2">Home</a>
+            <a href="../features.html" class="text-dark font-semibold hover:text-primary transition-colors py-2">Features</a>
+            <a href="../pricing.html" class="text-dark font-semibold hover:text-primary transition-colors py-2">Pricing</a>
+            <a href="../about.html" class="text-dark font-semibold hover:text-primary transition-colors py-2">About</a>
+            <a href="../blog.html" class="text-gold font-semibold py-2">Blog</a>
+            <a href="../contact.html" class="text-dark font-semibold hover:text-primary transition-colors py-2">Contact</a>
+            <a href="../demo-request.html" class="btn-primary text-center">Request Demo</a>
+        </div>
+    </div>
+</header>
+
+<!-- ====== BLOG CONTENT ====== -->
+<article class="py-8 md:py-12 bg-light">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+
+        <!-- Breadcrumb -->
+        <nav class="text-sm text-gray-500 mb-6">
+            <a href="../index.html" class="hover:text-primary">Home</a>
+            <span class="mx-2">/</span>
+            <a href="../blog.html" class="hover:text-primary">Blog</a>
+            <span class="mx-2">/</span>
+            <span class="text-dark font-medium">Laboratory Management</span>
+        </nav>
+
+        <!-- Blog Header -->
+        <div class="mb-8">
+            <div class="flex items-center gap-3 text-sm text-primary font-semibold mb-4">
+                <span class="bg-primary/10 px-3 py-1 rounded-full">Laboratories</span>
+                <span>27 January 2026</span>
+                <span>•</span>
+                <span>7 min read</span>
+            </div>
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-dark leading-tight">
+                Laboratory Management: <span class="text-gold">Track Equipment & Usage for Schools</span>
+            </h1>
+            <p class="text-xl text-gray-600 mt-4 leading-relaxed">
+                Track laboratory equipment, manage usage logs, monitor equipment condition, and maintain lab inventory. Complete laboratory management for Nigerian schools.
+            </p>
+        </div>
+
+        <!-- Blog Body -->
+        <div class="blog-content">
+
+            <p>
+                St Mary's Science Laboratory had ₦2 million worth of equipment. But nobody knew where half of it was. Microscopes were missing. Chemicals were unaccounted for. Equipment was broken — and nobody reported it.
+            </p>
+
+            <p>
+                Then they implemented SkulCBT's <strong>Laboratory Management module</strong>. Now every equipment is tracked. Every usage is logged. Equipment condition is monitored. <strong>Lab accountability is finally here.</strong>
+            </p>
+
+            <div class="highlight-box">
+                <p class="font-semibold text-lg">🔬 The Difference:</p>
+                <p>Before: ₦2M in equipment, half unaccounted for. After: <strong>Every item tracked</strong>. Usage logged. Conditions monitored. <strong>Equipment loss stopped.</strong></p>
+            </div>
+
+            <div class="stat-box">
+                <div class="stat-item">
+                    <div class="number">100%</div>
+                    <div class="label">Equipment tracked</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number">4</div>
+                    <div class="label">Condition statuses</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number">Logs</div>
+                    <div class="label">Usage history</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number">Offline</div>
+                    <div class="label">First</div>
+                </div>
+            </div>
+
+            <h2>What's Included in SkulCBT Laboratory Management</h2>
+
+            <h3>1. Lab Management</h3>
+            <ul>
+                <li><strong>Add Lab:</strong> Name, location, teacher in charge, capacity, status</li>
+                <li><strong>Edit Lab:</strong> Update lab details as needed</li>
+                <li><strong>Delete Lab:</strong> Remove labs no longer in use</li>
+            </ul>
+
+            <h3>2. Equipment Management</h3>
+            <ul>
+                <li><strong>Add Equipment:</strong> Name, quantity, condition (Good/Fair/Poor/Broken)</li>
+                <li><strong>Equipment Status:</strong> Visual indicators for equipment condition</li>
+                <li><strong>Last Used:</strong> Shows when equipment was last used</li>
+                <li><strong>Filter:</strong> Filter equipment by condition</li>
+            </ul>
+
+            <h3>3. Usage Logs</h3>
+            <ul>
+                <li><strong>Log Usage:</strong> Track who used equipment, when, and what action</li>
+                <li><strong>Action Types:</strong> Used, Maintained, Checked, Reported Issue</li>
+                <li><strong>Usage History:</strong> Complete history of all equipment usage</li>
+            </ul>
+
+            <h3>4. Equipment Condition Tracking</h3>
+
+            <div class="equipment-status">
+                <div class="status good">🟢 Good</div>
+                <div class="status fair">🟡 Fair</div>
+                <div class="status poor">🟠 Poor</div>
+                <div class="status broken">🔴 Broken</div>
+            </div>
+
+            <p>
+                Visual indicators help you quickly see the condition of each equipment. Update statuses as equipment is maintained or breaks.
+            </p>
+
+            <h2>Why Nigerian Schools Need Laboratory Management</h2>
+
+            <h3>1. Equipment Gets Lost</h3>
+            <p>
+                Without tracking, equipment disappears. Microscopes, chemicals, glassware — all expensive. Laboratory management <strong>stops equipment loss.</strong>
+            </p>
+
+            <h3>2. Equipment Breaks Unnoticed</h3>
+            <p>
+                Students break equipment and don't report it. Labs become unsafe. Laboratory management <strong>tracks equipment condition</strong> and flags issues.
+            </p>
+
+            <h3>3. No Accountability</h3>
+            <p>
+                Teachers don't know who used equipment. Students don't take responsibility. Laboratory management <strong>creates accountability.</strong>
+            </p>
+
+            <h3>4. Wasted Resources</h3>
+            <p>
+                Schools buy equipment they already have because they don't know what's available. Laboratory management <strong>saves money.</strong>
+            </p>
+
+            <h3>5. Lab Safety</h3>
+            <p>
+                Broken equipment is dangerous. Laboratory management <strong>ensures equipment is maintained</strong> and unsafe items are flagged.
+            </p>
+
+            <div class="highlight-box">
+                <p class="font-semibold">📊 Real Impact:</p>
+                <p>St Mary's Science Laboratory reduced equipment loss by <strong>90%</strong> after implementing laboratory management. Equipment breakage was reported immediately. Lab safety improved significantly.</p>
+            </div>
+
+            <h2>How to Use SkulCBT Laboratory Management</h2>
+
+            <div class="step-box">
+                <div class="flex items-start">
+                    <span class="step-number">1</span>
+                    <div>
+                        <h3 class="text-lg font-bold text-dark mt-0 mb-1">Add Labs</h3>
+                        <p class="text-gray-600">Go to Laboratories page. Click Add Lab. Enter name, location, teacher in charge, capacity, and status.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-box">
+                <div class="flex items-start">
+                    <span class="step-number">2</span>
+                    <div>
+                        <h3 class="text-lg font-bold text-dark mt-0 mb-1">Add Equipment</h3>
+                        <p class="text-gray-600">In each lab, click Add Equipment. Enter name, quantity, and condition (Good, Fair, Poor, Broken).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-box">
+                <div class="flex items-start">
+                    <span class="step-number">3</span>
+                    <div>
+                        <h3 class="text-lg font-bold text-dark mt-0 mb-1">Log Usage</h3>
+                        <p class="text-gray-600">For each equipment, click Log Usage. Select the action (Used, Maintained, Checked, Reported Issue).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-box">
+                <div class="flex items-start">
+                    <span class="step-number">4</span>
+                    <div>
+                        <h3 class="text-lg font-bold text-dark mt-0 mb-1">Monitor Condition</h3>
+                        <p class="text-gray-600">View equipment status at a glance. Update condition as equipment is maintained or repaired.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2>Equipment Status Guide</h2>
+
+            <ul>
+                <li><strong>🟢 Good:</strong> Equipment is in excellent condition. Fully functional.</li>
+                <li><strong>🟡 Fair:</strong> Equipment works but may need minor maintenance soon.</li>
+                <li><strong>🟠 Poor:</strong> Equipment is functional but needs repair. Should be replaced soon.</li>
+                <li><strong>🔴 Broken:</strong> Equipment is not functional. Needs immediate repair or replacement.</li>
+            </ul>
+
+            <h2>FAQ — School Lab Technicians Ask</h2>
+
+            <div class="space-y-4">
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                    <h4 class="font-bold text-lg text-dark">What is laboratory management software?</h4>
+                    <p class="text-gray-600">Laboratory management software helps schools track lab equipment, manage usage logs, monitor equipment condition, and maintain inventory. It prevents equipment loss and ensures lab safety.</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                    <h4 class="font-bold text-lg text-dark">Can I track equipment condition?</h4>
+                    <p class="text-gray-600">Yes. SkulCBT tracks equipment condition as Good, Fair, Poor, or Broken. You can update equipment status and see visual indicators for each item.</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                    <h4 class="font-bold text-lg text-dark">Can I log equipment usage?</h4>
+                    <p class="text-gray-600">Yes. You can log who used equipment, when, and what action was taken (Used, Maintained, Checked, Reported Issue). This creates a complete usage history.</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                    <h4 class="font-bold text-lg text-dark">Does it work offline?</h4>
+                    <p class="text-gray-600">Yes. SkulCBT is 100% offline-first. You can manage your labs without internet. Perfect for schools in areas with unreliable network.</p>
+                </div>
+            </div>
+
+            <h2>Start Managing Your Labs Professionally</h2>
+
+            <p>
+                Join 100+ Nigerian schools using SkulCBT Laboratory Management. Track equipment. Log usage. Monitor condition. Prevent loss. Work offline.
+            </p>
+
+        </div>
+
+        <!-- CTA Section -->
+        <div class="mt-12 bg-primary rounded-2xl p-6 md:p-8 text-white text-center">
+            <h3 class="text-2xl md:text-3xl font-extrabold mb-3">Ready to Organize Your Labs?</h3>
+            <p class="text-white/80 mb-6 max-w-2xl mx-auto">
+                Track every equipment. Log usage. Monitor condition. Prevent loss. Work offline.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="../demo-request.html" class="inline-block px-8 py-3 bg-gold text-dark font-bold rounded-full hover:bg-gold-dark transition-colors">
+                    Request Demo
+                </a>
+                <a href="https://wa.me/2347032977572?text=I%20want%20to%20see%20laboratory%20management" target="_blank" class="inline-block px-8 py-3 bg-white text-primary font-bold rounded-full hover:bg-gray-100 transition-colors">
+                    WhatsApp Demo
+                </a>
+            </div>
+            <p class="text-white/60 text-sm mt-4">📞 Or call: <a href="tel:07032977572" class="text-gold hover:underline">07032977572</a></p>
+        </div>
+
+        <!-- Related Posts -->
+        <div class="mt-12 pt-8 border-t border-gray-200">
+            <h3 class="text-xl font-bold text-dark mb-4">Related Articles</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a href="../features.html#laboratories" class="block bg-white p-4 rounded-xl border border-gray-200 hover:border-primary transition-colors">
+                    <h4 class="font-bold text-dark">Laboratory Management Feature Overview</h4>
+                    <p class="text-sm text-gray-500">All lab features explained</p>
+                </a>
+                <a href="library-management-software-nigeria-schools-guide.html" class="block bg-white p-4 rounded-xl border border-gray-200 hover:border-primary transition-colors">
+                    <h4 class="font-bold text-dark">Library Management Guide</h4>
+                    <p class="text-sm text-gray-500">Track books and borrowings</p>
+                </a>
+            </div>
+        </div>
+
+    </div>
+</article>
+
+<!-- ====== FOOTER ====== -->
+<footer class="bg-dark text-white py-12">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <div class="flex items-center space-x-2 mb-4">
+                    <img src="../images/skulcbt-logo.png" alt="SkulCBT Logo" class="h-8 w-auto">
+                    <span class="text-xl font-extrabold">Skul<span class="text-gold">CBT</span></span>
+                </div>
+                <p class="text-gray-400 text-sm mb-4">
+                    Nigeria's #1 Offline-First School Platform. Built by Nigerians, for Nigerians.
+                </p>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-gold transition-colors" aria-label="Facebook">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879V14.89h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.989C18.343 21.129 22 16.99 22 12z"/></svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-gold transition-colors" aria-label="Twitter">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-gold transition-colors" aria-label="LinkedIn">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    </a>
+                </div>
+            </div>
+            <div>
+                <h4 class="font-bold text-white mb-4">Quick Links</h4>
+                <ul class="space-y-2 text-gray-400 text-sm">
+                    <li><a href="../index.html" class="hover:text-gold transition-colors">Home</a></li>
+                    <li><a href="../features.html" class="hover:text-gold transition-colors">Features</a></li>
+                    <li><a href="../pricing.html" class="hover:text-gold transition-colors">Pricing</a></li>
+                    <li><a href="../about.html" class="hover:text-gold transition-colors">About</a></li>
+                    <li><a href="../blog.html" class="hover:text-gold transition-colors">Blog</a></li>
+                    <li><a href="../contact.html" class="hover:text-gold transition-colors">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-white mb-4">Contact Us</h4>
+                <ul class="space-y-2 text-gray-400 text-sm">
+                    <li>📞 <a href="tel:07032977572" class="hover:text-gold transition-colors">07032977572</a></li>
+                    <li>📧 <a href="mailto:emmanueladekunlep@gmail.com" class="hover:text-gold transition-colors">emmanueladekunlep@gmail.com</a></li>
+                    <li>🌐 <a href="https://www.emmanueladekunlepeace.com" target="_blank" class="hover:text-gold transition-colors">www.emmanueladekunlepeace.com</a></li>
+                    <li>💬 <a href="https://wa.me/2347032977572" target="_blank" class="hover:text-gold transition-colors">WhatsApp</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-white mb-4">Stay Updated</h4>
+                <p class="text-gray-400 text-sm mb-4">Subscribe for updates on new features and offers.</p>
+                <form class="flex flex-col space-y-2">
+                    <input type="email" placeholder="Your email address" class="px-4 py-2 rounded-lg bg-dark/60 text-white placeholder-gray-400 border border-gray-600 focus:outline-none focus:border-gold text-sm">
+                    <button type="submit" class="px-4 py-2 bg-gold text-dark font-bold rounded-lg hover:bg-gold-dark transition-colors text-sm">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="border-t border-gray-700 mt-12 pt-8 text-center text-gray-400 text-sm">
+            <p>&copy; 2025 <span class="text-white font-semibold">SkulCBT</span>. All rights reserved. Built with ❤️ in Nigeria.</p>
+            <p class="mt-1">Developer: <a href="https://www.emmanueladekunlepeace.com" target="_blank" class="text-gold hover:underline">Emmanuel Adekunle Peace</a></p>
+        </div>
+    </div>
+</footer>
+
+<!-- ====== WHATSAPP FLOATING BUTTON ====== -->
+<div class="whatsapp-float">
+    <a href="https://wa.me/2347032977572?text=I%20want%20to%20see%20laboratory%20management" target="_blank" aria-label="Chat on WhatsApp">
+        <svg fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+    </a>
+</div>
+
+<script>
+    // Mobile menu toggle
+    const toggle = document.getElementById('mobile-menu-toggle');
+    const menu = document.getElementById('mobile-menu');
+    if (toggle && menu) {
+        toggle.addEventListener('click', function() {
+            menu.classList.toggle('hidden');
+        });
+        menu.querySelectorAll('a').forEach(function(link) {
+            link.addEventListener('click', function() {
+                menu.classList.add('hidden');
+            });
+        });
+    }
+
+    // Header scroll effect
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+</script>
+
+</body>
+</html>

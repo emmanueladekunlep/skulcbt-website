@@ -1,19 +1,42 @@
 /* ====== SKULCBT - MAIN STYLESHEET ====== */
 /* Nigeria's #1 Offline-First School Platform */
+/* Brand Colors: Deep Green #006B45 | Gold #F2B900 | Dark Text #172033 | Light Gray #F5F7F9 */
 
 /* ====== ROOT VARIABLES ====== */
 :root {
-    --primary-blue: #1a237e;
-    --primary-dark: #0d1442;
-    --accent-gold: #f9a825;
-    --accent-green: #008751;
-    --text-dark: #1a1a2e;
-    --text-light: #ffffff;
-    --bg-light: #f8f9fa;
-    --card-bg: #ffffff;
-    --shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-    --shadow-hover: 0 20px 60px rgba(0, 0, 0, 0.15);
-    --radius: 16px;
+    /* SkulCBT Brand Colors */
+    --primary: #006B45;
+    --primary-dark: #005A3C;
+    --primary-light: #008A5A;
+    --gold: #F2B900;
+    --gold-light: #FFD433;
+    --gold-dark: #D4A600;
+    --white: #FFFFFF;
+    --dark-text: #172033;
+    --light-gray: #F5F7F9;
+    --gray-200: #E8ECF0;
+    --gray-300: #D0D5DB;
+    --gray-400: #A0AAB8;
+    --gray-500: #6B7A8F;
+    --gray-600: #4A5A6F;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #006B45 0%, #005A3C 100%);
+    --gradient-gold: linear-gradient(135deg, #F2B900 0%, #FFD433 100%);
+    --gradient-hero: linear-gradient(135deg, rgba(0, 107, 69, 0.92) 0%, rgba(0, 90, 60, 0.95) 100%);
+
+    /* Shadows */
+    --shadow: 0 4px 16px rgba(0, 107, 69, 0.08);
+    --shadow-hover: 0 10px 30px rgba(0, 107, 69, 0.12);
+    --shadow-gold: 0 0 40px rgba(242, 185, 0, 0.20);
+    --shadow-card: 0 2px 12px rgba(23, 32, 51, 0.06);
+
+    /* Radius */
+    --radius: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
+
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -30,8 +53,8 @@ html {
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-    color: var(--text-dark);
-    background: var(--bg-light);
+    color: var(--dark-text);
+    background: var(--light-gray);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -41,6 +64,7 @@ body {
 h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
     line-height: 1.2;
+    color: var(--dark-text);
 }
 
 a {
@@ -54,77 +78,97 @@ img {
     display: block;
 }
 
-/* ====== BUTTONS ====== */
+/* ====== SCROLLBAR - SkulCBT Brand ====== */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--light-gray);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gold);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gold-dark);
+}
+
+/* ====== BUTTONS - SkulCBT Brand ====== */
 .btn-primary {
     display: inline-block;
     padding: 12px 28px;
-    background: var(--accent-gold);
-    color: var(--text-dark);
+    background: var(--gold);
+    color: var(--dark-text);
     font-weight: 700;
     font-size: 0.9rem;
-    border-radius: 50px;
+    border-radius: var(--radius-full);
     border: none;
     cursor: pointer;
     transition: var(--transition);
     text-align: center;
-    box-shadow: 0 4px 15px rgba(249, 168, 37, 0.3);
+    box-shadow: 0 2px 8px rgba(242, 185, 0, 0.3);
 }
 
 .btn-primary:hover {
-    background: #e6a800;
+    background: var(--gold-dark);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(249, 168, 37, 0.4);
+    box-shadow: 0 4px 16px rgba(242, 185, 0, 0.4);
 }
 
 .btn-primary-large {
     display: inline-block;
     padding: 16px 40px;
-    background: var(--accent-gold);
-    color: var(--text-dark);
+    background: var(--gold);
+    color: var(--dark-text);
     font-weight: 700;
     font-size: 1.1rem;
-    border-radius: 50px;
+    border-radius: var(--radius-full);
     border: none;
     cursor: pointer;
     transition: var(--transition);
     text-align: center;
-    box-shadow: 0 4px 20px rgba(249, 168, 37, 0.35);
+    box-shadow: 0 2px 8px rgba(242, 185, 0, 0.3);
 }
 
 .btn-primary-large:hover {
-    background: #e6a800;
+    background: var(--gold-dark);
     transform: translateY(-3px);
-    box-shadow: 0 8px 30px rgba(249, 168, 37, 0.5);
+    box-shadow: 0 4px 20px rgba(242, 185, 0, 0.4);
 }
 
 .btn-secondary {
     display: inline-block;
     padding: 12px 28px;
     background: transparent;
-    color: var(--text-dark);
+    color: var(--primary);
     font-weight: 600;
     font-size: 0.9rem;
-    border-radius: 50px;
-    border: 2px solid var(--accent-gold);
+    border-radius: var(--radius-full);
+    border: 2px solid var(--primary);
     cursor: pointer;
     transition: var(--transition);
     text-align: center;
 }
 
 .btn-secondary:hover {
-    background: var(--accent-gold);
-    color: var(--text-dark);
+    background: var(--primary);
+    color: var(--white);
     transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 107, 69, 0.2);
 }
 
 .btn-secondary-large {
     display: inline-block;
     padding: 16px 40px;
     background: transparent;
-    color: var(--text-light);
+    color: var(--white);
     font-weight: 600;
     font-size: 1.1rem;
-    border-radius: 50px;
+    border-radius: var(--radius-full);
     border: 2px solid rgba(255, 255, 255, 0.3);
     cursor: pointer;
     transition: var(--transition);
@@ -133,7 +177,7 @@ img {
 
 .btn-secondary-large:hover {
     background: rgba(255, 255, 255, 0.1);
-    border-color: var(--text-light);
+    border-color: var(--white);
     transform: translateY(-3px);
 }
 
@@ -141,7 +185,7 @@ img {
 .header {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 20px rgba(0, 107, 69, 0.05);
     position: fixed;
     top: 0;
     left: 0;
@@ -151,7 +195,7 @@ img {
 }
 
 .header.scrolled {
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 107, 69, 0.1);
 }
 
 /* ====== HERO SECTION ====== */
@@ -173,23 +217,24 @@ img {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(26, 35, 126, 0.92) 0%, rgba(13, 20, 66, 0.95) 100%);
+    background: var(--gradient-hero);
     z-index: 1;
 }
 
-/* ====== FEATURE CARDS ====== */
+/* ====== FEATURE CARDS - SkulCBT Brand ====== */
 .feature-card {
-    background: var(--card-bg);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
     transition: var(--transition);
     overflow: hidden;
-    border: 1px solid rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 107, 69, 0.08);
 }
 
 .feature-card:hover {
     transform: translateY(-8px);
     box-shadow: var(--shadow-hover);
+    border-color: var(--gold);
 }
 
 .feature-card-image {
@@ -249,12 +294,12 @@ img {
         min-height: auto;
         padding: 120px 0 80px;
     }
-    
+
     .btn-primary-large {
         padding: 14px 32px;
         font-size: 1rem;
     }
-    
+
     .btn-secondary-large {
         padding: 14px 32px;
         font-size: 1rem;
@@ -266,35 +311,35 @@ img {
     .hero-section {
         padding: 100px 0 60px;
     }
-    
+
     .btn-primary-large {
         padding: 12px 28px;
         font-size: 0.95rem;
         width: 100%;
     }
-    
+
     .btn-secondary-large {
         padding: 12px 28px;
         font-size: 0.95rem;
         width: 100%;
     }
-    
+
     .btn-primary {
         padding: 10px 20px;
         font-size: 0.85rem;
         width: 100%;
     }
-    
+
     .btn-secondary {
         padding: 10px 20px;
         font-size: 0.85rem;
         width: 100%;
     }
-    
+
     .feature-card {
         margin-bottom: 16px;
     }
-    
+
     .header .container {
         padding: 0 16px;
     }
@@ -305,7 +350,7 @@ img {
     .hero-section {
         padding: 90px 0 40px;
     }
-    
+
     .feature-card .p-6 {
         padding: 16px;
     }
@@ -317,15 +362,32 @@ img {
     margin: 0 auto;
 }
 
-.text-gradient {
-    background: linear-gradient(135deg, var(--accent-gold), #ff6f00);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+.text-gold {
+    color: var(--gold);
 }
 
-.shadow-glow {
-    box-shadow: 0 0 40px rgba(249, 168, 37, 0.15);
+.text-primary {
+    color: var(--primary);
+}
+
+.bg-primary {
+    background: var(--primary);
+}
+
+.bg-gold {
+    background: var(--gold);
+}
+
+.bg-light-gray {
+    background: var(--light-gray);
+}
+
+.border-gold {
+    border-color: var(--gold);
+}
+
+.shadow-gold {
+    box-shadow: var(--shadow-gold);
 }
 
 .rounded-custom {
@@ -337,26 +399,35 @@ input:focus,
 select:focus,
 textarea:focus {
     outline: none;
-    border-color: var(--accent-gold);
-    box-shadow: 0 0 0 3px rgba(249, 168, 37, 0.15);
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(242, 185, 0, 0.15);
 }
 
-/* ====== SCROLL BAR ====== */
-::-webkit-scrollbar {
-    width: 10px;
+/* ====== BADGE STYLES ====== */
+.badge-gold {
+    background: rgba(242, 185, 0, 0.12);
+    color: var(--gold-dark);
 }
 
-::-webkit-scrollbar-track {
-    background: var(--bg-light);
+.badge-primary {
+    background: rgba(0, 107, 69, 0.10);
+    color: var(--primary);
 }
 
-::-webkit-scrollbar-thumb {
-    background: var(--primary-blue);
-    border-radius: 10px;
+/* ====== CARD HOVER EFFECTS ====== */
+.card-hover {
+    transition: var(--transition);
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: var(--accent-gold);
+.card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--gold);
+}
+
+/* ====== GOLD ACCENT BORDER ====== */
+.border-gold-light {
+    border-color: rgba(242, 185, 0, 0.12);
 }
 
 /* ====== PRINT STYLES ====== */
@@ -367,9 +438,40 @@ textarea:focus {
     .btn-secondary {
         display: none !important;
     }
-    
+
     .hero-section {
         min-height: auto !important;
         padding: 40px 0 !important;
     }
+}
+
+/* ====== SIDEBAR NAVIGATION (For App) ====== */
+.sidebar {
+    background: var(--primary-dark);
+    color: var(--white);
+}
+
+.sidebar .active {
+    background: rgba(242, 185, 0, 0.15);
+    border-right: 3px solid var(--gold);
+}
+
+.sidebar .nav-link:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* ====== CTA SECTIONS ====== */
+.cta-section {
+    background: var(--gradient-primary);
+    color: var(--white);
+}
+
+.cta-section .btn-primary {
+    background: var(--white);
+    color: var(--primary);
+}
+
+.cta-section .btn-primary:hover {
+    background: var(--gold);
+    color: var(--dark-text);
 }
