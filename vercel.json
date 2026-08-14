@@ -21,15 +21,15 @@
     },
     {
       "src": "/agent/(.*)",
-      "dest": "/frontend/agent/$1"
+      "dest": "backend/agent_app.py"
     },
     {
       "src": "/admin/(.*)",
-      "dest": "/frontend/admin/$1"
+      "dest": "backend/agent_app.py"
     },
     {
       "src": "/(.*)",
-      "dest": "/frontend/$1"
+      "dest": "backend/agent_app.py"
     }
   ]
 }
