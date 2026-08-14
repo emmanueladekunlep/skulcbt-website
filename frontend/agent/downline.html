@@ -1,0 +1,294 @@
+<!-- downline.html -->
+<!-- Agent Downline Page for SkulCBT Agent Program -->
+<!-- Full path: C:\Users\Peace\Desktop\skulcbt-website\frontend\agent\downline.html -->
+<!--
+============================================
+AUTHOR: Emmanuel Adekunle Peace
+WEBSITE: www.emmanueladekunlepeace.com
+PHONE: 07032977572
+EMAIL: emmanueladekunlep@gmail.com
+============================================
+SkulCBT Agent Program - Agent Downline View
+Copyright (c) 2026 SkulCBT. All rights reserved.
+============================================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Downline - SkulCBT Agent</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <h2>SkulCBT</h2>
+                <p>Agent Portal</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/agent/dashboard">Dashboard</a>
+                <a href="/agent/sales">My Sales</a>
+                <a href="/agent/downline" class="active">My Downline</a>
+                <a href="/agent/commissions">Commissions</a>
+                <a href="/agent/withdraw">Withdraw</a>
+            </nav>
+            <div class="sidebar-footer">
+                <button onclick="handleLogout()" class="btn-logout">Logout</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="top-bar">
+                <h1>My Downline</h1>
+                <div class="agent-info">
+                    <span id="agentName">Welcome, Agent</span>
+                    <span id="agentRank" class="rank-badge">Bronze</span>
+                </div>
+            </div>
+
+            <div id="message" class="message hidden"></div>
+
+            <!-- Referral Link Section -->
+            <div class="referral-section">
+                <h2>Your Referral Link</h2>
+                <div class="referral-link-box">
+                    <input type="text" id="referralLink" readonly>
+                    <button onclick="copyReferralLink()" class="btn-copy">Copy Link</button>
+                </div>
+                <p class="referral-note">Share this link with people who want to become agents under you.</p>
+            </div>
+
+            <!-- Downline Summary -->
+            <div class="downline-summary">
+                <div class="summary-card">
+                    <h3>Level 1</h3>
+                    <p id="level1Count">0</p>
+                    <span>Direct Recruits</span>
+                </div>
+                <div class="summary-card">
+                    <h3>Level 2</h3>
+                    <p id="level2Count">0</p>
+                    <span>Indirect Recruits</span>
+                </div>
+                <div class="summary-card">
+                    <h3>Level 3</h3>
+                    <p id="level3Count">0</p>
+                    <span>Third Level</span>
+                </div>
+                <div class="summary-card total">
+                    <h3>Total</h3>
+                    <p id="totalCount">0</p>
+                    <span>All Downline</span>
+                </div>
+            </div>
+
+            <!-- Downline Tree -->
+            <div class="tree-section">
+                <h2>Downline Tree</h2>
+                <div id="downlineTree">
+                    <p class="empty-message">You have no downline agents yet. Start recruiting!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load downline data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAgentInfo();
+            loadDownline();
+            loadReferralLink();
+        });
+
+        function loadAgentInfo() {
+            fetch('/api/agent/dashboard')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('agentName').textContent = 'Welcome, ' + data.agent.full_name;
+                    document.getElementById('agentRank').textContent = data.agent.rank.toUpperCase();
+                }
+            })
+            .catch(error => {
+                console.error('Error loading agent info:', error);
+            });
+        }
+
+        function loadDownline() {
+            fetch('/api/agent/downline')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update counts
+                    document.getElementById('level1Count').textContent = data.counts.level1;
+                    document.getElementById('level2Count').textContent = data.counts.level2;
+                    document.getElementById('level3Count').textContent = data.counts.level3;
+                    document.getElementById('totalCount').textContent = data.counts.total;
+
+                    // Build downline tree
+                    const treeContainer = document.getElementById('downlineTree');
+                    
+                    if (data.counts.total === 0) {
+                        treeContainer.innerHTML = '<p class="empty-message">You have no downline agents yet. Start recruiting!</p>';
+                        return;
+                    }
+
+                    treeContainer.innerHTML = '';
+
+                    // Display Level 1
+                    if (data.level1 && data.level1.length > 0) {
+                        const level1Title = document.createElement('h3');
+                        level1Title.className = 'tree-level-title';
+                        level1Title.textContent = 'Level 1 - Direct Recruits (' + data.level1.length + ')';
+                        treeContainer.appendChild(level1Title);
+
+                        const level1List = document.createElement('div');
+                        level1List.className = 'tree-level';
+                        
+                        data.level1.forEach(function(agent) {
+                            const agentCard = document.createElement('div');
+                            agentCard.className = 'agent-card';
+                            agentCard.innerHTML = `
+                                <div class="agent-info">
+                                    <span class="agent-name">${agent.full_name}</span>
+                                    <span class="agent-rank">${agent.rank.toUpperCase()}</span>
+                                </div>
+                                <div class="agent-stats">
+                                    <span>Sales: ${agent.total_sales}</span>
+                                    <span>Commission: ₦${agent.total_commission.toLocaleString()}</span>
+                                </div>
+                            `;
+                            level1List.appendChild(agentCard);
+                        });
+                        
+                        treeContainer.appendChild(level1List);
+                    }
+
+                    // Display Level 2
+                    if (data.level2 && data.level2.length > 0) {
+                        const level2Title = document.createElement('h3');
+                        level2Title.className = 'tree-level-title';
+                        level2Title.textContent = 'Level 2 - Indirect Recruits (' + data.level2.length + ')';
+                        treeContainer.appendChild(level2Title);
+
+                        const level2List = document.createElement('div');
+                        level2List.className = 'tree-level';
+                        
+                        data.level2.forEach(function(agent) {
+                            const agentCard = document.createElement('div');
+                            agentCard.className = 'agent-card';
+                            agentCard.innerHTML = `
+                                <div class="agent-info">
+                                    <span class="agent-name">${agent.full_name}</span>
+                                    <span class="agent-rank">${agent.rank.toUpperCase()}</span>
+                                </div>
+                                <div class="agent-stats">
+                                    <span>Sales: ${agent.total_sales}</span>
+                                    <span>Commission: ₦${agent.total_commission.toLocaleString()}</span>
+                                </div>
+                            `;
+                            level2List.appendChild(agentCard);
+                        });
+                        
+                        treeContainer.appendChild(level2List);
+                    }
+
+                    // Display Level 3
+                    if (data.level3 && data.level3.length > 0) {
+                        const level3Title = document.createElement('h3');
+                        level3Title.className = 'tree-level-title';
+                        level3Title.textContent = 'Level 3 - Third Level (' + data.level3.length + ')';
+                        treeContainer.appendChild(level3Title);
+
+                        const level3List = document.createElement('div');
+                        level3List.className = 'tree-level';
+                        
+                        data.level3.forEach(function(agent) {
+                            const agentCard = document.createElement('div');
+                            agentCard.className = 'agent-card';
+                            agentCard.innerHTML = `
+                                <div class="agent-info">
+                                    <span class="agent-name">${agent.full_name}</span>
+                                    <span class="agent-rank">${agent.rank.toUpperCase()}</span>
+                                </div>
+                                <div class="agent-stats">
+                                    <span>Sales: ${agent.total_sales}</span>
+                                    <span>Commission: ₦${agent.total_commission.toLocaleString()}</span>
+                                </div>
+                            `;
+                            level3List.appendChild(agentCard);
+                        });
+                        
+                        treeContainer.appendChild(level3List);
+                    }
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            })
+            .catch(error => {
+                showMessage('An error occurred loading downline data.', 'error');
+            });
+        }
+
+        function loadReferralLink() {
+            // Get the agent's referral code from session
+            fetch('/api/agent/dashboard')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const baseUrl = window.location.origin;
+                    const referralLink = baseUrl + '/agent/register?ref=' + data.agent.referral_code;
+                    document.getElementById('referralLink').value = referralLink;
+                }
+            })
+            .catch(error => {
+                console.error('Error loading referral link:', error);
+            });
+        }
+
+        function copyReferralLink() {
+            const linkInput = document.getElementById('referralLink');
+            linkInput.select();
+            linkInput.setSelectionRange(0, 99999);
+            
+            try {
+                document.execCommand('copy');
+                showMessage('Referral link copied to clipboard!', 'success');
+            } catch (err) {
+                showMessage('Failed to copy link. Please copy manually.', 'error');
+            }
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                fetch('/api/agent/logout', {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href = '/agent/login';
+                })
+                .catch(error => {
+                    window.location.href = '/agent/login';
+                });
+            }
+        }
+
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            messageDiv.className = 'message ' + type;
+            messageDiv.classList.remove('hidden');
+            
+            setTimeout(function() {
+                messageDiv.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

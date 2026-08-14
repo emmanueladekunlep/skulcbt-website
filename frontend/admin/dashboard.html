@@ -1,0 +1,219 @@
+<!-- dashboard.html -->
+<!-- Admin Dashboard Page for SkulCBT Agent Program -->
+<!-- Full path: C:\Users\Peace\Desktop\skulcbt-website\frontend\admin\dashboard.html -->
+<!--
+============================================
+AUTHOR: Emmanuel Adekunle Peace
+WEBSITE: www.emmanueladekunlepeace.com
+PHONE: 07032977572
+EMAIL: emmanueladekunlep@gmail.com
+============================================
+SkulCBT Agent Program - Admin Dashboard
+Copyright (c) 2026 SkulCBT. All rights reserved.
+============================================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - SkulCBT</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <img src="/static/images/skulcbt-logo.png" alt="SkulCBT Logo" style="height: 40px; width: auto; margin-bottom: 8px;">
+                <h2>Skul<span style="color: #D4AF37;">CBT</span></h2>
+                <p>Admin Portal</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/admin/dashboard" class="active">Dashboard</a>
+                <a href="/admin/agents">Agents</a>
+                <a href="/admin/sales">Sales</a>
+                <a href="/admin/licenses">Licenses</a>
+                <a href="/admin/withdrawals">Withdrawals</a>
+                <a href="/admin/reports">Reports</a>
+            </nav>
+            <div class="sidebar-footer">
+                <button onclick="handleLogout()" class="btn-logout">Logout</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="top-bar">
+                <h1>Admin Dashboard</h1>
+                <div class="agent-info">
+                    <span>Welcome, Administrator</span>
+                </div>
+            </div>
+
+            <div id="message" class="message hidden"></div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Agents</h3>
+                    <p id="totalAgents">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Active Agents</h3>
+                    <p id="activeAgents">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Sales</h3>
+                    <p id="totalSales">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Revenue</h3>
+                    <p id="totalRevenue">₦0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Commissions Paid</h3>
+                    <p id="totalCommissions">₦0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Pending Withdrawals</h3>
+                    <p id="pendingWithdrawals">0</p>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h2>Quick Actions</h2>
+                <div class="action-grid">
+                    <a href="/admin/agents" class="action-card">
+                        <h3>Manage Agents</h3>
+                        <p>View, approve, or suspend agents</p>
+                    </a>
+                    <a href="/admin/withdrawals" class="action-card">
+                        <h3>Pending Withdrawals</h3>
+                        <p>Approve or reject withdrawal requests</p>
+                    </a>
+                    <a href="/admin/sales" class="action-card">
+                        <h3>Pending Sales</h3>
+                        <p>Approve or reject pending license sales</p>
+                    </a>
+                    <a href="/admin/licenses" class="action-card">
+                        <h3>View Licenses</h3>
+                        <p>View all generated licenses and schools</p>
+                    </a>
+                    <a href="/admin/reports" class="action-card">
+                        <h3>Reports</h3>
+                        <p>Generate reports and analytics</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="recent-section">
+                <div class="recent-box">
+                    <h2>Recent Agents</h2>
+                    <div id="recentAgents">
+                        <p class="empty-message">Loading...</p>
+                    </div>
+                </div>
+
+                <div class="recent-box">
+                    <h2>Recent Sales</h2>
+                    <div id="recentSales">
+                        <p class="empty-message">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+        });
+
+        function loadDashboardData() {
+            fetch('/api/admin/dashboard')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('totalAgents').textContent = data.stats.total_agents;
+                    document.getElementById('activeAgents').textContent = data.stats.active_agents;
+                    document.getElementById('totalSales').textContent = data.stats.total_sales;
+                    document.getElementById('totalRevenue').textContent = '₦' + data.stats.total_revenue.toLocaleString();
+                    document.getElementById('totalCommissions').textContent = '₦' + data.stats.total_commissions.toLocaleString();
+                    document.getElementById('pendingWithdrawals').textContent = data.stats.pending_withdrawals;
+
+                    const agentsContainer = document.getElementById('recentAgents');
+                    if (data.recent_agents && data.recent_agents.length > 0) {
+                        agentsContainer.innerHTML = '';
+                        data.recent_agents.forEach(function(agent) {
+                            const item = document.createElement('div');
+                            item.className = 'recent-item';
+                            item.innerHTML = `
+                                <span class="school-name">${agent.full_name}</span>
+                                <span>${agent.email}</span>
+                                <span class="sale-status ${agent.status}">${agent.status}</span>
+                            `;
+                            agentsContainer.appendChild(item);
+                        });
+                    } else {
+                        agentsContainer.innerHTML = '<p class="empty-message">No agents registered yet.</p>';
+                    }
+
+                    const salesContainer = document.getElementById('recentSales');
+                    if (data.recent_sales && data.recent_sales.length > 0) {
+                        salesContainer.innerHTML = '';
+                        data.recent_sales.forEach(function(sale) {
+                            const item = document.createElement('div');
+                            item.className = 'recent-item';
+                            const statusDisplay = sale.status === 'pending' ? '🟡 Pending' : '✅ Approved';
+                            item.innerHTML = `
+                                <span class="school-name">${sale.school_name}</span>
+                                <span class="sale-details">${sale.tier} - ${sale.plan}</span>
+                                <span class="sale-amount">₦${sale.price.toLocaleString()}</span>
+                                <span class="sale-status ${sale.status}">${statusDisplay}</span>
+                            `;
+                            salesContainer.appendChild(item);
+                        });
+                    } else {
+                        salesContainer.innerHTML = '<p class="empty-message">No sales yet.</p>';
+                    }
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            })
+            .catch(error => {
+                showMessage('Error loading dashboard data.', 'error');
+            });
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                fetch('/api/admin/logout', {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href = '/admin/login';
+                })
+                .catch(error => {
+                    window.location.href = '/admin/login';
+                });
+            }
+        }
+
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            messageDiv.className = 'message ' + type;
+            messageDiv.classList.remove('hidden');
+
+            setTimeout(function() {
+                messageDiv.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

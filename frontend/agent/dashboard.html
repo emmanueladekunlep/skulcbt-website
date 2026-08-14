@@ -1,0 +1,189 @@
+<!-- dashboard.html -->
+<!-- Agent Dashboard Page for SkulCBT Agent Program -->
+<!-- Full path: C:\Users\Peace\Desktop\skulcbt-website\frontend\agent\dashboard.html -->
+<!--
+============================================
+AUTHOR: Emmanuel Adekunle Peace
+WEBSITE: www.emmanueladekunlepeace.com
+PHONE: 07032977572
+EMAIL: emmanueladekunlep@gmail.com
+============================================
+SkulCBT Agent Program - Agent Dashboard
+Copyright (c) 2026 SkulCBT. All rights reserved.
+============================================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SkulCBT Agent</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <img src="/static/images/skulcbt-logo.png" alt="SkulCBT Logo" style="height: 40px; width: auto; margin-bottom: 8px;">
+                <h2>Skul<span style="color: #D4AF37;">CBT</span></h2>
+                <p>Agent Portal</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/agent/dashboard" class="active">Dashboard</a>
+                <a href="/agent/sales">My Sales</a>
+                <a href="/agent/downline">My Downline</a>
+                <a href="/agent/commissions">Commissions</a>
+                <a href="/agent/withdraw">Withdraw</a>
+                <a href="/agent/generate">Generate License</a>
+            </nav>
+            <div class="sidebar-footer">
+                <button onclick="handleLogout()" class="btn-logout">Logout</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="top-bar">
+                <h1>Dashboard</h1>
+                <div class="agent-info">
+                    <span id="agentName">Welcome, Agent</span>
+                    <span id="agentRank" class="rank-badge">Bronze</span>
+                </div>
+            </div>
+
+            <div id="message" class="message hidden"></div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Sales</h3>
+                    <p id="totalSales">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Commission</h3>
+                    <p id="totalCommission">₦0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Current Balance</h3>
+                    <p id="currentBalance">₦0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Downline Agents</h3>
+                    <p id="downlineCount">0</p>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="recent-section">
+                <div class="recent-box">
+                    <h2>Recent Sales</h2>
+                    <div id="recentSales">
+                        <p class="empty-message">No sales yet. Start selling today!</p>
+                    </div>
+                </div>
+
+                <div class="recent-box">
+                    <h2>Recent Commissions</h2>
+                    <div id="recentCommissions">
+                        <p class="empty-message">No commissions yet.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load dashboard data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboard();
+        });
+
+        function loadDashboard() {
+            fetch('/api/agent/dashboard')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update agent name
+                    document.getElementById('agentName').textContent = 'Welcome, ' + data.agent.full_name;
+
+                    // Update rank
+                    document.getElementById('agentRank').textContent = data.agent.rank.toUpperCase();
+
+                    // Update stats
+                    document.getElementById('totalSales').textContent = data.stats.total_sales;
+                    document.getElementById('totalCommission').textContent = '₦' + data.stats.total_commission.toLocaleString();
+                    document.getElementById('currentBalance').textContent = '₦' + data.stats.balance.toLocaleString();
+                    document.getElementById('downlineCount').textContent = data.stats.downline_count;
+
+                    // Update recent sales
+                    const salesContainer = document.getElementById('recentSales');
+                    if (data.recent_sales && data.recent_sales.length > 0) {
+                        salesContainer.innerHTML = '';
+                        data.recent_sales.forEach(function(sale) {
+                            const saleItem = document.createElement('div');
+                            saleItem.className = 'recent-item';
+                            saleItem.innerHTML = `
+                                <span class="school-name">${sale.school_name}</span>
+                                <span class="sale-details">${sale.tier} - ${sale.plan}</span>
+                                <span class="sale-amount">₦${sale.price.toLocaleString()}</span>
+                                <span class="sale-status ${sale.status}">${sale.status}</span>
+                            `;
+                            salesContainer.appendChild(saleItem);
+                        });
+                    }
+
+                    // Update recent commissions
+                    const commissionsContainer = document.getElementById('recentCommissions');
+                    if (data.recent_commissions && data.recent_commissions.length > 0) {
+                        commissionsContainer.innerHTML = '';
+                        data.recent_commissions.forEach(function(commission) {
+                            const commItem = document.createElement('div');
+                            commItem.className = 'recent-item';
+                            const levelText = commission.level === 0 ? 'Recruitment Bonus' : 'Level ' + commission.level + ' Commission';
+                            commItem.innerHTML = `
+                                <span class="comm-type">${levelText}</span>
+                                <span class="comm-amount">₦${commission.amount.toLocaleString()}</span>
+                                <span class="comm-status ${commission.paid ? 'paid' : 'pending'}">${commission.paid ? 'Paid' : 'Pending'}</span>
+                            `;
+                            commissionsContainer.appendChild(commItem);
+                        });
+                    }
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            })
+            .catch(error => {
+                showMessage('An error occurred loading dashboard.', 'error');
+            });
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                fetch('/api/agent/logout', {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href = '/agent/login';
+                })
+                .catch(error => {
+                    window.location.href = '/agent/login';
+                });
+            }
+        }
+
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            messageDiv.className = 'message ' + type;
+            messageDiv.classList.remove('hidden');
+
+            setTimeout(function() {
+                messageDiv.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

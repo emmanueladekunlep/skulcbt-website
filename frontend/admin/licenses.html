@@ -1,0 +1,264 @@
+<!-- licenses.html -->
+<!-- Admin Licenses Management Page for SkulCBT Agent Program -->
+<!-- Full path: C:\Users\Peace\Desktop\skulcbt-website\frontend\admin\licenses.html -->
+<!--
+============================================
+AUTHOR: Emmanuel Adekunle Peace
+WEBSITE: www.emmanueladekunlepeace.com
+PHONE: 07032977572
+EMAIL: emmanueladekunlep@gmail.com
+============================================
+SkulCBT Agent Program - Admin Licenses Management
+Copyright (c) 2026 SkulCBT. All rights reserved.
+============================================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Licenses - SkulCBT Admin</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* Mobile responsive table styles */
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .table-wrapper table {
+            min-width: 800px;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .table-wrapper table {
+                min-width: 700px;
+                font-size: 12px;
+            }
+            .table-wrapper table th,
+            .table-wrapper table td {
+                padding: 8px 10px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .table-wrapper table {
+                min-width: 600px;
+                font-size: 11px;
+            }
+            .table-wrapper table th,
+            .table-wrapper table td {
+                padding: 6px 8px;
+            }
+        }
+
+        .license-key-mobile {
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+        }
+
+        @media (max-width: 480px) {
+            .license-key-mobile {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <img src="/static/images/skulcbt-logo.png" alt="SkulCBT Logo" style="height: 40px; width: auto; margin-bottom: 8px;">
+                <h2>Skul<span style="color: #D4AF37;">CBT</span></h2>
+                <p>Admin Portal</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/admin/dashboard">Dashboard</a>
+                <a href="/admin/agents">Agents</a>
+                <a href="/admin/sales">Sales</a>
+                <a href="/admin/licenses" class="active">Licenses</a>
+                <a href="/admin/withdrawals">Withdrawals</a>
+                <a href="/admin/reports">Reports</a>
+            </nav>
+            <div class="sidebar-footer">
+                <button onclick="handleLogout()" class="btn-logout">Logout</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="top-bar">
+                <h1>Manage Licenses</h1>
+                <div class="agent-info">
+                    <span>Administrator</span>
+                </div>
+            </div>
+
+            <div id="message" class="message hidden"></div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Licenses</h3>
+                    <p id="totalLicenses">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Active</h3>
+                    <p id="activeLicenses">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Expired</h3>
+                    <p id="expiredLicenses">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Revenue</h3>
+                    <p id="totalRevenue">₦0</p>
+                </div>
+            </div>
+
+            <!-- Search Box -->
+            <div style="margin-bottom: 16px;">
+                <input type="text" id="searchInput" placeholder="Search by school name or license key..." style="width: 100%; padding: 10px 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 14px; background: white;">
+            </div>
+
+            <!-- Licenses Table -->
+            <div class="table-section">
+                <h2>All Licenses</h2>
+                <div class="table-wrapper">
+                    <div id="licensesTableContainer">
+                        <p class="empty-message">Loading licenses...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadLicenses();
+            
+            document.getElementById('searchInput').addEventListener('keyup', function() {
+                filterLicenses();
+            });
+        });
+
+        function loadLicenses() {
+            const container = document.getElementById('licensesTableContainer');
+
+            fetch('/api/admin/licenses')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const licenses = data.licenses;
+
+                    document.getElementById('totalLicenses').textContent = data.stats.total_licenses;
+                    document.getElementById('activeLicenses').textContent = data.stats.active_licenses;
+                    document.getElementById('expiredLicenses').textContent = data.stats.expired_licenses;
+                    document.getElementById('totalRevenue').textContent = '₦' + data.stats.total_revenue.toLocaleString();
+
+                    window.allLicenses = licenses;
+                    renderLicenses(licenses);
+                } else {
+                    container.innerHTML = '<p class="empty-message">Error loading licenses.</p>';
+                }
+            })
+            .catch(error => {
+                container.innerHTML = '<p class="empty-message">Error loading licenses.</p>';
+                console.error('Error:', error);
+            });
+        }
+
+        function renderLicenses(licenses) {
+            const container = document.getElementById('licensesTableContainer');
+
+            if (licenses.length === 0) {
+                container.innerHTML = '<p class="empty-message">No licenses generated yet.</p>';
+                return;
+            }
+
+            let tableHtml = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>License Key</th>
+                            <th>School Name</th>
+                            <th>Tier</th>
+                            <th>Plan</th>
+                            <th>Price</th>
+                            <th>Agent</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Expiry</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            licenses.forEach(function(license) {
+                const statusClass = license.status === 'active' ? 'status-approved' :
+                                   license.status === 'expired' ? 'status-rejected' : 'status-pending';
+
+                const expiryDisplay = license.expiry_date === 'LIFETIME' ? 'Never' : license.expiry_date;
+
+                tableHtml += `
+                    <tr>
+                        <td><span class="license-key-mobile">${license.license_key}</span></td>
+                        <td>${license.school_name}</td>
+                        <td>${license.tier}</td>
+                        <td>${license.plan}</td>
+                        <td>₦${(license.price || 0).toLocaleString()}</td>
+                        <td>${license.agent_name || 'Agent #' + license.agent_id}</td>
+                        <td><span class="status-badge ${statusClass}">${license.status}</span></td>
+                        <td>${license.created_date}</td>
+                        <td>${expiryDisplay}</td>
+                    </tr>
+                `;
+            });
+
+            tableHtml += `
+                    </tbody>
+                </table>
+            `;
+
+            container.innerHTML = tableHtml;
+        }
+
+        function filterLicenses() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (!window.allLicenses) return;
+            
+            if (searchTerm === '') {
+                renderLicenses(window.allLicenses);
+                return;
+            }
+            
+            const filtered = window.allLicenses.filter(function(license) {
+                return license.school_name.toLowerCase().includes(searchTerm) ||
+                       license.license_key.toLowerCase().includes(searchTerm);
+            });
+            
+            renderLicenses(filtered);
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                fetch('/api/admin/logout', {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href = '/admin/login';
+                })
+                .catch(error => {
+                    window.location.href = '/admin/login';
+                });
+            }
+        }
+    </script>
+</body>
+</html>

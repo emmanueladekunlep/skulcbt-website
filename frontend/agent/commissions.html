@@ -1,0 +1,231 @@
+<!-- commissions.html -->
+<!-- Agent Commissions Page for SkulCBT Agent Program -->
+<!-- Full path: C:\Users\Peace\Desktop\skulcbt-website\frontend\agent\commissions.html -->
+<!--
+============================================
+AUTHOR: Emmanuel Adekunle Peace
+WEBSITE: www.emmanueladekunlepeace.com
+PHONE: 07032977572
+EMAIL: emmanueladekunlep@gmail.com
+============================================
+SkulCBT Agent Program - Agent Commissions View
+Copyright (c) 2026 SkulCBT. All rights reserved.
+============================================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commissions - SkulCBT Agent</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <h2>SkulCBT</h2>
+                <p>Agent Portal</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/agent/dashboard">Dashboard</a>
+                <a href="/agent/sales">My Sales</a>
+                <a href="/agent/downline">My Downline</a>
+                <a href="/agent/commissions" class="active">Commissions</a>
+                <a href="/agent/withdraw">Withdraw</a>
+            </nav>
+            <div class="sidebar-footer">
+                <button onclick="handleLogout()" class="btn-logout">Logout</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="top-bar">
+                <h1>Commissions</h1>
+                <div class="agent-info">
+                    <span id="agentName">Welcome, Agent</span>
+                    <span id="agentRank" class="rank-badge">Bronze</span>
+                </div>
+            </div>
+
+            <div id="message" class="message hidden"></div>
+
+            <!-- Commission Summary -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Earned</h3>
+                    <p id="totalEarned">₦0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Paid</h3>
+                    <p id="paidTotal">₦0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Pending</h3>
+                    <p id="pendingTotal">₦0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Current Balance</h3>
+                    <p id="currentBalance">₦0</p>
+                </div>
+            </div>
+
+            <!-- Commission Breakdown -->
+            <div class="commission-breakdown">
+                <h2>How You Earn</h2>
+                <div class="breakdown-grid">
+                    <div class="breakdown-item">
+                        <h4>Direct Sales</h4>
+                        <p>35% of every sale you make</p>
+                    </div>
+                    <div class="breakdown-item">
+                        <h4>Level 1</h4>
+                        <p>5% from your direct recruits' sales</p>
+                    </div>
+                    <div class="breakdown-item">
+                        <h4>Level 2</h4>
+                        <p>3% from your indirect recruits' sales</p>
+                    </div>
+                    <div class="breakdown-item">
+                        <h4>Level 3</h4>
+                        <p>1% from third level recruits' sales</p>
+                    </div>
+                    <div class="breakdown-item">
+                        <h4>Recruitment Bonus</h4>
+                        <p>₦5,000 for every new agent you recruit</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Commission Table -->
+            <div class="table-section">
+                <h2>Commission History</h2>
+                <div id="commissionTableContainer">
+                    <p class="empty-message">No commissions yet.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load commission data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAgentInfo();
+            loadCommissions();
+        });
+
+        function loadAgentInfo() {
+            fetch('/api/agent/dashboard')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('agentName').textContent = 'Welcome, ' + data.agent.full_name;
+                    document.getElementById('agentRank').textContent = data.agent.rank.toUpperCase();
+                    document.getElementById('currentBalance').textContent = '₦' + data.stats.balance.toLocaleString();
+                }
+            })
+            .catch(error => {
+                console.error('Error loading agent info:', error);
+            });
+        }
+
+        function loadCommissions() {
+            fetch('/api/agent/commissions')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const commissions = data.commissions;
+                    const container = document.getElementById('commissionTableContainer');
+                    
+                    // Update summary
+                    document.getElementById('paidTotal').textContent = '₦' + data.paid_total.toLocaleString();
+                    document.getElementById('pendingTotal').textContent = '₦' + data.pending_total.toLocaleString();
+                    document.getElementById('totalEarned').textContent = '₦' + (data.paid_total + data.pending_total).toLocaleString();
+
+                    if (commissions.length === 0) {
+                        container.innerHTML = '<p class="empty-message">No commissions yet.</p>';
+                        return;
+                    }
+
+                    // Build table
+                    let tableHtml = `
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Level</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                    commissions.forEach(function(comm) {
+                        let typeText = 'Commission';
+                        if (comm.level === 0) {
+                            typeText = 'Recruitment Bonus';
+                        } else {
+                            typeText = 'Level ' + comm.level;
+                        }
+
+                        const statusClass = comm.paid ? 'status-paid' : 'status-pending';
+
+                        tableHtml += `
+                            <tr>
+                                <td>${typeText}</td>
+                                <td>${comm.level === 0 ? 'Bonus' : 'Level ' + comm.level}</td>
+                                <td>₦${comm.amount.toLocaleString()}</td>
+                                <td><span class="status-badge ${statusClass}">${comm.paid ? 'Paid' : 'Pending'}</span></td>
+                                <td>${comm.created_date}</td>
+                            </tr>
+                        `;
+                    });
+
+                    tableHtml += `
+                            </tbody>
+                        </table>
+                    `;
+
+                    container.innerHTML = tableHtml;
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            })
+            .catch(error => {
+                showMessage('An error occurred loading commission data.', 'error');
+            });
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                fetch('/api/agent/logout', {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href = '/agent/login';
+                })
+                .catch(error => {
+                    window.location.href = '/agent/login';
+                });
+            }
+        }
+
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            messageDiv.className = 'message ' + type;
+            messageDiv.classList.remove('hidden');
+            
+            setTimeout(function() {
+                messageDiv.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

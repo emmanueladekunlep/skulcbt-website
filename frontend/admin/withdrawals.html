@@ -1,0 +1,239 @@
+<!-- withdrawals.html -->
+<!-- Admin Withdrawals Management Page for SkulCBT Agent Program -->
+<!-- Full path: C:\Users\Peace\Desktop\skulcbt-website\frontend\admin\withdrawals.html -->
+<!--
+============================================
+AUTHOR: Emmanuel Adekunle Peace
+WEBSITE: www.emmanueladekunlepeace.com
+PHONE: 07032977572
+EMAIL: emmanueladekunlep@gmail.com
+============================================
+SkulCBT Agent Program - Admin Withdrawals Management
+Copyright (c) 2026 SkulCBT. All rights reserved.
+============================================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Withdrawals - SkulCBT Admin</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <img src="/static/images/skulcbt-logo.png" alt="SkulCBT Logo" style="height: 40px; width: auto; margin-bottom: 8px;">
+                <h2>Skul<span style="color: #D4AF37;">CBT</span></h2>
+                <p>Admin Portal</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/admin/dashboard">Dashboard</a>
+                <a href="/admin/agents">Agents</a>
+                <a href="/admin/sales">Sales</a>
+                <a href="/admin/licenses">Licenses</a>
+                <a href="/admin/withdrawals" class="active">Withdrawals</a>
+                <a href="/admin/reports">Reports</a>
+            </nav>
+            <div class="sidebar-footer">
+                <button onclick="handleLogout()" class="btn-logout">Logout</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="top-bar">
+                <h1>Manage Withdrawals</h1>
+                <div class="agent-info">
+                    <span>Administrator</span>
+                </div>
+            </div>
+
+            <div id="message" class="message hidden"></div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Withdrawals</h3>
+                    <p id="totalWithdrawals">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Amount</h3>
+                    <p id="totalAmount">₦0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Pending</h3>
+                    <p id="pendingCount">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Approved</h3>
+                    <p id="approvedCount">0</p>
+                </div>
+            </div>
+
+            <!-- Withdrawals Table -->
+            <div class="table-section">
+                <h2>Withdrawal Requests</h2>
+                <div id="withdrawalTableContainer">
+                    <p class="empty-message">Loading withdrawals...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadWithdrawals();
+        });
+
+        function loadWithdrawals() {
+            const container = document.getElementById('withdrawalTableContainer');
+
+            fetch('/api/admin/withdrawals')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const withdrawals = data.withdrawals;
+
+                    document.getElementById('totalWithdrawals').textContent = data.stats.total_withdrawals;
+                    document.getElementById('totalAmount').textContent = '₦' + data.stats.total_amount.toLocaleString();
+                    document.getElementById('pendingCount').textContent = data.stats.pending_count;
+                    document.getElementById('approvedCount').textContent = data.stats.approved_count;
+
+                    if (withdrawals.length === 0) {
+                        container.innerHTML = '<p class="empty-message">No withdrawal requests yet.</p>';
+                        return;
+                    }
+
+                    let tableHtml = `
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Agent</th>
+                                    <th>Amount</th>
+                                    <th>Bank</th>
+                                    <th>Account Number</th>
+                                    <th>Account Name</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                    withdrawals.forEach(function(w) {
+                        const statusClass = w.status === 'approved' ? 'status-approved' :
+                                           w.status === 'pending' ? 'status-pending' : 'status-rejected';
+
+                        let actionButtons = '';
+                        if (w.status === 'pending') {
+                            actionButtons = `
+                                <button class="btn-action" onclick="approveWithdrawal(${w.id})">Approve</button>
+                                <button class="btn-action btn-reject" onclick="rejectWithdrawal(${w.id})">Reject</button>
+                            `;
+                        } else {
+                            actionButtons = `<span style="color: #a0aec0; font-size: 12px;">Completed</span>`;
+                        }
+
+                        tableHtml += `
+                            <tr>
+                                <td><strong>${w.agent_name || 'Agent #' + w.agent_id}</strong></td>
+                                <td><strong>₦${w.amount.toLocaleString()}</strong></td>
+                                <td><strong>${w.bank_name || 'N/A'}</strong></td>
+                                <td><strong>${w.account_number || 'N/A'}</strong></td>
+                                <td><strong>${w.account_name || 'N/A'}</strong></td>
+                                <td><span class="status-badge ${statusClass}">${w.status}</span></td>
+                                <td>${w.request_date}</td>
+                                <td>${actionButtons}</td>
+                            </tr>
+                        `;
+                    });
+
+                    tableHtml += `
+                            </tbody>
+                        </table>
+                    `;
+
+                    container.innerHTML = tableHtml;
+                } else {
+                    container.innerHTML = '<p class="empty-message">Error loading withdrawals.</p>';
+                }
+            })
+            .catch(error => {
+                container.innerHTML = '<p class="empty-message">Error loading withdrawals.</p>';
+                console.error('Error:', error);
+            });
+        }
+
+        function approveWithdrawal(id) {
+            if (confirm('Approve this withdrawal request? The agent will be paid.')) {
+                fetch('/api/admin/withdrawals/approve/' + id, {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showMessage('Withdrawal approved successfully.', 'success');
+                        loadWithdrawals();
+                    } else {
+                        showMessage('Error approving withdrawal.', 'error');
+                    }
+                })
+                .catch(error => {
+                    showMessage('Error approving withdrawal.', 'error');
+                });
+            }
+        }
+
+        function rejectWithdrawal(id) {
+            if (confirm('Reject this withdrawal request?')) {
+                fetch('/api/admin/withdrawals/reject/' + id, {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showMessage('Withdrawal rejected.', 'success');
+                        loadWithdrawals();
+                    } else {
+                        showMessage('Error rejecting withdrawal.', 'error');
+                    }
+                })
+                .catch(error => {
+                    showMessage('Error rejecting withdrawal.', 'error');
+                });
+            }
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                fetch('/api/admin/logout', {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href = '/admin/login';
+                })
+                .catch(error => {
+                    window.location.href = '/admin/login';
+                });
+            }
+        }
+
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            messageDiv.className = 'message ' + type;
+            messageDiv.classList.remove('hidden');
+
+            setTimeout(function() {
+                messageDiv.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

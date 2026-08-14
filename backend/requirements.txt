@@ -1,0 +1,14 @@
+# requirements.txt
+# Python dependencies for SkulCBT Agent Program
+# Full path: C:\Users\Peace\Desktop\skulcbt-website\backend\requirements.txt
+#
+# ============================================
+# AUTHOR: Emmanuel Adekunle Peace
+# WEBSITE: www.emmanueladekunlepeace.com
+# PHONE: 07032977572
+# EMAIL: emmanueladekunlep@gmail.com
+# ============================================
+
+Flask==2.3.2
+Flask-CORS==4.0.0
+python-dotenv==1.0.0
