@@ -2,34 +2,66 @@
   "version": 2,
   "builds": [
     {
-      "src": "backend/agent_app.py",
-      "use": "@vercel/python"
-    },
-    {
-      "src": "frontend/**/*.html",
+      "src": "*.html",
       "use": "@vercel/static"
     },
     {
-      "src": "static/**/*",
+      "src": "blog/*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "css/*.css",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "js/*.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "images/**",
       "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "backend/agent_app.py"
+      "src": "/",
+      "dest": "/index.html"
     },
     {
-      "src": "/agent/(.*)",
-      "dest": "backend/agent_app.py"
+      "src": "/features",
+      "dest": "/features.html"
     },
     {
-      "src": "/admin/(.*)",
-      "dest": "backend/agent_app.py"
+      "src": "/pricing",
+      "dest": "/pricing.html"
+    },
+    {
+      "src": "/about",
+      "dest": "/about.html"
+    },
+    {
+      "src": "/contact",
+      "dest": "/contact.html"
+    },
+    {
+      "src": "/blog",
+      "dest": "/blog.html"
+    },
+    {
+      "src": "/demo-request",
+      "dest": "/demo-request.html"
+    },
+    {
+      "src": "/thank-you",
+      "dest": "/thank-you.html"
+    },
+    {
+      "src": "/blog/(.*)",
+      "dest": "/blog/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "backend/agent_app.py"
+      "dest": "/$1"
     }
   ]
 }
