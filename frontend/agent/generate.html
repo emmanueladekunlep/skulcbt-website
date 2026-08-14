@@ -1,0 +1,311 @@
+<!-- generate.html -->
+<!-- Agent Generate License Page for SkulCBT Agent Program -->
+<!-- Full path: C:\Users\Peace\Desktop\skulcbt-website\frontend\agent\generate.html -->
+<!--
+============================================
+AUTHOR: Emmanuel Adekunle Peace
+WEBSITE: www.emmanueladekunlepeace.com
+PHONE: 07032977572
+EMAIL: emmanueladekunlep@gmail.com
+============================================
+SkulCBT Agent Program - Agent Generate License
+Copyright (c) 2026 SkulCBT. All rights reserved.
+============================================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate License - SkulCBT Agent</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <img src="/static/images/skulcbt-logo.png" alt="SkulCBT Logo" style="height: 40px; width: auto; margin-bottom: 8px;">
+                <h2>Skul<span style="color: #D4AF37;">CBT</span></h2>
+                <p>Agent Portal</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/agent/dashboard">Dashboard</a>
+                <a href="/agent/sales">My Sales</a>
+                <a href="/agent/downline">My Downline</a>
+                <a href="/agent/commissions">Commissions</a>
+                <a href="/agent/withdraw">Withdraw</a>
+                <a href="/agent/generate" class="active">Generate License</a>
+            </nav>
+            <div class="sidebar-footer">
+                <button onclick="handleLogout()" class="btn-logout">Logout</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="top-bar">
+                <h1>Generate License</h1>
+                <div class="agent-info">
+                    <span id="agentName">Welcome, Agent</span>
+                    <span id="agentRank" class="rank-badge">Bronze</span>
+                </div>
+            </div>
+
+            <div id="message" class="message hidden"></div>
+
+            <!-- Generate License Form -->
+            <div class="form-section">
+                <h2>Sell a License to a School</h2>
+                <p style="color: #718096; margin-bottom: 18px; font-size: 14px;">
+                    Fill in the school details below. Once you submit, the sale will be recorded as <strong>PENDING</strong>.
+                    After the school pays, the admin will approve it and the license will be generated automatically.
+                </p>
+
+                <form id="generateForm" onsubmit="handleGenerate(event)">
+                    <div class="form-group">
+                        <label for="school_name">School Name <span style="color: #e53e3e;">*</span></label>
+                        <input type="text" id="school_name" name="school_name" required placeholder="Enter school name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="school_email">School Email <span style="color: #e53e3e;">*</span></label>
+                        <input type="email" id="school_email" name="school_email" required placeholder="Enter school email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="school_phone">School Phone</label>
+                        <input type="text" id="school_phone" name="school_phone" placeholder="Enter school phone number">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tier">Tier <span style="color: #e53e3e;">*</span></label>
+                        <select id="tier" name="tier" required onchange="updatePrice()">
+                            <option value="ESS">Essential (ESS) - ₦20,000</option>
+                            <option value="PRO" selected>Professional (PRO) - ₦40,000</option>
+                            <option value="ENT">Enterprise (ENT) - ₦75,000</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="plan">Plan <span style="color: #e53e3e;">*</span></label>
+                        <select id="plan" name="plan" required onchange="updatePrice()">
+                            <option value="TERMLY">Termly</option>
+                            <option value="YEARLY">Yearly</option>
+                            <option value="LIFETIME" selected>Lifetime</option>
+                        </select>
+                    </div>
+
+                    <div class="price-display" id="priceDisplay">
+                        Price: ₦40,000
+                    </div>
+
+                    <div style="background: #feebc8; padding: 14px 18px; border-radius: 10px; margin-bottom: 16px; border: 1px solid #f6ad55;">
+                        <p style="font-size: 14px; color: #744210; margin: 0;">
+                            <strong>Your Commission:</strong> 35% = <span id="commissionDisplay">₦14,000</span>
+                        </p>
+                        <p style="font-size: 13px; color: #744210; margin: 4px 0 0 0;">
+                            You will earn this when the admin approves the sale.
+                        </p>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Record Sale</button>
+                </form>
+            </div>
+
+            <!-- Recent Pending Sales -->
+            <div class="table-section">
+                <h2>My Pending Sales</h2>
+                <div id="pendingSalesContainer">
+                    <p class="empty-message">No pending sales.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Pricing data
+        const PRICES = {
+            "ESS": { "TERMLY": 20000, "YEARLY": 50000, "LIFETIME": 75000 },
+            "PRO": { "TERMLY": 40000, "YEARLY": 100000, "LIFETIME": 150000 },
+            "ENT": { "TERMLY": 75000, "YEARLY": 175000, "LIFETIME": 250000 }
+        };
+
+        // Load agent info on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAgentInfo();
+            loadPendingSales();
+            updatePrice();
+        });
+
+        function loadAgentInfo() {
+            fetch('/api/agent/dashboard')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('agentName').textContent = 'Welcome, ' + data.agent.full_name;
+                    document.getElementById('agentRank').textContent = data.agent.rank.toUpperCase();
+                }
+            })
+            .catch(error => {
+                console.error('Error loading agent info:', error);
+            });
+        }
+
+        function updatePrice() {
+            const tier = document.getElementById('tier').value;
+            const plan = document.getElementById('plan').value;
+            const price = PRICES[tier]?.[plan] || 0;
+            const commission = price * 0.35;
+
+            document.getElementById('priceDisplay').textContent = 'Price: ₦' + price.toLocaleString();
+            document.getElementById('commissionDisplay').textContent = '₦' + commission.toLocaleString();
+        }
+
+        function loadPendingSales() {
+            const container = document.getElementById('pendingSalesContainer');
+
+            fetch('/api/agent/pending-sales')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const sales = data.sales;
+
+                    if (sales.length === 0) {
+                        container.innerHTML = '<p class="empty-message">No pending sales.</p>';
+                        return;
+                    }
+
+                    let tableHtml = `
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>School</th>
+                                    <th>Tier</th>
+                                    <th>Plan</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                    sales.forEach(function(sale) {
+                        tableHtml += `
+                            <tr>
+                                <td>${sale.school_name}</td>
+                                <td>${sale.tier}</td>
+                                <td>${sale.plan}</td>
+                                <td>₦${sale.price.toLocaleString()}</td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td>${sale.sale_date}</td>
+                            </tr>
+                        `;
+                    });
+
+                    tableHtml += `
+                            </tbody>
+                        </table>
+                    `;
+
+                    container.innerHTML = tableHtml;
+                }
+            })
+            .catch(error => {
+                console.error('Error loading pending sales:', error);
+            });
+        }
+
+        function handleGenerate(event) {
+            event.preventDefault();
+
+            const school_name = document.getElementById('school_name').value;
+            const school_email = document.getElementById('school_email').value;
+            const school_phone = document.getElementById('school_phone').value;
+            const tier = document.getElementById('tier').value;
+            const plan = document.getElementById('plan').value;
+            const price = PRICES[tier]?.[plan] || 0;
+            const commission = price * 0.35;
+            const messageDiv = document.getElementById('message');
+
+            messageDiv.classList.add('hidden');
+
+            const submitBtn = document.querySelector('button[type="submit"]');
+            submitBtn.textContent = 'Submitting...';
+            submitBtn.disabled = true;
+
+            fetch('/api/agent/sales', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    school_name: school_name,
+                    school_email: school_email,
+                    school_phone: school_phone,
+                    tier: tier,
+                    plan: plan,
+                    price: price,
+                    commission: commission
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    messageDiv.textContent = data.message;
+                    messageDiv.className = 'message success';
+                    messageDiv.classList.remove('hidden');
+
+                    document.getElementById('generateForm').reset();
+                    document.getElementById('tier').value = 'PRO';
+                    document.getElementById('plan').value = 'LIFETIME';
+                    updatePrice();
+
+                    submitBtn.textContent = 'Record Sale';
+                    submitBtn.disabled = false;
+
+                    // Reload pending sales
+                    loadPendingSales();
+
+                    // Scroll to message
+                    messageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                    setTimeout(function() {
+                        messageDiv.classList.add('hidden');
+                    }, 8000);
+                } else {
+                    messageDiv.textContent = data.message;
+                    messageDiv.className = 'message error';
+                    messageDiv.classList.remove('hidden');
+                    submitBtn.textContent = 'Record Sale';
+                    submitBtn.disabled = false;
+                }
+            })
+            .catch(error => {
+                messageDiv.textContent = 'An error occurred. Please try again.';
+                messageDiv.className = 'message error';
+                messageDiv.classList.remove('hidden');
+                submitBtn.textContent = 'Record Sale';
+                submitBtn.disabled = false;
+            });
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                fetch('/api/agent/logout', {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href = '/agent/login';
+                })
+                .catch(error => {
+                    window.location.href = '/agent/login';
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!-- reports.html -->
+<!-- Admin Reports Page for SkulCBT Agent Program -->
+<!-- Full path: C:\Users\Peace\Desktop\skulcbt-website\frontend\admin\reports.html -->
+<!--
+============================================
+AUTHOR: Emmanuel Adekunle Peace
+WEBSITE: www.emmanueladekunlepeace.com
+PHONE: 07032977572
+EMAIL: emmanueladekunlep@gmail.com
+============================================
+SkulCBT Agent Program - Admin Reports
+Copyright (c) 2026 SkulCBT. All rights reserved.
+============================================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - SkulCBT Admin</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <img src="/static/images/skulcbt-logo.png" alt="SkulCBT Logo" style="height: 40px; width: auto; margin-bottom: 8px;">
+                <h2>Skul<span style="color: #D4AF37;">CBT</span></h2>
+                <p>Admin Portal</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/admin/dashboard">Dashboard</a>
+                <a href="/admin/agents">Agents</a>
+                <a href="/admin/sales">Sales</a>
+                <a href="/admin/licenses">Licenses</a>
+                <a href="/admin/withdrawals">Withdrawals</a>
+                <a href="/admin/reports" class="active">Reports</a>
+            </nav>
+            <div class="sidebar-footer">
+                <button onclick="handleLogout()" class="btn-logout">Logout</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="top-bar">
+                <h1>Reports</h1>
+                <div class="agent-info">
+                    <span>Administrator</span>
+                </div>
+            </div>
+
+            <div id="message" class="message hidden"></div>
+
+            <!-- Report Cards -->
+            <div class="report-grid">
+                <div class="report-card">
+                    <h3>Agent Performance Report</h3>
+                    <p>View all agents ranked by sales and commissions</p>
+                    <button onclick="generateReport('agents')" class="btn-primary" style="width: auto; padding: 10px 24px; margin-top: 12px;">Generate Report</button>
+                </div>
+
+                <div class="report-card">
+                    <h3>Sales Summary Report</h3>
+                    <p>View total sales, revenue, and commissions</p>
+                    <button onclick="generateReport('sales')" class="btn-primary" style="width: auto; padding: 10px 24px; margin-top: 12px;">Generate Report</button>
+                </div>
+
+                <div class="report-card">
+                    <h3>Commission Report</h3>
+                    <p>View all commissions paid and pending by agent</p>
+                    <button onclick="generateReport('commissions')" class="btn-primary" style="width: auto; padding: 10px 24px; margin-top: 12px;">Generate Report</button>
+                </div>
+
+                <div class="report-card">
+                    <h3>Withdrawal Report</h3>
+                    <p>View all withdrawal requests and their status</p>
+                    <button onclick="generateReport('withdrawals')" class="btn-primary" style="width: auto; padding: 10px 24px; margin-top: 12px;">Generate Report</button>
+                </div>
+
+                <div class="report-card">
+                    <h3>License Report</h3>
+                    <p>View all licenses generated and their status</p>
+                    <button onclick="generateReport('licenses')" class="btn-primary" style="width: auto; padding: 10px 24px; margin-top: 12px;">Generate Report</button>
+                </div>
+            </div>
+
+            <!-- Report Display Area -->
+            <div id="reportDisplay" class="report-display" style="display: none;">
+                <div class="report-header">
+                    <h2 id="reportTitle">Report</h2>
+                    <button onclick="closeReport()" class="modal-close" style="font-size: 24px; background: none; border: none; cursor: pointer;">×</button>
+                </div>
+                <div id="reportContent">
+                    <p class="empty-message">Report content will appear here.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generateReport(type) {
+            const display = document.getElementById('reportDisplay');
+            const title = document.getElementById('reportTitle');
+            const content = document.getElementById('reportContent');
+
+            display.style.display = 'block';
+
+            fetch('/api/admin/reports/' + type)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    title.textContent = data.title;
+
+                    if (data.data.length === 0) {
+                        content.innerHTML = '<p class="empty-message">No data available for this report.</p>';
+                        return;
+                    }
+
+                    let tableHtml = `
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                    `;
+
+                    Object.keys(data.data[0]).forEach(function(key) {
+                        tableHtml += `<th>${key.replace(/_/g, ' ').toUpperCase()}</th>`;
+                    });
+
+                    tableHtml += `
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                    data.data.forEach(function(item) {
+                        tableHtml += `<tr>`;
+                        Object.values(item).forEach(function(value) {
+                            if (typeof value === 'number') {
+                                tableHtml += `<td>₦${value.toLocaleString()}</td>`;
+                            } else {
+                                tableHtml += `<td>${value}</td>`;
+                            }
+                        });
+                        tableHtml += `</tr>`;
+                    });
+
+                    tableHtml += `
+                            </tbody>
+                        </table>
+                    `;
+
+                    content.innerHTML = tableHtml;
+                    showMessage('Report generated successfully!', 'success');
+                } else {
+                    content.innerHTML = '<p class="empty-message">Error generating report.</p>';
+                }
+            })
+            .catch(error => {
+                content.innerHTML = '<p class="empty-message">Error generating report.</p>';
+                console.error('Error:', error);
+            });
+        }
+
+        function closeReport() {
+            document.getElementById('reportDisplay').style.display = 'none';
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                fetch('/api/admin/logout', {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href = '/admin/login';
+                })
+                .catch(error => {
+                    window.location.href = '/admin/login';
+                });
+            }
+        }
+
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            messageDiv.className = 'message ' + type;
+            messageDiv.classList.remove('hidden');
+
+            setTimeout(function() {
+                messageDiv.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!-- sales.html -->
+<!-- Agent Sales Page for SkulCBT Agent Program -->
+<!-- Full path: C:\Users\Peace\Desktop\skulcbt-website\frontend\agent\sales.html -->
+<!--
+============================================
+AUTHOR: Emmanuel Adekunle Peace
+WEBSITE: www.emmanueladekunlepeace.com
+PHONE: 07032977572
+EMAIL: emmanueladekunlep@gmail.com
+============================================
+SkulCBT Agent Program - Agent Sales History
+Copyright (c) 2026 SkulCBT. All rights reserved.
+============================================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Sales - SkulCBT Agent</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-logo">
+                <img src="/static/images/skulcbt-logo.png" alt="SkulCBT Logo" style="height: 40px; width: auto; margin-bottom: 8px;">
+                <h2>Skul<span style="color: #D4AF37;">CBT</span></h2>
+                <p>Agent Portal</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/agent/dashboard">Dashboard</a>
+                <a href="/agent/sales" class="active">My Sales</a>
+                <a href="/agent/downline">My Downline</a>
+                <a href="/agent/commissions">Commissions</a>
+                <a href="/agent/withdraw">Withdraw</a>
+                <a href="/agent/generate">Generate License</a>
+            </nav>
+            <div class="sidebar-footer">
+                <button onclick="handleLogout()" class="btn-logout">Logout</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="top-bar">
+                <h1>My Sales</h1>
+                <div class="agent-info">
+                    <span id="agentName">Welcome, Agent</span>
+                    <span id="agentRank" class="rank-badge">Bronze</span>
+                </div>
+            </div>
+
+            <div id="message" class="message hidden"></div>
+
+            <!-- Sales Summary -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Sales</h3>
+                    <p id="totalSales">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Revenue</h3>
+                    <p id="totalRevenue">₦0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Commission</h3>
+                    <p id="totalCommission">₦0</p>
+                </div>
+            </div>
+
+            <!-- Sales Table -->
+            <div class="table-section">
+                <h2>Sales History</h2>
+                <div id="salesTableContainer">
+                    <p class="empty-message">You have no sales yet. Start selling today!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load sales data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAgentInfo();
+            loadSales();
+        });
+
+        function loadAgentInfo() {
+            fetch('/api/agent/dashboard')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('agentName').textContent = 'Welcome, ' + data.agent.full_name;
+                    document.getElementById('agentRank').textContent = data.agent.rank.toUpperCase();
+                }
+            })
+            .catch(error => {
+                console.error('Error loading agent info:', error);
+            });
+        }
+
+        function loadSales() {
+            fetch('/api/agent/sales')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const sales = data.sales;
+                    const container = document.getElementById('salesTableContainer');
+
+                    let totalSales = sales.length;
+                    let totalRevenue = 0;
+                    let totalCommission = 0;
+
+                    if (totalSales === 0) {
+                        container.innerHTML = '<p class="empty-message">You have no sales yet. Start selling today!</p>';
+                        document.getElementById('totalSales').textContent = '0';
+                        document.getElementById('totalRevenue').textContent = '₦0';
+                        document.getElementById('totalCommission').textContent = '₦0';
+                        return;
+                    }
+
+                    let tableHtml = `
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>School Name</th>
+                                    <th>Tier</th>
+                                    <th>Plan</th>
+                                    <th>Price</th>
+                                    <th>Commission</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                    sales.forEach(function(sale) {
+                        totalRevenue += sale.price;
+                        totalCommission += sale.commission;
+
+                        const statusClass = sale.status === 'approved' ? 'status-approved' :
+                                           sale.status === 'pending' ? 'status-pending' : 'status-rejected';
+
+                        tableHtml += `
+                            <tr>
+                                <td>${sale.school_name}</td>
+                                <td>${sale.tier}</td>
+                                <td>${sale.plan}</td>
+                                <td>₦${sale.price.toLocaleString()}</td>
+                                <td>₦${sale.commission.toLocaleString()}</td>
+                                <td><span class="status-badge ${statusClass}">${sale.status}</span></td>
+                                <td>${sale.sale_date}</td>
+                            </tr>
+                        `;
+                    });
+
+                    tableHtml += `
+                            </tbody>
+                        </table>
+                    `;
+
+                    container.innerHTML = tableHtml;
+
+                    document.getElementById('totalSales').textContent = totalSales;
+                    document.getElementById('totalRevenue').textContent = '₦' + totalRevenue.toLocaleString();
+                    document.getElementById('totalCommission').textContent = '₦' + totalCommission.toLocaleString();
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            })
+            .catch(error => {
+                showMessage('An error occurred loading sales data.', 'error');
+            });
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                fetch('/api/agent/logout', {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    window.location.href = '/agent/login';
+                })
+                .catch(error => {
+                    window.location.href = '/agent/login';
+                });
+            }
+        }
+
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            messageDiv.className = 'message ' + type;
+            messageDiv.classList.remove('hidden');
+
+            setTimeout(function() {
+                messageDiv.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
