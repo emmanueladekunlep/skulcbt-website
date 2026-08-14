@@ -2,26 +2,6 @@
   "version": 2,
   "builds": [
     {
-      "src": "*.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "blog/*.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "css/*.css",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "js/*.js",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "images/**",
-      "use": "@vercel/static"
-    },
-    {
       "src": "backend/agent_app.py",
       "use": "@vercel/python"
     },
@@ -36,56 +16,20 @@
   ],
   "routes": [
     {
-      "src": "/",
-      "dest": "/index.html"
-    },
-    {
-      "src": "/features",
-      "dest": "/features.html"
-    },
-    {
-      "src": "/pricing",
-      "dest": "/pricing.html"
-    },
-    {
-      "src": "/about",
-      "dest": "/about.html"
-    },
-    {
-      "src": "/contact",
-      "dest": "/contact.html"
-    },
-    {
-      "src": "/blog",
-      "dest": "/blog.html"
-    },
-    {
-      "src": "/demo-request",
-      "dest": "/demo-request.html"
-    },
-    {
-      "src": "/thank-you",
-      "dest": "/thank-you.html"
-    },
-    {
-      "src": "/blog/(.*)",
-      "dest": "/blog/$1"
-    },
-    {
       "src": "/api/(.*)",
       "dest": "backend/agent_app.py"
-    },
-    {
-      "src": "/admin/(.*)",
-      "dest": "/frontend/admin/$1"
     },
     {
       "src": "/agent/(.*)",
       "dest": "/frontend/agent/$1"
     },
     {
+      "src": "/admin/(.*)",
+      "dest": "/frontend/admin/$1"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/$1"
+      "dest": "/frontend/$1"
     }
   ]
 }
