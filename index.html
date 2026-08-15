@@ -69,24 +69,281 @@
         }
     </script>
 
-    <link rel="stylesheet" href="css/style.css">
-
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "SkulCBT",
-        "description": "Nigeria's Number 1 Offline-First School Platform",
-        "url": "https://skulcbt.plccglobal.com",
-        "logo": "https://skulcbt.plccglobal.com/images/skulcbt-logo.png",
-        "contactPoint": {
-            "@type": "ContactPoint",
-            "telephone": "+2347032977572",
-            "contactType": "Sales",
-            "availableLanguage": "English"
+    <style>
+        /* ====== MOBILE RESPONSIVE FIXES ====== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-    }
-    </script>
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Header fixes */
+        .header {
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(11, 30, 54, 0.08);
+        }
+
+        @media (max-width: 768px) {
+            .header .container {
+                padding: 12px 16px !important;
+            }
+            .header .flex.items-center.space-x-3 img {
+                height: 32px !important;
+            }
+            .header .flex.items-center.space-x-3 span {
+                font-size: 20px !important;
+            }
+            #mobile-menu-toggle svg {
+                width: 28px !important;
+                height: 28px !important;
+            }
+        }
+
+        /* Hero Section - Mobile */
+        @media (max-width: 768px) {
+            .hero-section {
+                min-height: auto !important;
+                padding: 40px 0 !important;
+            }
+            .hero-section h1 {
+                font-size: 28px !important;
+                line-height: 1.3 !important;
+            }
+            .hero-section p {
+                font-size: 16px !important;
+            }
+            .hero-section .grid.grid-cols-1.lg\:grid-cols-2 {
+                gap: 24px !important;
+            }
+            .hero-section .grid.grid-cols-2 {
+                gap: 10px !important;
+            }
+            .hero-section .grid.grid-cols-2 > div {
+                padding: 12px !important;
+            }
+            .hero-section .grid.grid-cols-2 h3 {
+                font-size: 12px !important;
+            }
+            .hero-section .grid.grid-cols-2 p {
+                font-size: 10px !important;
+            }
+            .btn-primary-large {
+                padding: 12px 24px !important;
+                font-size: 14px !important;
+            }
+            .btn-secondary-large {
+                padding: 12px 24px !important;
+                font-size: 14px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-section h1 {
+                font-size: 24px !important;
+            }
+            .hero-section .flex.flex-wrap.gap-6 {
+                gap: 12px !important;
+            }
+            .hero-section .flex.flex-wrap.gap-6 > div {
+                flex: 1 1 45% !important;
+            }
+            .hero-section .text-2xl {
+                font-size: 18px !important;
+            }
+            .hero-section .text-sm {
+                font-size: 10px !important;
+            }
+        }
+
+        /* Features Section - Mobile */
+        @media (max-width: 768px) {
+            .features-section .grid {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+            }
+            .features-section h2 {
+                font-size: 24px !important;
+            }
+            .features-section .feature-card {
+                padding: 16px !important;
+            }
+            .feature-card-image img {
+                height: 180px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .features-section h2 {
+                font-size: 20px !important;
+            }
+            .features-section .feature-card h3 {
+                font-size: 16px !important;
+            }
+            .features-section .feature-card p {
+                font-size: 13px !important;
+            }
+        }
+
+        /* Testimonials - Mobile */
+        @media (max-width: 768px) {
+            .testimonials-section .grid {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+            }
+            .testimonials-section h2 {
+                font-size: 24px !important;
+            }
+            .testimonials-section .bg-white {
+                padding: 16px !important;
+            }
+        }
+
+        /* CTA Section - Mobile */
+        @media (max-width: 768px) {
+            .cta-section h2 {
+                font-size: 24px !important;
+            }
+            .cta-section p {
+                font-size: 16px !important;
+            }
+            .cta-section .flex {
+                flex-direction: column !important;
+                align-items: center !important;
+            }
+            .cta-section .flex a {
+                width: 100% !important;
+                text-align: center !important;
+            }
+        }
+
+        /* Footer - Mobile */
+        @media (max-width: 768px) {
+            footer .grid {
+                grid-template-columns: 1fr !important;
+                gap: 24px !important;
+            }
+            footer .text-center {
+                text-align: left !important;
+            }
+        }
+
+        /* Trust Logos - Mobile */
+        @media (max-width: 768px) {
+            .trust-section .flex {
+                gap: 16px !important;
+                flex-wrap: wrap !important;
+            }
+            .trust-section .flex span {
+                font-size: 16px !important;
+                padding: 4px 8px !important;
+            }
+        }
+
+        /* Mobile Menu */
+        #mobile-menu {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        #mobile-menu a {
+            padding: 10px 16px !important;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 15px !important;
+        }
+        #mobile-menu a:last-child {
+            border-bottom: none;
+        }
+
+        @media (max-width: 768px) {
+            #mobile-menu .container {
+                padding: 8px 16px !important;
+            }
+            #mobile-menu a.py-2 {
+                padding: 10px 0 !important;
+            }
+        }
+
+        /* Buttons - Mobile */
+        @media (max-width: 768px) {
+            .btn-primary-large {
+                display: inline-block;
+                padding: 14px 32px;
+                background: linear-gradient(135deg, #D4AF37 0%, #E8C84A 100%);
+                color: #0B1E36;
+                font-weight: 700;
+                border-radius: 12px;
+                font-size: 15px;
+                transition: all 0.3s ease;
+                text-align: center;
+                border: none;
+                box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+            }
+            .btn-secondary-large {
+                display: inline-block;
+                padding: 14px 32px;
+                background: transparent;
+                color: white;
+                font-weight: 600;
+                border-radius: 12px;
+                font-size: 15px;
+                transition: all 0.3s ease;
+                text-align: center;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        /* Admin link - hidden in plain sight */
+        .admin-link {
+            color: #0B1E36;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            font-size: 14px;
+        }
+        .admin-link:hover {
+            color: #D4AF37;
+        }
+
+        @media (max-width: 768px) {
+            .admin-link {
+                font-size: 13px;
+            }
+        }
+
+        /* WhatsApp button mobile */
+        @media (max-width: 768px) {
+            .whatsapp-btn {
+                bottom: 16px !important;
+                right: 16px !important;
+                padding: 12px !important;
+            }
+            .whatsapp-btn svg {
+                width: 28px !important;
+                height: 28px !important;
+            }
+        }
+
+        /* Fix feature cards on mobile */
+        .feature-card {
+            transition: all 0.3s ease;
+            border: 1px solid #eef2f6;
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+        }
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(11, 30, 54, 0.1);
+            border-color: #D4AF37;
+        }
+    </style>
 </head>
 <body>
 
@@ -94,19 +351,21 @@
 <header class="header" id="header">
     <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
         <a href="index.html" class="flex items-center space-x-3">
-            <img src="images/skulcbt-logo.png" alt="SkulCBT Logo - Nigeria's Number 1 Offline-First School Platform" class="h-12 w-auto">
+            <img src="images/skulcbt-logo.png" alt="SkulCBT Logo" class="h-12 w-auto" style="height: 48px;">
             <span class="text-2xl font-extrabold text-navy tracking-tight">Skul<span class="text-champagne">CBT</span></span>
         </a>
 
+        <!-- Desktop Menu -->
         <div class="hidden md:flex items-center space-x-8">
             <a href="index.html" class="text-navy font-semibold hover:text-champagne transition-colors">Home</a>
             <a href="features.html" class="text-navy font-semibold hover:text-champagne transition-colors">Features</a>
             <a href="pricing.html" class="text-navy font-semibold hover:text-champagne transition-colors">Pricing</a>
             <a href="about.html" class="text-navy font-semibold hover:text-champagne transition-colors">About</a>
             <a href="blog.html" class="text-navy font-semibold hover:text-champagne transition-colors">Blog</a>
-            <a href="agent.html" class="text-navy font-semibold hover:text-champagne transition-colors">Become an Agent</a>
+            <a href="agent.html" class="text-navy font-semibold hover:text-champagne transition-colors bg-champagne/10 px-4 py-2 rounded-full">Become an Agent</a>
             <a href="contact.html" class="text-navy font-semibold hover:text-champagne transition-colors">Contact</a>
-            <a href="https://emmanueladekunlep.pythonanywhere.com/agent/login" class="text-navy font-semibold hover:text-champagne transition-colors">Agent Login</a>
+            <!-- Admin Login - Hidden in plain sight -->
+            <a href="https://skulcbt.pythonanywhere.com/admin/login" class="admin-link">Admin</a>
             <a href="demo-request.html" class="btn-primary">Request Demo</a>
         </div>
 
@@ -117,17 +376,19 @@
         </button>
     </nav>
 
+    <!-- Mobile Menu -->
     <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200 shadow-lg">
-        <div class="container mx-auto px-4 py-6 flex flex-col space-y-4">
-            <a href="index.html" class="text-navy font-semibold hover:text-champagne transition-colors py-2">Home</a>
-            <a href="features.html" class="text-navy font-semibold hover:text-champagne transition-colors py-2">Features</a>
-            <a href="pricing.html" class="text-navy font-semibold hover:text-champagne transition-colors py-2">Pricing</a>
-            <a href="about.html" class="text-navy font-semibold hover:text-champagne transition-colors py-2">About</a>
-            <a href="blog.html" class="text-navy font-semibold hover:text-champagne transition-colors py-2">Blog</a>
-            <a href="agent.html" class="text-navy font-semibold hover:text-champagne transition-colors py-2">Become an Agent</a>
-            <a href="contact.html" class="text-navy font-semibold hover:text-champagne transition-colors py-2">Contact</a>
-            <a href="https://emmanueladekunlep.pythonanywhere.com/agent/login" class="text-navy font-semibold hover:text-champagne transition-colors py-2">Agent Login</a>
-            <a href="demo-request.html" class="btn-primary text-center">Request Demo</a>
+        <div class="container mx-auto px-4 py-4 flex flex-col space-y-2">
+            <a href="index.html" class="text-navy font-semibold hover:text-champagne transition-colors py-3 border-b border-gray-100">Home</a>
+            <a href="features.html" class="text-navy font-semibold hover:text-champagne transition-colors py-3 border-b border-gray-100">Features</a>
+            <a href="pricing.html" class="text-navy font-semibold hover:text-champagne transition-colors py-3 border-b border-gray-100">Pricing</a>
+            <a href="about.html" class="text-navy font-semibold hover:text-champagne transition-colors py-3 border-b border-gray-100">About</a>
+            <a href="blog.html" class="text-navy font-semibold hover:text-champagne transition-colors py-3 border-b border-gray-100">Blog</a>
+            <a href="agent.html" class="text-navy font-semibold hover:text-champagne transition-colors py-3 border-b border-gray-100 bg-champagne/10 px-4 rounded-lg font-bold">🌟 Become an Agent</a>
+            <a href="contact.html" class="text-navy font-semibold hover:text-champagne transition-colors py-3 border-b border-gray-100">Contact</a>
+            <!-- Admin Login - Hidden in plain sight on mobile -->
+            <a href="https://skulcbt.pythonanywhere.com/admin/login" class="admin-link py-3 border-b border-gray-100">Admin</a>
+            <a href="demo-request.html" class="btn-primary text-center py-3">Request Demo</a>
         </div>
     </div>
 </header>
@@ -201,7 +462,7 @@
 </section>
 
 <!-- ====== CUSTOMER LOGOS / TRUST SECTION ====== -->
-<section class="py-12 bg-alabaster border-y border-champagne/20">
+<section class="trust-section py-12 bg-alabaster border-y border-champagne/20">
     <div class="container mx-auto px-4 text-center">
         <p class="text-sm font-semibold text-navy/60 uppercase tracking-wider mb-6">Trusted by Leading Nigerian Schools</p>
         <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12">
@@ -215,7 +476,7 @@
 </section>
 
 <!-- ====== FEATURES OVERVIEW ====== -->
-<section class="py-16 md:py-24 bg-white">
+<section class="features-section py-16 md:py-24 bg-white">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-3xl mx-auto mb-16">
             <span class="text-champagne font-semibold text-sm uppercase tracking-wider">Features</span>
@@ -236,7 +497,7 @@
                 <div class="p-6">
                     <h3 class="text-xl font-bold text-navy mb-2">CBT Exam Hosting</h3>
                     <p class="text-gray-600 mb-4">Host exams directly from your phone. Students join on any device. 100% offline. No computer lab needed.</p>
-                    <a href="features.html#cbt" class="text-champagne font-semibold hover:text-navy transition-colors">Learn More</a>
+                    <a href="features.html#cbt" class="text-champagne font-semibold hover:text-navy transition-colors">Learn More →</a>
                 </div>
             </div>
 
@@ -247,7 +508,7 @@
                 <div class="p-6">
                     <h3 class="text-xl font-bold text-navy mb-2">Automated Report Cards</h3>
                     <p class="text-gray-600 mb-4">Generate professional report cards with AI-powered teacher and principal comments. Psychomotor skills assessment included.</p>
-                    <a href="features.html#reportcards" class="text-champagne font-semibold hover:text-navy transition-colors">Learn More</a>
+                    <a href="features.html#reportcards" class="text-champagne font-semibold hover:text-navy transition-colors">Learn More →</a>
                 </div>
             </div>
 
@@ -258,7 +519,7 @@
                 <div class="p-6">
                     <h3 class="text-xl font-bold text-navy mb-2">Fee Management</h3>
                     <p class="text-gray-600 mb-4">Professional PDF receipts with auto-balance tracking. Previous balance, new balance, all automatically calculated.</p>
-                    <a href="features.html#fees" class="text-champagne font-semibold hover:text-navy transition-colors">Learn More</a>
+                    <a href="features.html#fees" class="text-champagne font-semibold hover:text-navy transition-colors">Learn More →</a>
                 </div>
             </div>
 
@@ -269,7 +530,7 @@
                 <div class="p-6">
                     <h3 class="text-xl font-bold text-navy mb-2">Parent Portal</h3>
                     <p class="text-gray-600 mb-4">Parents access results, fees, report cards, and newsletters in real-time. Better communication, better engagement.</p>
-                    <a href="features.html#parentportal" class="text-champagne font-semibold hover:text-navy transition-colors">Learn More</a>
+                    <a href="features.html#parentportal" class="text-champagne font-semibold hover:text-navy transition-colors">Learn More →</a>
                 </div>
             </div>
 
@@ -280,7 +541,7 @@
                 <div class="p-6">
                     <h3 class="text-xl font-bold text-navy mb-2">100% Offline-First</h3>
                     <p class="text-gray-600 mb-4">No internet? No problem. Every feature works offline. Built specifically for Nigerian schools where internet is unreliable.</p>
-                    <a href="features.html#offline" class="text-champagne font-semibold hover:text-navy transition-colors">Learn More</a>
+                    <a href="features.html#offline" class="text-champagne font-semibold hover:text-navy transition-colors">Learn More →</a>
                 </div>
             </div>
 
@@ -291,7 +552,7 @@
                 <div class="p-6">
                     <h3 class="text-xl font-bold text-navy mb-2">Analytics and Insights</h3>
                     <p class="text-gray-600 mb-4">Real-time insights into student performance, fee collection, attendance, and school-wide metrics. Data-driven decisions.</p>
-                    <a href="features.html#analytics" class="text-champagne font-semibold hover:text-navy transition-colors">Learn More</a>
+                    <a href="features.html#analytics" class="text-champagne font-semibold hover:text-navy transition-colors">Learn More →</a>
                 </div>
             </div>
         </div>
@@ -299,7 +560,7 @@
 </section>
 
 <!-- ====== TESTIMONIALS ====== -->
-<section class="py-16 md:py-24 bg-alabaster">
+<section class="testimonials-section py-16 md:py-24 bg-alabaster">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-3xl mx-auto mb-16">
             <span class="text-champagne font-semibold text-sm uppercase tracking-wider">Testimonials</span>
@@ -318,7 +579,7 @@
                     <div>
                         <div class="flex text-champagne mb-1">★★★★★</div>
                         <p class="text-gray-700 italic text-sm mb-2">
-                            SkulCBT transformed our school operations. We saved 10+ hours per week on administrative tasks. The offline capability is a game-changer.
+                            "SkulCBT transformed our school operations. We saved 10+ hours per week on administrative tasks. The offline capability is a game-changer."
                         </p>
                         <p class="font-bold text-navy text-sm">Mr. Adebayo Ogunleye</p>
                         <p class="text-gray-500 text-xs">School Proprietor, Crowns Academy, Lagos</p>
@@ -332,7 +593,7 @@
                     <div>
                         <div class="flex text-champagne mb-1">★★★★★</div>
                         <p class="text-gray-700 italic text-sm mb-2">
-                            The auto-comment feature alone saved me 3 hours a day. Parents love the professional report cards. I recommend SkulCBT to every school.
+                            "The auto-comment feature alone saved me 3 hours a day. Parents love the professional report cards. I recommend SkulCBT to every school."
                         </p>
                         <p class="font-bold text-navy text-sm">Mrs. Ngozi Nwachukwu</p>
                         <p class="text-gray-500 text-xs">Head Teacher, Excel Academy, Abuja</p>
@@ -344,7 +605,7 @@
 </section>
 
 <!-- ====== CTA SECTION ====== -->
-<section class="py-16 md:py-20 bg-gradient-to-r from-navy to-navy/95">
+<section class="cta-section py-16 md:py-20 bg-gradient-to-r from-navy to-navy/95">
     <div class="container mx-auto px-4 text-center">
         <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4">
             Ready to Transform Your School?
@@ -427,7 +688,20 @@
     </div>
 </footer>
 
-<script src="js/main.js"></script>
+<script>
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
+        const menu = document.getElementById('mobile-menu');
+        menu.classList.toggle('hidden');
+    });
+
+    // Close mobile menu when clicking a link
+    document.querySelectorAll('#mobile-menu a').forEach(function(link) {
+        link.addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.add('hidden');
+        });
+    });
+</script>
 
 <!-- WhatsApp Floating Button -->
 <script>
@@ -435,7 +709,7 @@
         const whatsappDiv = document.createElement('div');
         whatsappDiv.innerHTML = `
             <a href="https://wa.me/2347032977572" target="_blank"
-               class="fixed bottom-6 right-6 bg-[#25D366] text-white rounded-full p-4 shadow-2xl hover:scale-110 transition-transform z-50"
+               class="whatsapp-btn fixed bottom-6 right-6 bg-[#25D366] text-white rounded-full p-4 shadow-2xl hover:scale-110 transition-transform z-50"
                aria-label="Chat on WhatsApp">
                 <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
