@@ -20,13 +20,185 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reports - SkulCBT Admin</title>
     <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100% !important;
+                height: auto !important;
+                position: relative !important;
+                padding: 14px !important;
+            }
+            .sidebar-nav {
+                display: flex !important;
+                flex-wrap: wrap !important;
+                gap: 4px !important;
+                margin-top: 10px !important;
+            }
+            .sidebar-nav a {
+                padding: 8px 12px !important;
+                font-size: 13px !important;
+            }
+            .sidebar-footer {
+                display: none !important;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                padding: 14px !important;
+                width: 100% !important;
+            }
+            .top-bar {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 8px !important;
+            }
+            .top-bar h1 {
+                font-size: 20px !important;
+            }
+            .report-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 10px !important;
+            }
+            .report-card {
+                padding: 16px !important;
+            }
+            .report-card h3 {
+                font-size: 15px !important;
+            }
+            .report-card p {
+                font-size: 13px !important;
+            }
+            .btn-primary {
+                font-size: 13px !important;
+                padding: 8px 16px !important;
+            }
+            .table-section {
+                padding: 14px 16px !important;
+                overflow-x: auto !important;
+            }
+            .data-table {
+                font-size: 12px !important;
+                min-width: 500px !important;
+            }
+            .data-table th,
+            .data-table td {
+                padding: 8px 10px !important;
+            }
+            .report-display {
+                padding: 16px !important;
+            }
+            .sidebar-logo img {
+                height: 32px !important;
+            }
+            .sidebar-logo h2 {
+                font-size: 20px !important;
+            }
+        }
+        @media (max-width: 480px) {
+            .report-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 8px !important;
+            }
+            .report-card {
+                padding: 12px !important;
+            }
+            .report-card h3 {
+                font-size: 13px !important;
+            }
+            .report-card p {
+                font-size: 12px !important;
+            }
+            .btn-primary {
+                font-size: 12px !important;
+                padding: 6px 12px !important;
+            }
+            .data-table {
+                font-size: 11px !important;
+                min-width: 400px !important;
+            }
+            .data-table th,
+            .data-table td {
+                padding: 6px 8px !important;
+            }
+            .report-display {
+                padding: 12px !important;
+            }
+            .modal-close {
+                font-size: 20px !important;
+            }
+            .sidebar-nav a {
+                font-size: 12px !important;
+                padding: 6px 10px !important;
+            }
+        }
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        .report-card {
+            background: white;
+            padding: 20px 22px;
+            border-radius: 14px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+            border: 1px solid #edf2f7;
+            transition: all 0.3s ease;
+        }
+        .report-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-color: #D4AF37;
+        }
+        .report-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0B1E36;
+            margin-bottom: 6px;
+        }
+        .report-card p {
+            font-size: 14px;
+            color: #718096;
+            margin-bottom: 12px;
+        }
+        .report-display {
+            background: white;
+            padding: 24px;
+            border-radius: 14px;
+            border: 1px solid #edf2f7;
+            margin-top: 20px;
+        }
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f0f4f8;
+        }
+        .report-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0B1E36;
+        }
+        .modal-close {
+            font-size: 28px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #a0aec0;
+            transition: color 0.2s ease;
+        }
+        .modal-close:hover {
+            color: #e53e3e;
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
         <!-- Sidebar -->
         <div class="sidebar">
             <div class="sidebar-logo">
-                <img src="/static/images/skulcbt-logo.png" alt="SkulCBT Logo" style="height: 40px; width: auto; margin-bottom: 8px;">
+                <img src="/static/images/skulcbt-logo.png" alt="SkulCBT Logo" style="height: 40px; width: auto; margin-bottom: 6px;">
                 <h2>Skul<span style="color: #D4AF37;">CBT</span></h2>
                 <p>Admin Portal</p>
             </div>
@@ -59,31 +231,31 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
                 <div class="report-card">
                     <h3>Agent Performance Report</h3>
                     <p>View all agents ranked by sales and commissions</p>
-                    <button onclick="generateReport('agents')" class="btn-primary" style="width: auto; padding: 10px 24px; margin-top: 12px;">Generate Report</button>
+                    <button onclick="generateReport('agents')" class="btn-primary" style="width: auto; padding: 10px 24px; margin-top: 4px;">Generate Report</button>
                 </div>
 
                 <div class="report-card">
                     <h3>Sales Summary Report</h3>
                     <p>View total sales, revenue, and commissions</p>
-                    <button onclick="generateReport('sales')" class="btn-primary" style="width: auto; padding: 10px 24px; margin-top: 12px;">Generate Report</button>
+                    <button onclick="generateReport('sales')" class="btn-primary" style="width: auto; padding: 10px 24px; margin-top: 4px;">Generate Report</button>
                 </div>
 
                 <div class="report-card">
                     <h3>Commission Report</h3>
                     <p>View all commissions paid and pending by agent</p>
-                    <button onclick="generateReport('commissions')" class="btn-primary" style="width: auto; padding: 10px 24px; margin-top: 12px;">Generate Report</button>
+                    <button onclick="generateReport('commissions')" class="btn-primary" style="width: auto; padding: 10px 24px; margin-top: 4px;">Generate Report</button>
                 </div>
 
                 <div class="report-card">
                     <h3>Withdrawal Report</h3>
                     <p>View all withdrawal requests and their status</p>
-                    <button onclick="generateReport('withdrawals')" class="btn-primary" style="width: auto; padding: 10px 24px; margin-top: 12px;">Generate Report</button>
+                    <button onclick="generateReport('withdrawals')" class="btn-primary" style="width: auto; padding: 10px 24px; margin-top: 4px;">Generate Report</button>
                 </div>
 
                 <div class="report-card">
                     <h3>License Report</h3>
                     <p>View all licenses generated and their status</p>
-                    <button onclick="generateReport('licenses')" class="btn-primary" style="width: auto; padding: 10px 24px; margin-top: 12px;">Generate Report</button>
+                    <button onclick="generateReport('licenses')" class="btn-primary" style="width: auto; padding: 10px 24px; margin-top: 4px;">Generate Report</button>
                 </div>
             </div>
 
@@ -91,7 +263,7 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
             <div id="reportDisplay" class="report-display" style="display: none;">
                 <div class="report-header">
                     <h2 id="reportTitle">Report</h2>
-                    <button onclick="closeReport()" class="modal-close" style="font-size: 24px; background: none; border: none; cursor: pointer;">×</button>
+                    <button onclick="closeReport()" class="modal-close">×</button>
                 </div>
                 <div id="reportContent">
                     <p class="empty-message">Report content will appear here.</p>

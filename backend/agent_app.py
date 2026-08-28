@@ -1,16 +1,6 @@
 # agent_app.py
 # Main Flask Application for SkulCBT Agent Program
-# Full path: C:\Users\Peace\Desktop\skulcbt-website\backend\agent_app.py
-#
-# ============================================
-# AUTHOR: Emmanuel Adekunle Peace
-# WEBSITE: www.emmanueladekunlepeace.com
-# PHONE: 07032977572
-# EMAIL: emmanueladekunlep@gmail.com
-# ============================================
-# SkulCBT Agent Program - Main Application
-# Copyright (c) 2026 SkulCBT. All rights reserved.
-# ============================================
+# PythonAnywhere Version - August 2026
 
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory
 from flask_cors import CORS
@@ -39,16 +29,20 @@ from agent_models import (
     delete_agent,
     get_downline_agents,
     get_agent_rank,
-    update_agent_rank
+    update_agent_rank,
+    update_downline_sales_count,
+    release_frozen_recruitment_bonus
 )
 
-import os
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# ============================================
+# FIXED PATHS FOR PYTHONANYWHERE
+# ============================================
+BASE_DIR = '/home/skulcbt/skulcbt-website'
 
 app = Flask(__name__,
             static_folder=os.path.join(BASE_DIR, 'static'),
             template_folder=os.path.join(BASE_DIR, 'frontend'))
+
 app.secret_key = secrets.token_hex(32)
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
@@ -60,9 +54,9 @@ init_db()
 # Email Configuration
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_USER = 'emmanueladekunlep@gmail.com'
-EMAIL_PASSWORD = 'kbqrtsegmclwdduw'
-EMAIL_FROM = 'emmanueladekunlep@gmail.com'
+EMAIL_USER = 'skulcbt@gmail.com'
+EMAIL_PASSWORD = 'gzbxielexwnthayy'
+EMAIL_FROM = 'skulcbt@gmail.com'
 
 
 # ============================================
@@ -152,6 +146,10 @@ def get_all_downline(agent_id):
 # ============================================
 
 def send_email(to_email, subject, body):
+    if not to_email or not to_email.strip():
+        print(f"❌ No email address provided")
+        return False
+    
     try:
         msg = MIMEMultipart()
         msg['From'] = EMAIL_FROM
@@ -166,10 +164,10 @@ def send_email(to_email, subject, body):
         server.send_message(msg)
         server.quit()
         
-        print(f"Email sent to {to_email}")
+        print(f"✅ Email sent to {to_email}")
         return True
     except Exception as e:
-        print(f"Email failed: {e}")
+        print(f"❌ Email failed to {to_email}: {e}")
         return False
 
 
@@ -328,7 +326,7 @@ def api_agent_logout():
 
 
 # ============================================
-# AGENT DASHBOARD ROUTES
+# AGENT DASHBOARD ROUTES - FIXED WITH LICENSE KEY
 # ============================================
 
 @app.route('/agent/dashboard')
@@ -359,9 +357,20 @@ def api_agent_dashboard():
     downline_count = len(downline['level1'])
 
     cursor.execute('''
-        SELECT * FROM sales
-        WHERE agent_id = ?
-        ORDER BY created_at DESC
+        SELECT COUNT(*) as total FROM sales s
+        JOIN agents a ON s.agent_id = a.id
+        WHERE a.referred_by = (SELECT referral_code FROM agents WHERE id = ?)
+    ''', (agent_id,))
+    downline_sales_result = cursor.fetchone()
+    downline_sales_count = downline_sales_result['total'] if downline_sales_result else 0
+
+    # FIXED: Include license key from license_keys table
+    cursor.execute('''
+        SELECT s.*, l.license_key 
+        FROM sales s
+        LEFT JOIN license_keys l ON s.id = l.sale_id
+        WHERE s.agent_id = ?
+        ORDER BY s.created_at DESC
         LIMIT 5
     ''', (agent_id,))
     recent_sales = cursor.fetchall()
@@ -376,15 +385,24 @@ def api_agent_dashboard():
 
     conn.close()
 
+    # Get recruitment bonus balance safely using dictionary conversion
+    agent_dict = dict(agent)
+    recruitment_bonus_balance = agent_dict.get('recruitment_bonus_balance', 0)
+    
+    total_balance = float(agent_dict['balance']) + float(recruitment_bonus_balance)
+
     return jsonify({
         'success': True,
-        'agent': dict(agent),
+        'agent': agent_dict,
         'stats': {
             'total_sales': total_sales,
             'total_commission': float(total_commission),
-            'balance': float(agent['balance']),
+            'balance': total_balance,
+            'withdrawable_balance': float(agent_dict['balance']),
+            'frozen_balance': float(recruitment_bonus_balance),
             'downline_count': downline_count,
-            'rank': agent['rank']
+            'rank': agent_dict['rank'],
+            'downline_sales_count': downline_sales_count
         },
         'recent_sales': [dict(s) for s in recent_sales],
         'recent_commissions': [dict(c) for c in recent_commissions]
@@ -412,16 +430,38 @@ def api_agent_downline():
 
     downline = get_all_downline(agent_id)
 
+    result = {
+        'level1': [],
+        'level2': [],
+        'level3': []
+    }
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    for level in ['level1', 'level2', 'level3']:
+        for a in downline[level]:
+            agent_dict = dict(a)
+            
+            # Get sales count for this downline agent
+            cursor.execute('SELECT COUNT(*) as count FROM sales WHERE agent_id = ? AND status = "approved"', (a['id'],))
+            sales_count = cursor.fetchone()['count']
+            agent_dict['sales_count'] = sales_count
+            
+            result[level].append(agent_dict)
+
+    conn.close()
+
     return jsonify({
         'success': True,
-        'level1': [dict(a) for a in downline['level1']],
-        'level2': [dict(a) for a in downline['level2']],
-        'level3': [dict(a) for a in downline['level3']],
+        'level1': result['level1'],
+        'level2': result['level2'],
+        'level3': result['level3'],
         'counts': {
-            'level1': len(downline['level1']),
-            'level2': len(downline['level2']),
-            'level3': len(downline['level3']),
-            'total': len(downline['level1']) + len(downline['level2']) + len(downline['level3'])
+            'level1': len(result['level1']),
+            'level2': len(result['level2']),
+            'level3': len(result['level3']),
+            'total': len(result['level1']) + len(result['level2']) + len(result['level3'])
         }
     })
 
@@ -533,13 +573,13 @@ def api_agent_withdraw():
     if not agent:
         return jsonify({'success': False, 'message': 'Agent not found'}), 404
 
+    # Only allow withdrawal from main balance, not frozen
     if amount > agent['balance']:
-        return jsonify({'success': False, 'message': 'Insufficient balance'}), 400
+        return jsonify({'success': False, 'message': f'Insufficient withdrawable balance. You have ₦{agent["balance"]:,.0f} available.'}), 400
 
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    # Update agent balance and save bank details
     cursor.execute('''
         UPDATE agents SET
             balance = balance - ?,
@@ -549,7 +589,6 @@ def api_agent_withdraw():
         WHERE id = ?
     ''', (amount, bank_name, account_number, account_name, agent_id))
 
-    # Insert withdrawal with bank details
     cursor.execute('''
         INSERT INTO withdrawals (agent_id, amount, request_date, status, bank_name, account_number, account_name)
         VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -605,7 +644,7 @@ def api_agent_pending_sales():
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('''
-        SELECT * FROM sales 
+        SELECT * FROM sales
         WHERE agent_id = ? AND status = 'pending'
         ORDER BY created_at DESC
     ''', (agent_id,))
@@ -800,224 +839,403 @@ def api_admin_sales():
     })
 
 
+# ============================================
+# ADMIN AGENT TREE ROUTE
+# ============================================
+
+@app.route('/api/admin/agent-tree/<int:agent_id>')
+@admin_required
+def api_admin_agent_tree(agent_id):
+    agent = get_agent_by_id(agent_id)
+    if not agent:
+        return jsonify({'success': False, 'message': 'Agent not found'}), 404
+
+    downline = get_all_downline(agent_id)
+
+    result = {
+        'level1': [],
+        'level2': [],
+        'level3': []
+    }
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    for level in ['level1', 'level2', 'level3']:
+        for a in downline[level]:
+            agent_dict = dict(a)
+            cursor.execute('SELECT COUNT(*) as count FROM sales WHERE agent_id = ? AND status = "approved"', (a['id'],))
+            sales_count = cursor.fetchone()['count']
+            agent_dict['sales_count'] = sales_count
+            result[level].append(agent_dict)
+
+    conn.close()
+
+    return jsonify({
+        'success': True,
+        'agent': dict(agent),
+        'level1': result['level1'],
+        'level2': result['level2'],
+        'level3': result['level3'],
+        'counts': {
+            'level1': len(result['level1']),
+            'level2': len(result['level2']),
+            'level3': len(result['level3']),
+            'total': len(result['level1']) + len(result['level2']) + len(result['level3'])
+        }
+    })
+
+
+# ============================================
+# ADMIN TOP PERFORMING AGENTS
+# ============================================
+
+@app.route('/api/admin/top-agents')
+@admin_required
+def api_admin_top_agents():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        SELECT 
+            id, full_name, email, phone, rank, status,
+            total_sales, total_commission, balance,
+            (SELECT COUNT(*) FROM agents WHERE referred_by = a.referral_code) as downline_count,
+            (SELECT COUNT(*) FROM sales WHERE agent_id = a.id AND status = 'approved') as approved_sales
+        FROM agents a
+        WHERE status = 'active'
+        ORDER BY total_sales DESC, total_commission DESC
+        LIMIT 20
+    ''')
+    top_agents = cursor.fetchall()
+
+    conn.close()
+
+    return jsonify({
+        'success': True,
+        'agents': [dict(a) for a in top_agents]
+    })
+
+
+# ============================================
+# ADMIN APPROVE SALE - FIXED
+# ============================================
+
 @app.route('/api/admin/sales/approve/<int:sale_id>', methods=['POST'])
 @admin_required
 def api_admin_approve_sale(sale_id):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    cursor.execute('SELECT * FROM sales WHERE id = ?', (sale_id,))
-    sale = cursor.fetchone()
+    try:
+        cursor.execute('SELECT * FROM sales WHERE id = ?', (sale_id,))
+        sale = cursor.fetchone()
 
-    if not sale:
-        conn.close()
-        return jsonify({'success': False, 'message': 'Sale not found'}), 404
+        if not sale:
+            conn.close()
+            return jsonify({'success': False, 'message': 'Sale not found'}), 404
 
-    if sale['status'] != 'pending':
-        conn.close()
-        return jsonify({'success': False, 'message': 'Sale is not pending'}), 400
+        if sale['status'] != 'pending':
+            conn.close()
+            return jsonify({'success': False, 'message': 'Sale is not pending'}), 400
 
-    # Generate license key
-    tier_map = {'ESS': 'ES', 'PRO': 'PR', 'ENT': 'EN'}
-    plan_map = {'TERMLY': 'TM', 'YEARLY': 'YR', 'LIFETIME': 'LF'}
+        # Generate license key
+        tier_map = {'ESS': 'ES', 'PRO': 'PR', 'ENT': 'EN'}
+        plan_map = {'TERMLY': 'TM', 'YEARLY': 'YR', 'LIFETIME': 'LF'}
 
-    tier_short = tier_map.get(sale['tier'], 'PK')
-    plan_short = plan_map.get(sale['plan'], 'PL')
+        tier_short = tier_map.get(sale['tier'], 'PK')
+        plan_short = plan_map.get(sale['plan'], 'PL')
 
-    random_part = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
-    license_key = f"SKUL-{tier_short}-{plan_short}-{random_part}"
+        random_part = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+        license_key = f"SKUL-{tier_short}-{plan_short}-{random_part}"
 
-    # Update sale status
-    cursor.execute('UPDATE sales SET status = "approved" WHERE id = ?', (sale_id,))
+        # Update sale status
+        cursor.execute('UPDATE sales SET status = "approved" WHERE id = ?', (sale_id,))
 
-    # ============================================
-    # SAVE LICENSE KEY TO DATABASE WITH SCHOOL NAME
-    # ============================================
-    # Calculate expiry date
-    if sale['plan'] == 'LIFETIME':
-        expiry_date = 'LIFETIME'
-    else:
-        days = 90 if sale['plan'] == 'TERMLY' else 365
-        expiry_date = (datetime.now() + timedelta(days=days)).strftime('%Y-%m-%d')
-    
-    cursor.execute('''
-        INSERT INTO license_keys (
-            license_key, school_name, tier, plan, price, 
-            agent_id, sale_id, created_date, expiry_date, status
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ''', (license_key, sale['school_name'], sale['tier'], sale['plan'], 
-          sale['price'], sale['agent_id'], sale_id, 
-          datetime.now().strftime('%Y-%m-%d'), expiry_date, 'active'))
+        # SAVE LICENSE KEY TO DATABASE WITH SCHOOL NAME
+        if sale['plan'] == 'LIFETIME':
+            expiry_date = 'LIFETIME'
+        else:
+            days = 90 if sale['plan'] == 'TERMLY' else 365
+            expiry_date = (datetime.now() + timedelta(days=days)).strftime('%Y-%m-%d')
 
-    # Level 0: Direct agent commission (35%)
-    cursor.execute('''
-        UPDATE agents SET 
-            balance = balance + ?,
-            total_sales = total_sales + 1,
-            total_commission = total_commission + ?
-        WHERE id = ?
-    ''', (sale['commission'], sale['commission'], sale['agent_id']))
+        cursor.execute('''
+            INSERT INTO license_keys (
+                license_key, school_name, tier, plan, price,
+                agent_id, sale_id, created_date, expiry_date, status
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (license_key, sale['school_name'], sale['tier'], sale['plan'],
+              sale['price'], sale['agent_id'], sale_id,
+              datetime.now().strftime('%Y-%m-%d'), expiry_date, 'active'))
 
-    cursor.execute('''
-        INSERT INTO commissions (agent_id, sale_id, level, amount, paid, created_date)
-        VALUES (?, ?, ?, ?, ?, ?)
-    ''', (sale['agent_id'], sale_id, 0, sale['commission'], 1, datetime.now().strftime('%Y-%m-%d')))
+        # Level 0: Direct agent commission (35%) - goes to main balance
+        cursor.execute('''
+            UPDATE agents SET
+                balance = balance + ?,
+                total_sales = total_sales + 1,
+                total_commission = total_commission + ?
+            WHERE id = ?
+        ''', (sale['commission'], sale['commission'], sale['agent_id']))
 
-    # Get selling agent details for emails
-    cursor.execute('SELECT full_name, email FROM agents WHERE id = ?', (sale['agent_id'],))
-    selling_agent = cursor.fetchone()
+        cursor.execute('''
+            INSERT INTO commissions (agent_id, sale_id, level, amount, paid, created_date)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ''', (sale['agent_id'], sale_id, 0, sale['commission'], 1, datetime.now().strftime('%Y-%m-%d')))
 
-    # Level 1, 2, 3: Upline commissions
-    cursor.execute('SELECT referral_code FROM agents WHERE id = ?', (sale['agent_id'],))
-    current_agent = cursor.fetchone()
-    
-    if current_agent:
-        current_referral_code = current_agent['referral_code']
-        level = 1
-        
-        while level <= 3:
-            cursor.execute('SELECT referred_by FROM agents WHERE referral_code = ?', (current_referral_code,))
-            upline = cursor.fetchone()
+        # Get selling agent details for emails
+        cursor.execute('SELECT full_name, email FROM agents WHERE id = ?', (sale['agent_id'],))
+        selling_agent = cursor.fetchone()
+
+        # ============================================
+        # SEND EMAIL TO SELLING AGENT
+        # ============================================
+        if selling_agent and selling_agent['email']:
+            tier_names = {'ESS': 'Essential', 'PRO': 'Professional', 'ENT': 'Enterprise'}
+            plan_names = {'TERMLY': 'Termly (90 days)', 'YEARLY': 'Yearly (365 days)', 'LIFETIME': 'Lifetime (Never Expires)'}
             
-            if not upline or not upline['referred_by']:
-                break
-            
-            cursor.execute('SELECT id FROM agents WHERE referral_code = ?', (upline['referred_by'],))
-            upline_agent = cursor.fetchone()
-            
-            if not upline_agent:
-                break
-            
-            if level == 1:
-                percent = 0.05
-            elif level == 2:
-                percent = 0.03
-            elif level == 3:
-                percent = 0.01
-            
-            level_amount = sale['price'] * percent
-            
-            if level_amount > 0:
-                cursor.execute('UPDATE agents SET balance = balance + ? WHERE id = ?', (level_amount, upline_agent['id']))
-                cursor.execute('''
-                    INSERT INTO commissions (agent_id, sale_id, level, amount, paid, created_date)
-                    VALUES (?, ?, ?, ?, ?, ?)
-                ''', (upline_agent['id'], sale_id, level, level_amount, 1, datetime.now().strftime('%Y-%m-%d')))
-                
-                # Send email to upline agent
-                cursor.execute('SELECT full_name, email FROM agents WHERE id = ?', (upline_agent['id'],))
-                upline_info = cursor.fetchone()
-                
-                if upline_info and upline_info['email'] and selling_agent:
-                    level_names = {1: 'Level 1 (Direct Upline)', 2: 'Level 2', 3: 'Level 3'}
-                    email_body = f"""
-Dear {upline_info['full_name']},
+            email_body = f"""
+🎉 YOUR SALE HAS BEEN APPROVED! 🎉
 
-You have earned a commission from your downline!
-
-Commission Details:
-- Agent Who Sold: {selling_agent['full_name']}
-- School: {sale['school_name']}
-- Tier: {sale['tier']}
-- Plan: {sale['plan']}
-- Sale Price: ₦{sale['price']:,.0f}
-- Your Level: {level_names.get(level, 'Level ' + str(level))}
-- Your Commission: ₦{level_amount:,.0f}
-
-You can view your full earnings history here:
-http://127.0.0.1:5000/agent/dashboard
-
----
-Emmanuel Adekunle Peace
-SkulCBT
-07032977572
-"""
-                    send_email(upline_info['email'], "You Earned Commission from Your Downline - SkulCBT", email_body)
-            
-            current_referral_code = upline['referred_by']
-            level += 1
-
-    # Recruitment Bonus: Paid on FIRST SALE
-    cursor.execute('SELECT COUNT(*) as count FROM sales WHERE agent_id = ? AND status = "approved"', (sale['agent_id'],))
-    sales_count = cursor.fetchone()['count']
-    
-    if sales_count == 1:
-        cursor.execute('SELECT referred_by FROM agents WHERE id = ?', (sale['agent_id'],))
-        agent = cursor.fetchone()
-        
-        if agent and agent['referred_by']:
-            cursor.execute('SELECT id FROM agents WHERE referral_code = ?', (agent['referred_by'],))
-            referrer = cursor.fetchone()
-            
-            if referrer:
-                recruitment_bonus = float(get_setting('recruitment_bonus') or 5000)
-                cursor.execute('UPDATE agents SET balance = balance + ? WHERE id = ?', (recruitment_bonus, referrer['id']))
-                cursor.execute('''
-                    INSERT INTO commissions (agent_id, sale_id, level, amount, paid, created_date)
-                    VALUES (?, ?, ?, ?, ?, ?)
-                ''', (referrer['id'], sale_id, 0, recruitment_bonus, 1, datetime.now().strftime('%Y-%m-%d')))
-                
-                # Send email to referrer
-                cursor.execute('SELECT full_name, email FROM agents WHERE id = ?', (referrer['id'],))
-                referrer_info = cursor.fetchone()
-                
-                if referrer_info and referrer_info['email'] and selling_agent:
-                    email_body = f"""
-Dear {referrer_info['full_name']},
-
-Congratulations! You have earned a Recruitment Bonus!
-
-Bonus Details:
-- New Agent: {selling_agent['full_name']}
-- This is their FIRST sale!
-- Recruitment Bonus: ₦{recruitment_bonus:,.0f}
-
-You can view your full earnings history here:
-http://127.0.0.1:5000/agent/dashboard
-
----
-Emmanuel Adekunle Peace
-SkulCBT
-07032977572
-"""
-                    send_email(referrer_info['email'], "You Earned a Recruitment Bonus - SkulCBT", email_body)
-
-    # Send email to selling agent
-    if selling_agent and selling_agent['email']:
-        email_body = f"""
 Dear {selling_agent['full_name']},
 
-Your sale has been APPROVED!
+Congratulations! Your sale has been approved by the administrator.
 
-Sale Details:
-- School: {sale['school_name']}
-- Tier: {sale['tier']}
-- Plan: {sale['plan']}
-- Price: ₦{sale['price']:,.0f}
-- Your Commission: ₦{sale['commission']:,.0f}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 SALE DETAILS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+School Name: {sale['school_name']}
+School Email: {sale['school_email']}
+Tier: {tier_names.get(sale['tier'], sale['tier'])}
+Plan: {plan_names.get(sale['plan'], sale['plan'])}
+Sale Price: ₦{sale['price']:,.0f}
+Your Commission: ₦{sale['commission']:,.0f}
 
-License Key: {license_key}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔑 LICENSE KEY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+{license_key}
 
-You can view your full earnings history here:
-http://127.0.0.1:5000/agent/dashboard
+Please provide this license key to the school.
 
-Thank you for being a SkulCBT Agent!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📱 NEED HELP?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Contact: Emmanuel Adekunle Peace
+Phone: 07032977572
+Email: emmanueladekunlep@gmail.com
 
----
-Emmanuel Adekunle Peace
-SkulCBT
-07032977572
+Thank you for being a SkulCBT Agent! 🚀
 """
-        send_email(selling_agent['email'], "Your Sale Has Been Approved - SkulCBT", email_body)
+            print(f"📧 Sending approval email to: {selling_agent['email']}")
+            send_email(selling_agent['email'], "🎉 Your Sale Has Been Approved - SkulCBT", email_body)
 
-    conn.commit()
-    conn.close()
+        # ============================================
+        # UPLINE COMMISSIONS (Level 1, 2, 3) - goes to main balance
+        # ============================================
+        cursor.execute('SELECT referral_code FROM agents WHERE id = ?', (sale['agent_id'],))
+        current_agent = cursor.fetchone()
 
-    return jsonify({
-        'success': True,
-        'message': f'Sale approved! License key: {license_key}',
-        'license_key': license_key
-    })
+        if current_agent:
+            current_referral_code = current_agent['referral_code']
+            level = 1
+
+            while level <= 3:
+                cursor.execute('SELECT referred_by FROM agents WHERE referral_code = ?', (current_referral_code,))
+                upline = cursor.fetchone()
+
+                if not upline or not upline['referred_by']:
+                    break
+
+                cursor.execute('SELECT id FROM agents WHERE referral_code = ?', (upline['referred_by'],))
+                upline_agent = cursor.fetchone()
+
+                if not upline_agent:
+                    break
+
+                if level == 1:
+                    percent = 0.05
+                elif level == 2:
+                    percent = 0.03
+                elif level == 3:
+                    percent = 0.01
+
+                level_amount = sale['price'] * percent
+
+                if level_amount > 0:
+                    cursor.execute('UPDATE agents SET balance = balance + ? WHERE id = ?', (level_amount, upline_agent['id']))
+                    cursor.execute('''
+                        INSERT INTO commissions (agent_id, sale_id, level, amount, paid, created_date)
+                        VALUES (?, ?, ?, ?, ?, ?)
+                    ''', (upline_agent['id'], sale_id, level, level_amount, 1, datetime.now().strftime('%Y-%m-%d')))
+
+                    cursor.execute('SELECT full_name, email FROM agents WHERE id = ?', (upline_agent['id'],))
+                    upline_info = cursor.fetchone()
+
+                    if upline_info and upline_info['email'] and selling_agent:
+                        level_names = {1: 'Level 1 (Direct Upline)', 2: 'Level 2 (Upline)', 3: 'Level 3 (Upline)'}
+                        
+                        email_body = f"""
+💰 YOU EARNED A COMMISSION FROM YOUR DOWNLINE! 💰
+
+Dear {upline_info['full_name']},
+
+Great news! Your downline agent made a sale!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 COMMISSION DETAILS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Agent Who Sold: {selling_agent['full_name']}
+School: {sale['school_name']}
+Sale Price: ₦{sale['price']:,.0f}
+Your Level: {level_names.get(level, 'Level ' + str(level))}
+Your Commission: ₦{level_amount:,.0f}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📱 NEED HELP?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Contact: Emmanuel Adekunle Peace
+Phone: 07032977572
+Email: emmanueladekunlep@gmail.com
+
+Keep building your downline! 🚀
+"""
+                        print(f"📧 Sending commission email to upline: {upline_info['email']}")
+                        send_email(upline_info['email'], "💰 You Earned Commission from Your Downline - SkulCBT", email_body)
+
+                current_referral_code = upline['referred_by']
+                level += 1
+
+        # ============================================
+        # RECRUITMENT BONUS (First Sale Only) - goes to FROZEN balance
+        # ============================================
+        cursor.execute('SELECT COUNT(*) as count FROM sales WHERE agent_id = ? AND status = "approved"', (sale['agent_id'],))
+        sales_count = cursor.fetchone()['count']
+
+        if sales_count == 1:
+            cursor.execute('SELECT referred_by FROM agents WHERE id = ?', (sale['agent_id'],))
+            agent = cursor.fetchone()
+
+            if agent and agent['referred_by']:
+                cursor.execute('SELECT id FROM agents WHERE referral_code = ?', (agent['referred_by'],))
+                referrer = cursor.fetchone()
+
+                if referrer:
+                    recruitment_bonus = float(get_setting('recruitment_bonus') or 5000)
+                    cursor.execute('UPDATE agents SET recruitment_bonus_balance = recruitment_bonus_balance + ? WHERE id = ?',
+                                   (recruitment_bonus, referrer['id']))
+                    cursor.execute('''
+                        INSERT INTO commissions (agent_id, sale_id, level, amount, paid, created_date)
+                        VALUES (?, ?, ?, ?, ?, ?)
+                    ''', (referrer['id'], sale_id, 0, recruitment_bonus, 1, datetime.now().strftime('%Y-%m-%d')))
+
+                    cursor.execute('SELECT full_name, email FROM agents WHERE id = ?', (referrer['id'],))
+                    referrer_info = cursor.fetchone()
+
+                    if referrer_info and referrer_info['email'] and selling_agent:
+                        email_body = f"""
+🎊 CONGRATULATIONS! YOU EARNED A RECRUITMENT BONUS! 🎊
+
+Dear {referrer_info['full_name']},
+
+Excellent news! Someone you recruited just made their FIRST sale!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 BONUS DETAILS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+New Agent: {selling_agent['full_name']}
+This is their FIRST sale! 🎉
+Recruitment Bonus: ₦{recruitment_bonus:,.0f}
+
+⚠️ This bonus is FROZEN until your downline makes a sale.
+Once your downline makes a sale, it will automatically become withdrawable.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📱 NEED HELP?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Contact: Emmanuel Adekunle Peace
+Phone: 07032977572
+Email: emmanueladekunlep@gmail.com
+
+Keep recruiting! 🚀
+"""
+                        print(f"📧 Sending recruitment bonus email to: {referrer_info['email']}")
+                        send_email(referrer_info['email'], "🎊 You Earned a Recruitment Bonus - SkulCBT", email_body)
+
+        # ============================================
+        # RELEASE FROZEN BONUSES FOR ALL UPLINE AGENTS IF THEY HAVE DOWNLINE SALES
+        # ============================================
+        cursor.execute('SELECT referral_code FROM agents WHERE id = ?', (sale['agent_id'],))
+        current_agent = cursor.fetchone()
+        
+        if current_agent:
+            current_referral_code = current_agent['referral_code']
+            while True:
+                cursor.execute('SELECT referred_by FROM agents WHERE referral_code = ?', (current_referral_code,))
+                upline = cursor.fetchone()
+                if not upline or not upline['referred_by']:
+                    break
+                cursor.execute('SELECT id FROM agents WHERE referral_code = ?', (upline['referred_by'],))
+                upline_agent = cursor.fetchone()
+                if not upline_agent:
+                    break
+                
+                # Check if this upline agent has downline sales
+                cursor.execute('''
+                    SELECT COUNT(*) as count FROM sales s
+                    JOIN agents a ON s.agent_id = a.id
+                    WHERE a.referred_by = (SELECT referral_code FROM agents WHERE id = ?)
+                    AND s.status = 'approved'
+                ''', (upline_agent['id'],))
+                downline_sales = cursor.fetchone()['count']
+                
+                if downline_sales > 0:
+                    # Release frozen bonus using the connection
+                    release_frozen_recruitment_bonus(conn, upline_agent['id'])
+                    print(f"✅ Released frozen bonuses for agent {upline_agent['id']}")
+                
+                current_referral_code = upline['referred_by']
+
+        # Update downline sales count for all upline agents
+        cursor.execute('SELECT referral_code FROM agents WHERE id = ?', (sale['agent_id'],))
+        current_agent = cursor.fetchone()
+        
+        if current_agent:
+            current_referral_code = current_agent['referral_code']
+            while True:
+                cursor.execute('SELECT referred_by FROM agents WHERE referral_code = ?', (current_referral_code,))
+                upline = cursor.fetchone()
+                if not upline or not upline['referred_by']:
+                    break
+                cursor.execute('SELECT id FROM agents WHERE referral_code = ?', (upline['referred_by'],))
+                upline_agent = cursor.fetchone()
+                if not upline_agent:
+                    break
+                # Use the existing connection for update_downline_sales_count
+                cursor.execute('''
+                    SELECT COUNT(*) as total_sales FROM sales s
+                    JOIN agents a ON s.agent_id = a.id
+                    WHERE a.referred_by = (SELECT referral_code FROM agents WHERE id = ?)
+                    AND s.status = 'approved'
+                ''', (upline_agent['id'],))
+                result = cursor.fetchone()
+                count = result['total_sales'] if result else 0
+                cursor.execute('UPDATE agents SET downline_sales_count = ? WHERE id = ?', (count, upline_agent['id']))
+                current_referral_code = upline['referred_by']
+
+        conn.commit()
+        conn.close()
+
+        return jsonify({
+            'success': True,
+            'message': f'Sale approved! License key: {license_key}',
+            'license_key': license_key
+        })
+
+    except Exception as e:
+        conn.rollback()
+        conn.close()
+        print(f"❌ Error approving sale: {str(e)}")
+        return jsonify({'success': False, 'message': f'Error: {str(e)}'}), 500
 
 
 @app.route('/api/admin/sales/reject/<int:sale_id>', methods=['POST'])
@@ -1058,9 +1276,9 @@ def api_admin_withdrawals():
     cursor = conn.cursor()
 
     cursor.execute('''
-        SELECT w.*, a.full_name as agent_name 
-        FROM withdrawals w 
-        JOIN agents a ON w.agent_id = a.id 
+        SELECT w.*, a.full_name as agent_name
+        FROM withdrawals w
+        JOIN agents a ON w.agent_id = a.id
         ORDER BY w.created_at DESC
     ''')
     withdrawals = cursor.fetchall()
@@ -1192,35 +1410,33 @@ def admin_reports():
 @app.route('/api/validate-license', methods=['POST'])
 def api_validate_license():
     data = request.get_json()
-    
+
     license_key = data.get('license_key', '').strip().upper()
     school_name = data.get('school_name', '').strip()
-    
+
     if not license_key or not school_name:
         return jsonify({
-            'success': False, 
+            'success': False,
             'message': 'License key and school name are required'
         }), 400
-    
+
     conn = get_db_connection()
     cursor = conn.cursor()
-    
-    # Check if license exists and matches the school
+
     cursor.execute('''
-        SELECT * FROM license_keys 
+        SELECT * FROM license_keys
         WHERE license_key = ? AND school_name = ?
     ''', (license_key, school_name))
-    
+
     license_data = cursor.fetchone()
-    
+
     if not license_data:
         conn.close()
         return jsonify({
             'success': False,
             'message': 'Invalid license key or school name does not match'
         }), 404
-    
-    # Check if license is expired
+
     if license_data['expiry_date'] and license_data['expiry_date'] != 'LIFETIME':
         from datetime import datetime
         expiry = datetime.strptime(license_data['expiry_date'], '%Y-%m-%d')
@@ -1230,17 +1446,16 @@ def api_validate_license():
                 'success': False,
                 'message': 'License has expired'
             }), 403
-    
-    # Update activation time if not activated
+
     if not license_data['activated_at']:
         cursor.execute('''
-            UPDATE license_keys SET activated_at = CURRENT_TIMESTAMP 
+            UPDATE license_keys SET activated_at = CURRENT_TIMESTAMP
             WHERE id = ?
         ''', (license_data['id'],))
         conn.commit()
-    
+
     conn.close()
-    
+
     return jsonify({
         'success': True,
         'message': 'License is valid',
@@ -1262,30 +1477,29 @@ def api_validate_license():
 def api_admin_licenses():
     conn = get_db_connection()
     cursor = conn.cursor()
-    
+
     cursor.execute('''
-        SELECT l.*, a.full_name as agent_name 
-        FROM license_keys l 
-        LEFT JOIN agents a ON l.agent_id = a.id 
+        SELECT l.*, a.full_name as agent_name
+        FROM license_keys l
+        LEFT JOIN agents a ON l.agent_id = a.id
         ORDER BY l.created_at DESC
     ''')
     licenses = cursor.fetchall()
-    
-    # Calculate stats
+
     cursor.execute('SELECT COUNT(*) as count FROM license_keys')
     total_licenses = cursor.fetchone()['count']
-    
+
     cursor.execute('SELECT COUNT(*) as count FROM license_keys WHERE status = "active"')
     active_licenses = cursor.fetchone()['count']
-    
+
     cursor.execute('SELECT COUNT(*) as count FROM license_keys WHERE status = "expired"')
     expired_licenses = cursor.fetchone()['count']
-    
+
     cursor.execute('SELECT SUM(price) as total FROM license_keys')
     total_revenue = cursor.fetchone()['total'] or 0
-    
+
     conn.close()
-    
+
     return jsonify({
         'success': True,
         'licenses': [dict(l) for l in licenses],

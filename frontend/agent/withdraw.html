@@ -20,13 +20,101 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Withdraw - SkulCBT Agent</title>
     <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100% !important;
+                height: auto !important;
+                position: relative !important;
+                padding: 14px !important;
+            }
+            .sidebar-nav {
+                display: flex !important;
+                flex-wrap: wrap !important;
+                gap: 4px !important;
+                margin-top: 10px !important;
+            }
+            .sidebar-nav a {
+                padding: 8px 12px !important;
+                font-size: 13px !important;
+            }
+            .sidebar-footer {
+                display: none !important;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                padding: 14px !important;
+                width: 100% !important;
+            }
+            .top-bar {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 8px !important;
+            }
+            .top-bar h1 {
+                font-size: 20px !important;
+            }
+            .balance-display p {
+                font-size: 30px !important;
+            }
+            .form-section {
+                padding: 18px 16px !important;
+            }
+            .table-section {
+                padding: 14px 16px !important;
+                overflow-x: auto !important;
+            }
+            .data-table {
+                font-size: 12px !important;
+                min-width: 450px !important;
+            }
+            .data-table th,
+            .data-table td {
+                padding: 8px 10px !important;
+            }
+            .sidebar-logo img {
+                height: 32px !important;
+            }
+            .sidebar-logo h2 {
+                font-size: 20px !important;
+            }
+        }
+        @media (max-width: 480px) {
+            .balance-display p {
+                font-size: 24px !important;
+            }
+            .balance-display {
+                padding: 20px !important;
+            }
+            .form-section {
+                padding: 14px !important;
+            }
+            .form-group input {
+                font-size: 16px !important;
+                padding: 10px 12px !important;
+            }
+            .data-table {
+                font-size: 11px !important;
+                min-width: 380px !important;
+            }
+            .data-table th,
+            .data-table td {
+                padding: 6px 8px !important;
+            }
+            .sidebar-nav a {
+                font-size: 12px !important;
+                padding: 6px 10px !important;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
         <!-- Sidebar -->
         <div class="sidebar">
             <div class="sidebar-logo">
-                <h2>SkulCBT</h2>
+                <img src="/static/images/skulcbt-logo.png" alt="SkulCBT Logo" style="height: 40px; width: auto; margin-bottom: 6px;">
+                <h2>Skul<span style="color: #D4AF37;">CBT</span></h2>
                 <p>Agent Portal</p>
             </div>
             <nav class="sidebar-nav">
@@ -35,6 +123,7 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
                 <a href="/agent/downline">My Downline</a>
                 <a href="/agent/commissions">Commissions</a>
                 <a href="/agent/withdraw" class="active">Withdraw</a>
+                <a href="/agent/generate">Generate License</a>
             </nav>
             <div class="sidebar-footer">
                 <button onclick="handleLogout()" class="btn-logout">Logout</button>
@@ -99,7 +188,6 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
     </div>
 
     <script>
-        // Load withdrawal data on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadAgentInfo();
             loadWithdrawals();
@@ -133,7 +221,6 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
                         return;
                     }
 
-                    // Build table
                     let tableHtml = `
                         <table class="data-table">
                             <thead>
@@ -149,7 +236,7 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
                     `;
 
                     withdrawals.forEach(function(w) {
-                        const statusClass = w.status === 'approved' ? 'status-approved' : 
+                        const statusClass = w.status === 'approved' ? 'status-approved' :
                                            w.status === 'pending' ? 'status-pending' : 'status-rejected';
 
                         tableHtml += `
@@ -185,16 +272,13 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
             const account_name = document.getElementById('account_name').value;
             const messageDiv = document.getElementById('message');
 
-            // Hide any previous message
             messageDiv.classList.add('hidden');
 
-            // Validate amount
             if (parseFloat(amount) < 10000) {
                 showMessage('Minimum withdrawal amount is ₦10,000.', 'error');
                 return;
             }
 
-            // Show loading state
             const submitBtn = document.querySelector('button[type="submit"]');
             submitBtn.textContent = 'Submitting...';
             submitBtn.disabled = true;
@@ -215,14 +299,9 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
             .then(data => {
                 if (data.success) {
                     showMessage(data.message, 'success');
-                    
-                    // Reset form
                     document.getElementById('withdrawForm').reset();
-                    
-                    // Reload balance and withdrawal history
                     loadAgentInfo();
                     loadWithdrawals();
-                    
                     submitBtn.textContent = 'Request Withdrawal';
                     submitBtn.disabled = false;
                 } else {
@@ -258,7 +337,7 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
             messageDiv.textContent = message;
             messageDiv.className = 'message ' + type;
             messageDiv.classList.remove('hidden');
-            
+
             setTimeout(function() {
                 messageDiv.classList.add('hidden');
             }, 5000);

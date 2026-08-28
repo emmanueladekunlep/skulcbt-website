@@ -16,7 +16,7 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # Import the Flask app
-from agent_app import app
+from agent_app import app as application
 
 # Vercel expects a variable named 'app'
-application = app
+app = application

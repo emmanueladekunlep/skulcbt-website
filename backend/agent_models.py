@@ -1,23 +1,12 @@
 # agent_models.py
 # Database models for SkulCBT Agent Program
-# Full path: C:\Users\Peace\Desktop\skulcbt-website\backend\agent_models.py
-#
-# ============================================
-# AUTHOR: Emmanuel Adekunle Peace
-# WEBSITE: www.emmanueladekunlepeace.com
-# PHONE: 07032977572
-# EMAIL: emmanueladekunlep@gmail.com
-# ============================================
-# SkulCBT Agent Program - Database Models
-# Copyright (c) 2026 SkulCBT. All rights reserved.
-# ============================================
 
 import sqlite3
 import json
 from datetime import datetime
 import os
 
-DB_PATH = 'C:/Users/Peace/Desktop/skulcbt-website/database/agents.db'
+DB_PATH = '/home/skulcbt/skulcbt-website/database/agents.db'
 
 def get_db_connection():
     conn = sqlite3.connect(DB_PATH, timeout=30)
@@ -43,9 +32,11 @@ def init_db():
             total_sales INTEGER DEFAULT 0,
             total_commission REAL DEFAULT 0,
             balance REAL DEFAULT 0,
+            recruitment_bonus_balance REAL DEFAULT 0,
             bank_name TEXT,
             account_number TEXT,
             account_name TEXT,
+            downline_sales_count INTEGER DEFAULT 0,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
@@ -207,8 +198,8 @@ def update_setting(key, value):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('''
-        UPDATE settings 
-        SET setting_value = ?, updated_at = CURRENT_TIMESTAMP 
+        UPDATE settings
+        SET setting_value = ?, updated_at = CURRENT_TIMESTAMP
         WHERE setting_key = ?
     ''', (value, key))
     conn.commit()
@@ -270,17 +261,17 @@ def get_downline_agents(agent_id):
 
 def get_agent_rank(agent):
     sales = agent['total_sales'] if agent else 0
-    
+
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM ranks ORDER BY min_sales DESC')
     ranks = cursor.fetchall()
     conn.close()
-    
+
     for rank in ranks:
         if sales >= rank['min_sales']:
             return rank['rank_name']
-    
+
     return 'bronze'
 
 
@@ -288,10 +279,57 @@ def update_agent_rank(agent_id):
     agent = get_agent_by_id(agent_id)
     if not agent:
         return
-    
+
     new_rank = get_agent_rank(agent)
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('UPDATE agents SET rank = ? WHERE id = ?', (new_rank, agent_id))
     conn.commit()
     conn.close()
+
+
+def update_downline_sales_count(agent_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute('''
+        SELECT COUNT(*) as total_sales FROM sales s
+        JOIN agents a ON s.agent_id = a.id
+        WHERE a.referred_by = (SELECT referral_code FROM agents WHERE id = ?)
+        AND s.status = 'approved'
+    ''', (agent_id,))
+    result = cursor.fetchone()
+    count = result['total_sales'] if result else 0
+    
+    cursor.execute('UPDATE agents SET downline_sales_count = ? WHERE id = ?', (count, agent_id))
+    conn.commit()
+    conn.close()
+    return count
+
+
+def release_frozen_recruitment_bonus(conn, agent_id):
+    """
+    Move all recruitment_bonus_balance to main balance.
+    Uses existing connection to avoid deadlock.
+    """
+    cursor = conn.cursor()
+    
+    # Check if agent has downline sales
+    cursor.execute('''
+        SELECT COUNT(*) as count FROM sales s
+        JOIN agents a ON s.agent_id = a.id
+        WHERE a.referred_by = (SELECT referral_code FROM agents WHERE id = ?)
+        AND s.status = 'approved'
+    ''', (agent_id,))
+    downline_sales = cursor.fetchone()['count']
+    
+    if downline_sales > 0:
+        cursor.execute('''
+            UPDATE agents
+            SET balance = balance + recruitment_bonus_balance,
+                recruitment_bonus_balance = 0
+            WHERE id = ? AND recruitment_bonus_balance > 0
+        ''', (agent_id,))
+        return cursor.rowcount > 0
+    
+    return False

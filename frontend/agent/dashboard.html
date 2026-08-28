@@ -1,17 +1,5 @@
 <!-- dashboard.html -->
 <!-- Agent Dashboard Page for SkulCBT Agent Program -->
-<!-- Full path: C:\Users\Peace\Desktop\skulcbt-website\frontend\agent\dashboard.html -->
-<!--
-============================================
-AUTHOR: Emmanuel Adekunle Peace
-WEBSITE: www.emmanueladekunlepeace.com
-PHONE: 07032977572
-EMAIL: emmanueladekunlep@gmail.com
-============================================
-SkulCBT Agent Program - Agent Dashboard
-Copyright (c) 2026 SkulCBT. All rights reserved.
-============================================
--->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -20,13 +8,129 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - SkulCBT Agent</title>
     <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .sidebar-overlay.active {
+            display: block;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .hamburger-btn {
+                display: block !important;
+                background: none;
+                border: none;
+                font-size: 28px;
+                color: #0B1E36;
+                cursor: pointer;
+                padding: 8px 12px;
+                border-radius: 8px;
+            }
+            .top-bar {
+                flex-direction: row !important;
+                align-items: center !important;
+            }
+            .top-bar-left {
+                display: flex !important;
+                align-items: center !important;
+                gap: 10px !important;
+            }
+            .recent-item {
+                flex-wrap: wrap !important;
+                gap: 4px !important;
+            }
+            .license-key {
+                font-size: 11px !important;
+                padding: 2px 8px !important;
+            }
+        }
+        @media (min-width: 769px) {
+            .hamburger-btn {
+                display: none !important;
+            }
+            .sidebar-overlay {
+                display: none !important;
+            }
+        }
+        .downline-sales-box {
+            background: #f0f9ff;
+            border: 2px solid #0B7A4B;
+            border-radius: 10px;
+            padding: 12px 20px;
+            margin-top: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .downline-sales-box span.label {
+            font-weight: 600;
+            color: #0B1E36;
+        }
+        .downline-sales-box span.value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0B7A4B;
+        }
+        .downline-sales-box span.note {
+            font-size: 13px;
+            color: #64748b;
+        }
+        .stat-card .sub-text {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+        .license-key {
+            background: #002147;
+            color: #D4AF37;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            display: inline-block;
+        }
+        .recent-item .license-key {
+            margin-top: 4px;
+        }
+        @media (max-width: 480px) {
+            .downline-sales-box {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+            .license-key {
+                font-size: 11px !important;
+                padding: 2px 8px !important;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
         <!-- Sidebar -->
-        <div class="sidebar">
+        <div class="sidebar" id="sidebar">
             <div class="sidebar-logo">
-                <img src="/static/images/skulcbt-logo.png" alt="SkulCBT Logo" style="height: 40px; width: auto; margin-bottom: 8px;">
+                <img src="/static/images/skulcbt-logo.png" alt="SkulCBT Logo" style="height: 40px; width: auto; margin-bottom: 6px;">
                 <h2>Skul<span style="color: #D4AF37;">CBT</span></h2>
                 <p>Agent Portal</p>
             </div>
@@ -46,7 +150,10 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
         <!-- Main Content -->
         <div class="main-content">
             <div class="top-bar">
-                <h1>Dashboard</h1>
+                <div class="top-bar-left">
+                    <button class="hamburger-btn" onclick="toggleSidebar()">☰</button>
+                    <h1>Dashboard</h1>
+                </div>
                 <div class="agent-info">
                     <span id="agentName">Welcome, Agent</span>
                     <span id="agentRank" class="rank-badge">Bronze</span>
@@ -75,6 +182,13 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
                 </div>
             </div>
 
+            <!-- Downline Sales Box -->
+            <div class="downline-sales-box">
+                <span class="label">📊 Downline Total Sales</span>
+                <span class="value" id="downlineSalesCount">0</span>
+                <span class="note">Sales made by your downline agents</span>
+            </div>
+
             <!-- Recent Activity -->
             <div class="recent-section">
                 <div class="recent-box">
@@ -95,7 +209,20 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
     </div>
 
     <script>
-        // Load dashboard data on page load
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             loadDashboard();
         });
@@ -105,43 +232,57 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Update agent name
                     document.getElementById('agentName').textContent = 'Welcome, ' + data.agent.full_name;
-
-                    // Update rank
                     document.getElementById('agentRank').textContent = data.agent.rank.toUpperCase();
-
-                    // Update stats
                     document.getElementById('totalSales').textContent = data.stats.total_sales;
                     document.getElementById('totalCommission').textContent = '₦' + data.stats.total_commission.toLocaleString();
                     document.getElementById('currentBalance').textContent = '₦' + data.stats.balance.toLocaleString();
                     document.getElementById('downlineCount').textContent = data.stats.downline_count;
+                    document.getElementById('downlineSalesCount').textContent = data.stats.downline_sales_count;
 
-                    // Update recent sales
                     const salesContainer = document.getElementById('recentSales');
                     if (data.recent_sales && data.recent_sales.length > 0) {
                         salesContainer.innerHTML = '';
                         data.recent_sales.forEach(function(sale) {
                             const saleItem = document.createElement('div');
                             saleItem.className = 'recent-item';
+                            
+                            let licenseHtml = '';
+                            if (sale.license_key) {
+                                licenseHtml = `<span class="license-key">🔑 ${sale.license_key}</span>`;
+                            } else if (sale.status === 'approved') {
+                                licenseHtml = `<span style="color: #fc8181; font-size: 12px;">⚠️ No license key found</span>`;
+                            }
+                            
                             saleItem.innerHTML = `
                                 <span class="school-name">${sale.school_name}</span>
                                 <span class="sale-details">${sale.tier} - ${sale.plan}</span>
                                 <span class="sale-amount">₦${sale.price.toLocaleString()}</span>
                                 <span class="sale-status ${sale.status}">${sale.status}</span>
+                                ${licenseHtml ? `<div style="width:100%; margin-top: 4px;">${licenseHtml}</div>` : ''}
                             `;
                             salesContainer.appendChild(saleItem);
                         });
                     }
 
-                    // Update recent commissions
                     const commissionsContainer = document.getElementById('recentCommissions');
                     if (data.recent_commissions && data.recent_commissions.length > 0) {
                         commissionsContainer.innerHTML = '';
                         data.recent_commissions.forEach(function(commission) {
                             const commItem = document.createElement('div');
                             commItem.className = 'recent-item';
-                            const levelText = commission.level === 0 ? 'Recruitment Bonus' : 'Level ' + commission.level + ' Commission';
+                            
+                            let levelText = '';
+                            if (commission.level === 0) {
+                                if (commission.amount === 5000 || commission.amount === 5000.0) {
+                                    levelText = 'Recruitment Bonus';
+                                } else {
+                                    levelText = 'Direct Commission (35%)';
+                                }
+                            } else {
+                                levelText = 'Level ' + commission.level + ' Commission';
+                            }
+                            
                             commItem.innerHTML = `
                                 <span class="comm-type">${levelText}</span>
                                 <span class="comm-amount">₦${commission.amount.toLocaleString()}</span>

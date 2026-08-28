@@ -1,17 +1,5 @@
 <!-- downline.html -->
 <!-- Agent Downline Page for SkulCBT Agent Program -->
-<!-- Full path: C:\Users\Peace\Desktop\skulcbt-website\frontend\agent\downline.html -->
-<!--
-============================================
-AUTHOR: Emmanuel Adekunle Peace
-WEBSITE: www.emmanueladekunlepeace.com
-PHONE: 07032977572
-EMAIL: emmanueladekunlep@gmail.com
-============================================
-SkulCBT Agent Program - Agent Downline View
-Copyright (c) 2026 SkulCBT. All rights reserved.
-============================================
--->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -20,13 +8,141 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Downline - SkulCBT Agent</title>
     <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .sidebar-overlay.active {
+            display: block;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .hamburger-btn {
+                display: block !important;
+                background: none;
+                border: none;
+                font-size: 28px;
+                color: #0B1E36;
+                cursor: pointer;
+                padding: 8px 12px;
+                border-radius: 8px;
+            }
+            .top-bar {
+                flex-direction: row !important;
+                align-items: center !important;
+            }
+            .top-bar-left {
+                display: flex !important;
+                align-items: center !important;
+                gap: 10px !important;
+            }
+            .downline-summary {
+                grid-template-columns: 1fr 1fr !important;
+            }
+            .tree-level {
+                grid-template-columns: 1fr !important;
+            }
+        }
+        @media (max-width: 480px) {
+            .downline-summary {
+                grid-template-columns: 1fr 1fr !important;
+            }
+        }
+        @media (min-width: 769px) {
+            .hamburger-btn {
+                display: none !important;
+            }
+            .sidebar-overlay {
+                display: none !important;
+            }
+        }
+        .agent-stats .bonus-released {
+            background: #d4edda;
+            color: #155724;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid #c3e6cb;
+        }
+        .agent-stats .bonus-pending {
+            background: #fff3cd;
+            color: #856404;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid #ffeeba;
+        }
+        .agent-stats .bonus-info {
+            background: #e2e3e5;
+            color: #383d41;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        .agent-card .agent-stats {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .bonus-amount {
+            font-weight: 700;
+            color: #0B7A4B;
+        }
+        .bonus-pending-text {
+            font-weight: 700;
+            color: #856404;
+        }
+        .recruitment-info-box {
+            background: #f0f7ff;
+            border: 1px solid #cce5ff;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .recruitment-info-box .icon {
+            font-size: 24px;
+        }
+        .recruitment-info-box .text {
+            font-size: 14px;
+            color: #0B1E36;
+            flex: 1;
+        }
+        .recruitment-info-box .text strong {
+            color: #0B7A4B;
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
         <!-- Sidebar -->
-        <div class="sidebar">
+        <div class="sidebar" id="sidebar">
             <div class="sidebar-logo">
-                <h2>SkulCBT</h2>
+                <img src="/static/images/skulcbt-logo.png" alt="SkulCBT Logo" style="height: 40px; width: auto; margin-bottom: 6px;">
+                <h2>Skul<span style="color: #D4AF37;">CBT</span></h2>
                 <p>Agent Portal</p>
             </div>
             <nav class="sidebar-nav">
@@ -35,6 +151,7 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
                 <a href="/agent/downline" class="active">My Downline</a>
                 <a href="/agent/commissions">Commissions</a>
                 <a href="/agent/withdraw">Withdraw</a>
+                <a href="/agent/generate">Generate License</a>
             </nav>
             <div class="sidebar-footer">
                 <button onclick="handleLogout()" class="btn-logout">Logout</button>
@@ -44,64 +161,89 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
         <!-- Main Content -->
         <div class="main-content">
             <div class="top-bar">
-                <h1>My Downline</h1>
+                <div class="top-bar-left">
+                    <button class="hamburger-btn" onclick="toggleSidebar()">☰</button>
+                    <h1>My Downline</h1>
+                </div>
                 <div class="agent-info">
-                    <span id="agentName">Welcome, Agent</span>
+                    <span id="agentName">Agent</span>
                     <span id="agentRank" class="rank-badge">Bronze</span>
                 </div>
             </div>
 
             <div id="message" class="message hidden"></div>
 
-            <!-- Referral Link Section -->
+            <!-- Recruitment Info Box -->
+            <div class="recruitment-info-box">
+                <span class="icon">💰</span>
+                <span class="text">
+                    <strong>₦5,000</strong> bonus for <strong>EVERY</strong> agent you recruit who makes their <strong>FIRST SALE</strong>.
+                    You will see the bonus below. It becomes <strong>withdrawable</strong> once they make a sale!
+                </span>
+            </div>
+
+            <!-- Referral Link -->
             <div class="referral-section">
                 <h2>Your Referral Link</h2>
                 <div class="referral-link-box">
-                    <input type="text" id="referralLink" readonly>
+                    <input type="text" id="referralLink" readonly value="Loading...">
                     <button onclick="copyReferralLink()" class="btn-copy">Copy Link</button>
                 </div>
-                <p class="referral-note">Share this link with people who want to become agents under you.</p>
+                <p class="referral-note">Share this link with others to recruit agents. You earn bonuses when they make their first sale!</p>
             </div>
 
             <!-- Downline Summary -->
-            <div class="downline-summary">
+            <div class="downline-summary" id="downlineSummary">
                 <div class="summary-card">
                     <h3>Level 1</h3>
                     <p id="level1Count">0</p>
-                    <span>Direct Recruits</span>
+                    <span>Direct agents</span>
                 </div>
                 <div class="summary-card">
                     <h3>Level 2</h3>
                     <p id="level2Count">0</p>
-                    <span>Indirect Recruits</span>
+                    <span>Indirect agents</span>
                 </div>
                 <div class="summary-card">
                     <h3>Level 3</h3>
                     <p id="level3Count">0</p>
-                    <span>Third Level</span>
+                    <span>Indirect agents</span>
                 </div>
                 <div class="summary-card total">
                     <h3>Total</h3>
                     <p id="totalCount">0</p>
-                    <span>All Downline</span>
+                    <span>All downline agents</span>
                 </div>
             </div>
 
             <!-- Downline Tree -->
             <div class="tree-section">
                 <h2>Downline Tree</h2>
-                <div id="downlineTree">
-                    <p class="empty-message">You have no downline agents yet. Start recruiting!</p>
+                <div id="treeContainer">
+                    <p class="empty-message">Loading downline...</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Load downline data on page load
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
-            loadAgentInfo();
             loadDownline();
+            loadAgentInfo();
             loadReferralLink();
         });
 
@@ -119,149 +261,145 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
             });
         }
 
-        function loadDownline() {
-            fetch('/api/agent/downline')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Update counts
-                    document.getElementById('level1Count').textContent = data.counts.level1;
-                    document.getElementById('level2Count').textContent = data.counts.level2;
-                    document.getElementById('level3Count').textContent = data.counts.level3;
-                    document.getElementById('totalCount').textContent = data.counts.total;
-
-                    // Build downline tree
-                    const treeContainer = document.getElementById('downlineTree');
-                    
-                    if (data.counts.total === 0) {
-                        treeContainer.innerHTML = '<p class="empty-message">You have no downline agents yet. Start recruiting!</p>';
-                        return;
-                    }
-
-                    treeContainer.innerHTML = '';
-
-                    // Display Level 1
-                    if (data.level1 && data.level1.length > 0) {
-                        const level1Title = document.createElement('h3');
-                        level1Title.className = 'tree-level-title';
-                        level1Title.textContent = 'Level 1 - Direct Recruits (' + data.level1.length + ')';
-                        treeContainer.appendChild(level1Title);
-
-                        const level1List = document.createElement('div');
-                        level1List.className = 'tree-level';
-                        
-                        data.level1.forEach(function(agent) {
-                            const agentCard = document.createElement('div');
-                            agentCard.className = 'agent-card';
-                            agentCard.innerHTML = `
-                                <div class="agent-info">
-                                    <span class="agent-name">${agent.full_name}</span>
-                                    <span class="agent-rank">${agent.rank.toUpperCase()}</span>
-                                </div>
-                                <div class="agent-stats">
-                                    <span>Sales: ${agent.total_sales}</span>
-                                    <span>Commission: ₦${agent.total_commission.toLocaleString()}</span>
-                                </div>
-                            `;
-                            level1List.appendChild(agentCard);
-                        });
-                        
-                        treeContainer.appendChild(level1List);
-                    }
-
-                    // Display Level 2
-                    if (data.level2 && data.level2.length > 0) {
-                        const level2Title = document.createElement('h3');
-                        level2Title.className = 'tree-level-title';
-                        level2Title.textContent = 'Level 2 - Indirect Recruits (' + data.level2.length + ')';
-                        treeContainer.appendChild(level2Title);
-
-                        const level2List = document.createElement('div');
-                        level2List.className = 'tree-level';
-                        
-                        data.level2.forEach(function(agent) {
-                            const agentCard = document.createElement('div');
-                            agentCard.className = 'agent-card';
-                            agentCard.innerHTML = `
-                                <div class="agent-info">
-                                    <span class="agent-name">${agent.full_name}</span>
-                                    <span class="agent-rank">${agent.rank.toUpperCase()}</span>
-                                </div>
-                                <div class="agent-stats">
-                                    <span>Sales: ${agent.total_sales}</span>
-                                    <span>Commission: ₦${agent.total_commission.toLocaleString()}</span>
-                                </div>
-                            `;
-                            level2List.appendChild(agentCard);
-                        });
-                        
-                        treeContainer.appendChild(level2List);
-                    }
-
-                    // Display Level 3
-                    if (data.level3 && data.level3.length > 0) {
-                        const level3Title = document.createElement('h3');
-                        level3Title.className = 'tree-level-title';
-                        level3Title.textContent = 'Level 3 - Third Level (' + data.level3.length + ')';
-                        treeContainer.appendChild(level3Title);
-
-                        const level3List = document.createElement('div');
-                        level3List.className = 'tree-level';
-                        
-                        data.level3.forEach(function(agent) {
-                            const agentCard = document.createElement('div');
-                            agentCard.className = 'agent-card';
-                            agentCard.innerHTML = `
-                                <div class="agent-info">
-                                    <span class="agent-name">${agent.full_name}</span>
-                                    <span class="agent-rank">${agent.rank.toUpperCase()}</span>
-                                </div>
-                                <div class="agent-stats">
-                                    <span>Sales: ${agent.total_sales}</span>
-                                    <span>Commission: ₦${agent.total_commission.toLocaleString()}</span>
-                                </div>
-                            `;
-                            level3List.appendChild(agentCard);
-                        });
-                        
-                        treeContainer.appendChild(level3List);
-                    }
-                } else {
-                    showMessage(data.message, 'error');
-                }
-            })
-            .catch(error => {
-                showMessage('An error occurred loading downline data.', 'error');
-            });
-        }
-
         function loadReferralLink() {
-            // Get the agent's referral code from session
+            const linkInput = document.getElementById('referralLink');
             fetch('/api/agent/dashboard')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    const refCode = data.agent.referral_code;
                     const baseUrl = window.location.origin;
-                    const referralLink = baseUrl + '/agent/register?ref=' + data.agent.referral_code;
-                    document.getElementById('referralLink').value = referralLink;
+                    linkInput.value = baseUrl + '/agent/register?ref=' + refCode;
                 }
             })
             .catch(error => {
-                console.error('Error loading referral link:', error);
+                linkInput.value = 'Error loading referral link';
+                console.error('Error:', error);
             });
         }
 
         function copyReferralLink() {
             const linkInput = document.getElementById('referralLink');
             linkInput.select();
-            linkInput.setSelectionRange(0, 99999);
+            document.execCommand('copy');
             
-            try {
-                document.execCommand('copy');
-                showMessage('Referral link copied to clipboard!', 'success');
-            } catch (err) {
-                showMessage('Failed to copy link. Please copy manually.', 'error');
-            }
+            const btn = document.querySelector('.btn-copy');
+            const originalText = btn.textContent;
+            btn.textContent = 'Copied!';
+            setTimeout(function() {
+                btn.textContent = originalText;
+            }, 3000);
+        }
+
+        function loadDownline() {
+            const container = document.getElementById('treeContainer');
+
+            fetch('/api/agent/downline')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('level1Count').textContent = data.counts.level1;
+                    document.getElementById('level2Count').textContent = data.counts.level2;
+                    document.getElementById('level3Count').textContent = data.counts.level3;
+                    document.getElementById('totalCount').textContent = data.counts.total;
+
+                    if (data.counts.total === 0) {
+                        container.innerHTML = '<p class="empty-message">You don\'t have any downline agents yet.</p>';
+                        return;
+                    }
+
+                    let html = '';
+
+                    if (data.level1.length > 0) {
+                        html += `<h3 class="tree-level-title">Level 1 (Direct Agents)</h3>`;
+                        html += `<div class="tree-level">`;
+                        data.level1.forEach(function(agent) {
+                            let bonusDisplay = '';
+                            if (agent.sales_count > 0) {
+                                bonusDisplay = `<span class="bonus-released">✅ ₦5,000 Bonus (Withdrawable)</span>`;
+                            } else {
+                                bonusDisplay = `<span class="bonus-pending">🔒 ₦5,000 Bonus (Pending - needs 1 sale)</span>`;
+                            }
+                            html += `
+                                <div class="agent-card">
+                                    <div class="agent-info">
+                                        <span class="agent-name">${agent.full_name}</span>
+                                        <span class="agent-rank">${agent.rank}</span>
+                                    </div>
+                                    <div class="agent-stats">
+                                        <span>Sales: ${agent.total_sales}</span>
+                                        <span>₦${(agent.total_commission || 0).toLocaleString()}</span>
+                                        ${bonusDisplay}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        html += `</div>`;
+                    }
+
+                    if (data.level2.length > 0) {
+                        html += `<h3 class="tree-level-title">Level 2</h3>`;
+                        html += `<div class="tree-level">`;
+                        data.level2.forEach(function(agent) {
+                            let bonusDisplay = '';
+                            if (agent.sales_count > 0) {
+                                bonusDisplay = `<span class="bonus-released">✅ ₦5,000 Bonus (Withdrawable)</span>`;
+                            } else {
+                                bonusDisplay = `<span class="bonus-pending">🔒 ₦5,000 Bonus (Pending - needs 1 sale)</span>`;
+                            }
+                            html += `
+                                <div class="agent-card">
+                                    <div class="agent-info">
+                                        <span class="agent-name">${agent.full_name}</span>
+                                        <span class="agent-rank">${agent.rank}</span>
+                                    </div>
+                                    <div class="agent-stats">
+                                        <span>Sales: ${agent.total_sales}</span>
+                                        <span>₦${(agent.total_commission || 0).toLocaleString()}</span>
+                                        ${bonusDisplay}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        html += `</div>`;
+                    }
+
+                    if (data.level3.length > 0) {
+                        html += `<h3 class="tree-level-title">Level 3</h3>`;
+                        html += `<div class="tree-level">`;
+                        data.level3.forEach(function(agent) {
+                            let bonusDisplay = '';
+                            if (agent.sales_count > 0) {
+                                bonusDisplay = `<span class="bonus-released">✅ ₦5,000 Bonus (Withdrawable)</span>`;
+                            } else {
+                                bonusDisplay = `<span class="bonus-pending">🔒 ₦5,000 Bonus (Pending - needs 1 sale)</span>`;
+                            }
+                            html += `
+                                <div class="agent-card">
+                                    <div class="agent-info">
+                                        <span class="agent-name">${agent.full_name}</span>
+                                        <span class="agent-rank">${agent.rank}</span>
+                                    </div>
+                                    <div class="agent-stats">
+                                        <span>Sales: ${agent.total_sales}</span>
+                                        <span>₦${(agent.total_commission || 0).toLocaleString()}</span>
+                                        ${bonusDisplay}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        html += `</div>`;
+                    }
+
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = '<p class="empty-message">Error loading downline.</p>';
+                }
+            })
+            .catch(error => {
+                container.innerHTML = '<p class="empty-message">Error loading downline.</p>';
+                console.error('Error:', error);
+            });
         }
 
         function handleLogout() {
@@ -284,7 +422,7 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
             messageDiv.textContent = message;
             messageDiv.className = 'message ' + type;
             messageDiv.classList.remove('hidden');
-            
+
             setTimeout(function() {
                 messageDiv.classList.add('hidden');
             }, 5000);
