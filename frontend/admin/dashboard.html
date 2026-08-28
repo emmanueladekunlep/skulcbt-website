@@ -1,17 +1,5 @@
 <!-- dashboard.html -->
 <!-- Admin Dashboard Page for SkulCBT Agent Program -->
-<!-- Full path: C:\Users\Peace\Desktop\skulcbt-website\frontend\admin\dashboard.html -->
-<!--
-============================================
-AUTHOR: Emmanuel Adekunle Peace
-WEBSITE: www.emmanueladekunlepeace.com
-PHONE: 07032977572
-EMAIL: emmanueladekunlep@gmail.com
-============================================
-SkulCBT Agent Program - Admin Dashboard
-Copyright (c) 2026 SkulCBT. All rights reserved.
-============================================
--->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -20,13 +8,448 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - SkulCBT</title>
     <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .sidebar-overlay.active {
+            display: block;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .hamburger-btn {
+                display: block !important;
+                background: none;
+                border: none;
+                font-size: 28px;
+                color: #0B1E36;
+                cursor: pointer;
+                padding: 8px 12px;
+                border-radius: 8px;
+            }
+            .top-bar {
+                flex-direction: row !important;
+                align-items: center !important;
+            }
+            .top-bar-left {
+                display: flex !important;
+                align-items: center !important;
+                gap: 10px !important;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 10px !important;
+            }
+            .stat-card p {
+                font-size: 20px !important;
+            }
+            .recent-section {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+            }
+            .action-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 10px !important;
+            }
+            .top-bar h1 {
+                font-size: 20px !important;
+            }
+            .sidebar-logo img {
+                height: 32px !important;
+            }
+            .sidebar-logo h2 {
+                font-size: 20px !important;
+            }
+            .sidebar-logo {
+                display: flex !important;
+                align-items: center !important;
+                gap: 10px !important;
+            }
+            .sidebar-logo p {
+                display: block !important;
+            }
+            .agent-info {
+                flex-wrap: wrap !important;
+            }
+            .tree-modal {
+                width: 95% !important;
+                max-width: 95% !important;
+                margin: 10px !important;
+            }
+            .tree-modal .agent-card {
+                padding: 10px !important;
+            }
+            .top-agents-table {
+                font-size: 12px !important;
+            }
+            .top-agents-table th,
+            .top-agents-table td {
+                padding: 6px 8px !important;
+            }
+        }
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 8px !important;
+            }
+            .stat-card {
+                padding: 14px 16px !important;
+            }
+            .stat-card p {
+                font-size: 18px !important;
+            }
+            .stat-card h3 {
+                font-size: 11px !important;
+            }
+            .action-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 8px !important;
+            }
+            .action-card {
+                padding: 14px !important;
+            }
+            .action-card h3 {
+                font-size: 14px !important;
+            }
+            .action-card p {
+                font-size: 12px !important;
+            }
+            .recent-box {
+                padding: 14px 16px !important;
+            }
+            .recent-item {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 4px !important;
+                font-size: 13px !important;
+            }
+            .sidebar-nav a {
+                font-size: 12px !important;
+                padding: 6px 10px !important;
+            }
+            .top-bar h1 {
+                font-size: 18px !important;
+            }
+            .tree-modal .agent-card .agent-stats {
+                flex-wrap: wrap !important;
+            }
+            .top-agents-table {
+                font-size: 11px !important;
+            }
+            .top-agents-table th,
+            .top-agents-table td {
+                padding: 4px 6px !important;
+            }
+            .rank-badge {
+                font-size: 10px !important;
+                padding: 1px 8px !important;
+            }
+        }
+        @media (min-width: 769px) {
+            .hamburger-btn {
+                display: none !important;
+            }
+            .sidebar-overlay {
+                display: none !important;
+            }
+        }
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+        .action-card {
+            background: white;
+            padding: 20px 22px;
+            border-radius: 14px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+            border: 1px solid #edf2f7;
+            transition: all 0.3s ease;
+            display: block;
+            color: #1a202c;
+            text-decoration: none;
+        }
+        .action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-color: #D4AF37;
+            text-decoration: none;
+        }
+        .action-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0B1E36;
+            margin-bottom: 4px;
+        }
+        .action-card p {
+            font-size: 14px;
+            color: #718096;
+            margin-bottom: 0;
+        }
+        .quick-actions h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0B1E36;
+            margin-bottom: 14px;
+        }
+        .agent-clickable {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .agent-clickable:hover {
+            background: #f0f9ff;
+        }
+        .agent-clickable .view-tree {
+            color: #0B7A4B;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        .tree-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .tree-modal-overlay.active {
+            display: flex;
+        }
+        .tree-modal {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        .tree-modal .close-btn {
+            position: sticky;
+            top: 0;
+            float: right;
+            background: #fee2e2;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px 14px;
+            border-radius: 50%;
+            color: #991b1b;
+            font-weight: 700;
+            z-index: 10;
+        }
+        .tree-modal .close-btn:hover {
+            background: #fecaca;
+        }
+        .tree-modal h2 {
+            margin-top: 0;
+            color: #0B1E36;
+            border-bottom: 2px solid #D4AF37;
+            padding-bottom: 12px;
+        }
+        .tree-modal .tree-level {
+            margin-bottom: 16px;
+        }
+        .tree-modal .tree-level-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #0B1E36;
+            margin: 16px 0 8px 0;
+            background: #f1f5f9;
+            padding: 6px 14px;
+            border-radius: 6px;
+        }
+        .tree-modal .agent-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .tree-modal .agent-card .agent-name {
+            font-weight: 600;
+            color: #0B1E36;
+        }
+        .tree-modal .agent-card .agent-rank {
+            background: #D4AF37;
+            color: #0B1E36;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .tree-modal .agent-card .agent-stats {
+            display: flex;
+            gap: 12px;
+            font-size: 13px;
+            color: #475569;
+        }
+        .tree-modal .agent-card .agent-sales-count {
+            background: #e6f7e6;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #0B7A4B;
+        }
+        .tree-modal .no-downline {
+            color: #94a3b8;
+            text-align: center;
+            padding: 20px 0;
+        }
+        .tree-modal .empty-message {
+            color: #94a3b8;
+            text-align: center;
+            padding: 10px 0;
+        }
+        .tree-modal .agent-card .no-sales {
+            color: #94a3b8;
+            font-size: 12px;
+        }
+        @media (max-width: 600px) {
+            .tree-modal .agent-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+            .tree-modal .agent-card .agent-stats {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* Top Agents Styles */
+        .top-agents-section {
+            margin-bottom: 25px;
+        }
+        .top-agents-section h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0B1E36;
+            margin-bottom: 14px;
+        }
+        .top-agents-section h2 .badge {
+            background: #D4AF37;
+            color: #0B1E36;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .top-agents-table-wrap {
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+            border: 1px solid #edf2f7;
+            overflow: hidden;
+            padding: 4px;
+        }
+        .top-agents-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .top-agents-table th {
+            background: #f8fafc;
+            text-align: left;
+            padding: 12px 16px;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .top-agents-table td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .top-agents-table tr:hover td {
+            background: #f8fafc;
+        }
+        .top-agents-table .rank-num {
+            font-weight: 700;
+            font-size: 16px;
+            color: #0B1E36;
+        }
+        .top-agents-table .rank-1 { color: #D4AF37; }
+        .top-agents-table .rank-2 { color: #94a3b8; }
+        .top-agents-table .rank-3 { color: #cd7f32; }
+        .top-agents-table .agent-name-link {
+            color: #0B1E36;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .top-agents-table .agent-name-link:hover {
+            color: #0B7A4B;
+            text-decoration: underline;
+        }
+        .top-agents-table .rank-badge {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .rank-badge-bronze { background: #cd7f32; color: white; }
+        .rank-badge-silver { background: #94a3b8; color: white; }
+        .rank-badge-gold { background: #D4AF37; color: #0B1E36; }
+        .rank-badge-platinum { background: #7dd3fc; color: #0B1E36; }
+        .rank-badge-diamond { background: #22d3ee; color: #0B1E36; }
+        .empty-state {
+            text-align: center;
+            padding: 20px;
+            color: #94a3b8;
+        }
+        .crown {
+            font-size: 18px;
+        }
+        .top-agents-table .sales-count {
+            font-weight: 600;
+            color: #0B7A4B;
+        }
+        .top-agents-table .commission-amount {
+            font-weight: 600;
+            color: #0B1E36;
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
         <!-- Sidebar -->
-        <div class="sidebar">
+        <div class="sidebar" id="sidebar">
             <div class="sidebar-logo">
-                <img src="/static/images/skulcbt-logo.png" alt="SkulCBT Logo" style="height: 40px; width: auto; margin-bottom: 8px;">
+                <img src="/static/images/skulcbt-logo.png" alt="SkulCBT Logo" style="height: 40px; width: auto; margin-bottom: 6px;">
                 <h2>Skul<span style="color: #D4AF37;">CBT</span></h2>
                 <p>Admin Portal</p>
             </div>
@@ -46,7 +469,10 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
         <!-- Main Content -->
         <div class="main-content">
             <div class="top-bar">
-                <h1>Admin Dashboard</h1>
+                <div class="top-bar-left">
+                    <button class="hamburger-btn" onclick="toggleSidebar()">☰</button>
+                    <h1>Admin Dashboard</h1>
+                </div>
                 <div class="agent-info">
                     <span>Welcome, Administrator</span>
                 </div>
@@ -82,6 +508,16 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
                 </div>
             </div>
 
+            <!-- Top Performing Agents -->
+            <div class="top-agents-section">
+                <h2>🏆 Top Performing Agents <span class="badge">Leaderboard</span></h2>
+                <div class="top-agents-table-wrap">
+                    <div id="topAgentsContainer">
+                        <p class="empty-state">Loading top agents...</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Quick Actions -->
             <div class="quick-actions">
                 <h2>Quick Actions</h2>
@@ -112,7 +548,7 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
             <!-- Recent Activity -->
             <div class="recent-section">
                 <div class="recent-box">
-                    <h2>Recent Agents</h2>
+                    <h2>Recent Agents <span style="font-size:12px;font-weight:400;color:#94a3b8;">(click agent to view tree)</span></h2>
                     <div id="recentAgents">
                         <p class="empty-message">Loading...</p>
                     </div>
@@ -128,9 +564,35 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
         </div>
     </div>
 
+    <!-- Tree Modal -->
+    <div class="tree-modal-overlay" id="treeModal" onclick="closeTreeModal(event)">
+        <div class="tree-modal" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="closeTreeModal()">×</button>
+            <h2 id="treeModalTitle">Agent Downline Tree</h2>
+            <div id="treeModalContent">
+                <p class="empty-message">Loading...</p>
+            </div>
+        </div>
+    </div>
+
     <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             loadDashboardData();
+            loadTopAgents();
         });
 
         function loadDashboardData() {
@@ -150,11 +612,13 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
                         agentsContainer.innerHTML = '';
                         data.recent_agents.forEach(function(agent) {
                             const item = document.createElement('div');
-                            item.className = 'recent-item';
+                            item.className = 'recent-item agent-clickable';
+                            item.onclick = function() { openTreeModal(agent.id, agent.full_name); };
                             item.innerHTML = `
                                 <span class="school-name">${agent.full_name}</span>
                                 <span>${agent.email}</span>
                                 <span class="sale-status ${agent.status}">${agent.status}</span>
+                                <span class="view-tree">🔍 View Tree</span>
                             `;
                             agentsContainer.appendChild(item);
                         });
@@ -168,7 +632,7 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
                         data.recent_sales.forEach(function(sale) {
                             const item = document.createElement('div');
                             item.className = 'recent-item';
-                            const statusDisplay = sale.status === 'pending' ? '🟡 Pending' : '✅ Approved';
+                            const statusDisplay = sale.status === 'pending' ? 'Pending' : 'Approved';
                             item.innerHTML = `
                                 <span class="school-name">${sale.school_name}</span>
                                 <span class="sale-details">${sale.tier} - ${sale.plan}</span>
@@ -187,6 +651,179 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
             .catch(error => {
                 showMessage('Error loading dashboard data.', 'error');
             });
+        }
+
+        function loadTopAgents() {
+            const container = document.getElementById('topAgentsContainer');
+
+            fetch('/api/admin/top-agents')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.agents.length > 0) {
+                    let html = `
+                        <table class="top-agents-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Agent</th>
+                                    <th>Rank</th>
+                                    <th>Sales</th>
+                                    <th>Commission</th>
+                                    <th>Downline</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                    data.agents.forEach(function(agent, index) {
+                        const rankNum = index + 1;
+                        let rankClass = '';
+                        let crown = '';
+                        if (rankNum === 1) { rankClass = 'rank-1'; crown = '🥇 '; }
+                        else if (rankNum === 2) { rankClass = 'rank-2'; crown = '🥈 '; }
+                        else if (rankNum === 3) { rankClass = 'rank-3'; crown = '🥉 '; }
+
+                        const rankBadgeClass = 'rank-badge-' + agent.rank.toLowerCase();
+
+                        html += `
+                            <tr>
+                                <td><span class="rank-num ${rankClass}">${crown}${rankNum}</span></td>
+                                <td>
+                                    <span class="agent-name-link" onclick="openTreeModal(${agent.id}, '${agent.full_name}')">
+                                        ${agent.full_name}
+                                    </span>
+                                </td>
+                                <td><span class="rank-badge ${rankBadgeClass}">${agent.rank}</span></td>
+                                <td><span class="sales-count">${agent.total_sales || 0}</span></td>
+                                <td><span class="commission-amount">₦${(agent.total_commission || 0).toLocaleString()}</span></td>
+                                <td>${agent.downline_count || 0}</td>
+                                <td>
+                                    <button class="btn-action btn-approve" style="padding:4px 12px;font-size:11px;" onclick="openTreeModal(${agent.id}, '${agent.full_name}')">
+                                        View Tree
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+
+                    html += `
+                            </tbody>
+                        </table>
+                    `;
+                    container.innerHTML = html;
+                } else {
+                    container.innerHTML = '<p class="empty-state">No active agents yet. Start recruiting!</p>';
+                }
+            })
+            .catch(error => {
+                container.innerHTML = '<p class="empty-state">Error loading top agents.</p>';
+                console.error('Error:', error);
+            });
+        }
+
+        function openTreeModal(agentId, agentName) {
+            const modal = document.getElementById('treeModal');
+            const content = document.getElementById('treeModalContent');
+            const title = document.getElementById('treeModalTitle');
+            
+            title.textContent = 'Downline Tree: ' + agentName;
+            content.innerHTML = '<p class="empty-message">Loading downline...</p>';
+            modal.classList.add('active');
+
+            fetch('/api/admin/agent-tree/' + agentId)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    let html = '';
+                    
+                    if (data.counts.total === 0) {
+                        html = '<p class="no-downline">This agent has no downline yet.</p>';
+                    } else {
+                        if (data.level1.length > 0) {
+                            html += `<div class="tree-level"><div class="tree-level-title">Level 1 (Direct Agents)</div>`;
+                            data.level1.forEach(function(agent) {
+                                const salesDisplay = agent.sales_count > 0 ? 
+                                    `<span class="agent-sales-count">${agent.sales_count} sales</span>` : 
+                                    `<span class="no-sales">No sales yet</span>`;
+                                html += `
+                                    <div class="agent-card">
+                                        <div>
+                                            <span class="agent-name">${agent.full_name}</span>
+                                            <span class="agent-rank">${agent.rank}</span>
+                                        </div>
+                                        <div class="agent-stats">
+                                            <span>Sales: ${agent.total_sales}</span>
+                                            <span>₦${(agent.total_commission || 0).toLocaleString()}</span>
+                                            ${salesDisplay}
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                            html += `</div>`;
+                        }
+
+                        if (data.level2.length > 0) {
+                            html += `<div class="tree-level"><div class="tree-level-title">Level 2</div>`;
+                            data.level2.forEach(function(agent) {
+                                const salesDisplay = agent.sales_count > 0 ? 
+                                    `<span class="agent-sales-count">${agent.sales_count} sales</span>` : 
+                                    `<span class="no-sales">No sales yet</span>`;
+                                html += `
+                                    <div class="agent-card">
+                                        <div>
+                                            <span class="agent-name">${agent.full_name}</span>
+                                            <span class="agent-rank">${agent.rank}</span>
+                                        </div>
+                                        <div class="agent-stats">
+                                            <span>Sales: ${agent.total_sales}</span>
+                                            <span>₦${(agent.total_commission || 0).toLocaleString()}</span>
+                                            ${salesDisplay}
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                            html += `</div>`;
+                        }
+
+                        if (data.level3.length > 0) {
+                            html += `<div class="tree-level"><div class="tree-level-title">Level 3</div>`;
+                            data.level3.forEach(function(agent) {
+                                const salesDisplay = agent.sales_count > 0 ? 
+                                    `<span class="agent-sales-count">${agent.sales_count} sales</span>` : 
+                                    `<span class="no-sales">No sales yet</span>`;
+                                html += `
+                                    <div class="agent-card">
+                                        <div>
+                                            <span class="agent-name">${agent.full_name}</span>
+                                            <span class="agent-rank">${agent.rank}</span>
+                                        </div>
+                                        <div class="agent-stats">
+                                            <span>Sales: ${agent.total_sales}</span>
+                                            <span>₦${(agent.total_commission || 0).toLocaleString()}</span>
+                                            ${salesDisplay}
+                                        </div>
+                                    </div>
+                                `;
+                            });
+                            html += `</div>`;
+                        }
+                    }
+                    
+                    content.innerHTML = html;
+                } else {
+                    content.innerHTML = '<p class="empty-message">Error loading downline: ' + data.message + '</p>';
+                }
+            })
+            .catch(error => {
+                content.innerHTML = '<p class="empty-message">Error loading downline.</p>';
+                console.error('Error:', error);
+            });
+        }
+
+        function closeTreeModal(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('treeModal').classList.remove('active');
         }
 
         function handleLogout() {

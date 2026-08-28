@@ -20,13 +20,124 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commissions - SkulCBT Agent</title>
     <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100% !important;
+                height: auto !important;
+                position: relative !important;
+                padding: 14px !important;
+            }
+            .sidebar-nav {
+                display: flex !important;
+                flex-wrap: wrap !important;
+                gap: 4px !important;
+                margin-top: 10px !important;
+            }
+            .sidebar-nav a {
+                padding: 8px 12px !important;
+                font-size: 13px !important;
+            }
+            .sidebar-footer {
+                display: none !important;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                padding: 14px !important;
+                width: 100% !important;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 10px !important;
+            }
+            .stat-card p {
+                font-size: 20px !important;
+            }
+            .top-bar {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 8px !important;
+            }
+            .top-bar h1 {
+                font-size: 20px !important;
+            }
+            .breakdown-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 8px !important;
+            }
+            .breakdown-item {
+                padding: 12px !important;
+            }
+            .breakdown-item h4 {
+                font-size: 13px !important;
+            }
+            .breakdown-item p {
+                font-size: 12px !important;
+            }
+            .table-section {
+                padding: 14px 16px !important;
+                overflow-x: auto !important;
+            }
+            .data-table {
+                font-size: 12px !important;
+                min-width: 500px !important;
+            }
+            .data-table th,
+            .data-table td {
+                padding: 8px 10px !important;
+            }
+            .sidebar-logo img {
+                height: 32px !important;
+            }
+            .sidebar-logo h2 {
+                font-size: 20px !important;
+            }
+        }
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr 1fr !important;
+                gap: 8px !important;
+            }
+            .stat-card {
+                padding: 14px 16px !important;
+            }
+            .stat-card p {
+                font-size: 18px !important;
+            }
+            .stat-card h3 {
+                font-size: 11px !important;
+            }
+            .breakdown-grid {
+                grid-template-columns: 1fr 1fr !important;
+            }
+            .breakdown-item h4 {
+                font-size: 12px !important;
+            }
+            .breakdown-item p {
+                font-size: 11px !important;
+            }
+            .data-table {
+                font-size: 11px !important;
+                min-width: 400px !important;
+            }
+            .data-table th,
+            .data-table td {
+                padding: 6px 8px !important;
+            }
+            .sidebar-nav a {
+                font-size: 12px !important;
+                padding: 6px 10px !important;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
         <!-- Sidebar -->
         <div class="sidebar">
             <div class="sidebar-logo">
-                <h2>SkulCBT</h2>
+                <img src="/static/images/skulcbt-logo.png" alt="SkulCBT Logo" style="height: 40px; width: auto; margin-bottom: 6px;">
+                <h2>Skul<span style="color: #D4AF37;">CBT</span></h2>
                 <p>Agent Portal</p>
             </div>
             <nav class="sidebar-nav">
@@ -35,6 +146,7 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
                 <a href="/agent/downline">My Downline</a>
                 <a href="/agent/commissions" class="active">Commissions</a>
                 <a href="/agent/withdraw">Withdraw</a>
+                <a href="/agent/generate">Generate License</a>
             </nav>
             <div class="sidebar-footer">
                 <button onclick="handleLogout()" class="btn-logout">Logout</button>
@@ -111,7 +223,6 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
     </div>
 
     <script>
-        // Load commission data on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadAgentInfo();
             loadCommissions();
@@ -139,8 +250,7 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
                 if (data.success) {
                     const commissions = data.commissions;
                     const container = document.getElementById('commissionTableContainer');
-                    
-                    // Update summary
+
                     document.getElementById('paidTotal').textContent = '₦' + data.paid_total.toLocaleString();
                     document.getElementById('pendingTotal').textContent = '₦' + data.pending_total.toLocaleString();
                     document.getElementById('totalEarned').textContent = '₦' + (data.paid_total + data.pending_total).toLocaleString();
@@ -150,7 +260,6 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
                         return;
                     }
 
-                    // Build table
                     let tableHtml = `
                         <table class="data-table">
                             <thead>
@@ -221,7 +330,7 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
             messageDiv.textContent = message;
             messageDiv.className = 'message ' + type;
             messageDiv.classList.remove('hidden');
-            
+
             setTimeout(function() {
                 messageDiv.classList.add('hidden');
             }, 5000);

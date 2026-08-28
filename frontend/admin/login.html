@@ -20,6 +20,47 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login - SkulCBT</title>
     <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        @media (max-width: 576px) {
+            .login-box {
+                padding: 25px 20px !important;
+                margin: 10px !important;
+                border-radius: 12px !important;
+            }
+            .login-box .logo h1 {
+                font-size: 28px !important;
+            }
+            .login-box .logo img {
+                height: 50px !important;
+            }
+            .form-group input {
+                font-size: 16px !important;
+                padding: 12px 14px !important;
+            }
+            .btn-primary {
+                font-size: 15px !important;
+                padding: 14px !important;
+            }
+            .links p {
+                font-size: 13px !important;
+            }
+        }
+        @media (max-width: 400px) {
+            .login-box {
+                padding: 20px 16px !important;
+            }
+            .login-box .logo h1 {
+                font-size: 24px !important;
+            }
+            .login-box .logo img {
+                height: 40px !important;
+            }
+            .form-group input {
+                font-size: 14px !important;
+                padding: 10px 12px !important;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -48,6 +89,7 @@ Copyright (c) 2026 SkulCBT. All rights reserved.
 
             <div class="links">
                 <p><a href="/agent/login">Agent Login</a></p>
+                <p style="margin-top: 6px;"><a href="/">Back to Home</a></p>
             </div>
         </div>
     </div>
