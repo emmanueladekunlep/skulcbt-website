@@ -1,16 +1,16 @@
 /* ====== SKULCBT - MAIN STYLESHEET ====== */
 /* Nigeria's #1 Offline-First School Platform */
-/* Brand Colors: Deep Green #006B45 | Gold #F2B900 | Dark Text #172033 | Light Gray #F5F7F9 */
+/* Brand Colors: Deep Green #0D6841 | Gold #D4AF37 | Dark Text #172033 | Light Gray #F5F7F9 */
 
 /* ====== ROOT VARIABLES ====== */
 :root {
     /* SkulCBT Brand Colors */
-    --primary: #006B45;
-    --primary-dark: #005A3C;
-    --primary-light: #008A5A;
-    --gold: #F2B900;
-    --gold-light: #FFD433;
-    --gold-dark: #D4A600;
+    --primary: #0D6841;
+    --primary-dark: #0A5635;
+    --primary-light: #108A55;
+    --gold: #D4AF37;
+    --gold-light: #E5C158;
+    --gold-dark: #B8962E;
     --white: #FFFFFF;
     --dark-text: #172033;
     --light-gray: #F5F7F9;
@@ -21,8 +21,8 @@
     --gray-600: #4A5A6F;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, #006B45 0%, #005A3C 100%);
-    --gradient-gold: linear-gradient(135deg, #F2B900 0%, #FFD433 100%);
+    --gradient-primary: linear-gradient(135deg, #0D6841 0%, #0A5635 100%);
+    --gradient-gold: linear-gradient(135deg, #D4AF37 0%, #E5C158 100%);
     --gradient-hero: linear-gradient(135deg, rgba(0, 107, 69, 0.92) 0%, rgba(0, 90, 60, 0.95) 100%);
 
     /* Shadows */

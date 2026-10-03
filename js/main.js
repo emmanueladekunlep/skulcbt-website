@@ -1,6 +1,6 @@
 // ====== SKULCBT - MAIN JAVASCRIPT ======
 // Nigeria's #1 Offline-First School Platform
-// Brand: Deep Green #006B45 | Gold #F2B900
+// Brand: Deep Green #0D6841 | Gold #D4AF37
 
 document.addEventListener('DOMContentLoaded', function() {
     'use strict';
@@ -264,9 +264,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const toast = document.createElement('div');
         toast.className = 'skulcbt-toast fixed top-24 right-4 z-50 px-6 py-4 rounded-lg shadow-2xl max-w-md transform transition-all duration-300 translate-x-0';
-        toast.style.background = type === 'error' ? '#DC2626' : '#006B45';
+        toast.style.background = type === 'error' ? '#DC2626' : '#0D6841';
         toast.style.color = '#FFFFFF';
-        toast.style.borderLeft = '4px solid #F2B900';
+        toast.style.borderLeft = '4px solid #D4AF37';
 
         toast.innerHTML = `
             <div class="flex items-center space-x-3">

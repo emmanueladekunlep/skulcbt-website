@@ -343,7 +343,6 @@
             }
         }
 
-        /* Top Agents Styles */
         .top-agents-section {
             margin-bottom: 25px;
         }
@@ -439,14 +438,116 @@
             font-weight: 600;
             color: #0B1E36;
         }
+
+        /* ========== SCHOOLS SECTION ========== */
+        .schools-section {
+            margin-bottom: 25px;
+        }
+        .schools-section h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0B1E36;
+            margin-bottom: 14px;
+        }
+        .schools-section h2 .badge {
+            background: #0B7A4B;
+            color: white;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .school-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        .school-stat-box {
+            background: white;
+            border-radius: 12px;
+            padding: 14px 18px;
+            border: 1px solid #edf2f7;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+        }
+        .school-stat-box h4 {
+            font-size: 11px;
+            font-weight: 600;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0 0 6px 0;
+        }
+        .school-stat-box p {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0B1E36;
+            margin: 0;
+        }
+        .school-stat-box.trial p { color: #D4AF37; }
+        .school-stat-box.paid p { color: #0B7A4B; }
+
+        .schools-table-wrap {
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+            border: 1px solid #edf2f7;
+            overflow-x: auto;
+        }
+        .schools-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .schools-table th {
+            background: #f8fafc;
+            text-align: left;
+            padding: 10px 14px;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        .schools-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #f1f5f9;
+            white-space: nowrap;
+        }
+        .schools-table tr:hover td {
+            background: #f8fafc;
+        }
+        .school-tier-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .tier-ESS { background: #fef3c7; color: #78350f; }
+        .tier-PRO { background: #dbeafe; color: #1e40af; }
+        .tier-ENT { background: #dcfce7; color: #166534; }
+        .tier-unknown { background: #f1f5f9; color: #64748b; }
+        .school-status-active { color: #0B7A4B; font-weight: 600; }
+        .school-status-idle { color: #94a3b8; }
+        .weekly-mini {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #075985;
+            padding: 1px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
     <div class="dashboard-container">
-        <!-- Sidebar Overlay -->
         <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
-        <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
             <div class="sidebar-logo">
                 <img src="/static/images/skulcbt-logo.png" alt="SkulCBT Logo" style="height: 40px; width: auto; margin-bottom: 6px;">
@@ -466,7 +567,6 @@
             </div>
         </div>
 
-        <!-- Main Content -->
         <div class="main-content">
             <div class="top-bar">
                 <div class="top-bar-left">
@@ -480,7 +580,6 @@
 
             <div id="message" class="message hidden"></div>
 
-            <!-- Stats Cards -->
             <div class="stats-grid">
                 <div class="stat-card">
                     <h3>Total Agents</h3>
@@ -508,7 +607,40 @@
                 </div>
             </div>
 
-            <!-- Top Performing Agents -->
+            <!-- ========== SCHOOLS USING SKULCBT ========== -->
+            <div class="schools-section">
+                <h2>🏫 Schools Using SkulCBT <span class="badge" id="totalInstallsBadge">0 installs</span></h2>
+
+                <div class="school-stats-grid">
+                    <div class="school-stat-box">
+                        <h4>Total Installs</h4>
+                        <p id="schoolTotalInstalls">0</p>
+                    </div>
+                    <div class="school-stat-box">
+                        <h4>Active (7 days)</h4>
+                        <p id="schoolActive7">0</p>
+                    </div>
+                    <div class="school-stat-box">
+                        <h4>Active (30 days)</h4>
+                        <p id="schoolActive30">0</p>
+                    </div>
+                    <div class="school-stat-box trial">
+                        <h4>On Trial</h4>
+                        <p id="schoolTrialCount">0</p>
+                    </div>
+                    <div class="school-stat-box paid">
+                        <h4>Paid</h4>
+                        <p id="schoolPaidCount">0</p>
+                    </div>
+                </div>
+
+                <div class="schools-table-wrap">
+                    <div id="schoolsContainer">
+                        <p class="empty-state">Loading schools...</p>
+                    </div>
+                </div>
+            </div>
+
             <div class="top-agents-section">
                 <h2>🏆 Top Performing Agents <span class="badge">Leaderboard</span></h2>
                 <div class="top-agents-table-wrap">
@@ -518,7 +650,6 @@
                 </div>
             </div>
 
-            <!-- Quick Actions -->
             <div class="quick-actions">
                 <h2>Quick Actions</h2>
                 <div class="action-grid">
@@ -545,7 +676,6 @@
                 </div>
             </div>
 
-            <!-- Recent Activity -->
             <div class="recent-section">
                 <div class="recent-box">
                     <h2>Recent Agents <span style="font-size:12px;font-weight:400;color:#94a3b8;">(click agent to view tree)</span></h2>
@@ -564,7 +694,6 @@
         </div>
     </div>
 
-    <!-- Tree Modal -->
     <div class="tree-modal-overlay" id="treeModal" onclick="closeTreeModal(event)">
         <div class="tree-modal" onclick="event.stopPropagation()">
             <button class="close-btn" onclick="closeTreeModal()">×</button>
@@ -593,6 +722,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             loadDashboardData();
             loadTopAgents();
+            loadSchools();
         });
 
         function loadDashboardData() {
@@ -653,6 +783,81 @@
             });
         }
 
+        function loadSchools() {
+            const container = document.getElementById('schoolsContainer');
+
+            fetch('/api/admin/schools')
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    container.innerHTML = '<p class="empty-state">Error: ' + (data.message || 'unknown') + '</p>';
+                    return;
+                }
+
+                const s = data.stats;
+                document.getElementById('schoolTotalInstalls').textContent = s.total_installs;
+                document.getElementById('schoolActive7').textContent = s.active_last_7_days;
+                document.getElementById('schoolActive30').textContent = s.active_last_30_days;
+                document.getElementById('schoolTrialCount').textContent = s.trial_count;
+                document.getElementById('schoolPaidCount').textContent = s.paid_count;
+                document.getElementById('totalInstallsBadge').textContent = s.total_installs + ' installs';
+
+                if (!data.schools || data.schools.length === 0) {
+                    container.innerHTML = '<p class="empty-state">No school heartbeat received yet.</p>';
+                    return;
+                }
+
+                let html = `
+                    <table class="schools-table">
+                        <thead>
+                            <tr>
+                                <th>School</th>
+                                <th>License</th>
+                                <th>Tier</th>
+                                <th>Plan</th>
+                                <th>Students</th>
+                                <th>Staff</th>
+                                <th>Last Seen</th>
+                                <th>Pings</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                data.schools.forEach(function(sc) {
+                    const tier = sc.tier || 'unknown';
+                    const tierClass = 'tier-' + tier;
+                    const lic = sc.license_key || '';
+                    const isTrial = !lic || lic.indexOf('TRIAL-') === 0;
+                    const licDisplay = isTrial ? 'Trial' : (lic.length > 18 ? lic.slice(0, 18) + '…' : lic);
+
+                    const last = sc.last_seen_at ? sc.last_seen_at.replace('T', ' ').slice(0, 16) : '—';
+                    const daysAgo = sc.last_seen_at ? Math.floor((Date.now() - new Date(sc.last_seen_at).getTime()) / 86400000) : 999;
+                    const statusClass = daysAgo <= 7 ? 'school-status-active' : 'school-status-idle';
+
+                    html += `
+                        <tr>
+                            <td>${sc.school_name || '<em style="color:#94a3b8;">(unnamed)</em>'}</td>
+                            <td>${licDisplay}</td>
+                            <td><span class="school-tier-badge ${tierClass}">${tier}</span></td>
+                            <td>${sc.plan || '—'}</td>
+                            <td>${sc.students || 0}</td>
+                            <td>${sc.staff || 0}</td>
+                            <td class="${statusClass}">${last}</td>
+                            <td>${sc.ping_count || 0}</td>
+                        </tr>
+                    `;
+                });
+
+                html += '</tbody></table>';
+                container.innerHTML = html;
+            })
+            .catch(error => {
+                container.innerHTML = '<p class="empty-state">Error loading schools.</p>';
+                console.error(error);
+            });
+        }
+
         function loadTopAgents() {
             const container = document.getElementById('topAgentsContainer');
 
@@ -684,7 +889,7 @@
                         else if (rankNum === 2) { rankClass = 'rank-2'; crown = '🥈 '; }
                         else if (rankNum === 3) { rankClass = 'rank-3'; crown = '🥉 '; }
 
-                        const rankBadgeClass = 'rank-badge-' + agent.rank.toLowerCase();
+                        const rankBadgeClass = 'rank-badge-' + (agent.rank || 'bronze').toLowerCase();
 
                         html += `
                             <tr>
@@ -707,10 +912,7 @@
                         `;
                     });
 
-                    html += `
-                            </tbody>
-                        </table>
-                    `;
+                    html += '</tbody></table>';
                     container.innerHTML = html;
                 } else {
                     container.innerHTML = '<p class="empty-state">No active agents yet. Start recruiting!</p>';
@@ -740,74 +942,31 @@
                     if (data.counts.total === 0) {
                         html = '<p class="no-downline">This agent has no downline yet.</p>';
                     } else {
-                        if (data.level1.length > 0) {
-                            html += `<div class="tree-level"><div class="tree-level-title">Level 1 (Direct Agents)</div>`;
-                            data.level1.forEach(function(agent) {
-                                const salesDisplay = agent.sales_count > 0 ? 
-                                    `<span class="agent-sales-count">${agent.sales_count} sales</span>` : 
-                                    `<span class="no-sales">No sales yet</span>`;
-                                html += `
-                                    <div class="agent-card">
-                                        <div>
-                                            <span class="agent-name">${agent.full_name}</span>
-                                            <span class="agent-rank">${agent.rank}</span>
+                        ['level1', 'level2', 'level3'].forEach(function(lvl, idx) {
+                            if (data[lvl].length > 0) {
+                                const titles = ['Level 1 (Direct Agents)', 'Level 2', 'Level 3'];
+                                html += `<div class="tree-level"><div class="tree-level-title">${titles[idx]}</div>`;
+                                data[lvl].forEach(function(agent) {
+                                    const salesDisplay = agent.sales_count > 0 ? 
+                                        `<span class="agent-sales-count">${agent.sales_count} sales</span>` : 
+                                        `<span class="no-sales">No sales yet</span>`;
+                                    html += `
+                                        <div class="agent-card">
+                                            <div>
+                                                <span class="agent-name">${agent.full_name}</span>
+                                                <span class="agent-rank">${agent.rank}</span>
+                                            </div>
+                                            <div class="agent-stats">
+                                                <span>Sales: ${agent.total_sales}</span>
+                                                <span>₦${(agent.total_commission || 0).toLocaleString()}</span>
+                                                ${salesDisplay}
+                                            </div>
                                         </div>
-                                        <div class="agent-stats">
-                                            <span>Sales: ${agent.total_sales}</span>
-                                            <span>₦${(agent.total_commission || 0).toLocaleString()}</span>
-                                            ${salesDisplay}
-                                        </div>
-                                    </div>
-                                `;
-                            });
-                            html += `</div>`;
-                        }
-
-                        if (data.level2.length > 0) {
-                            html += `<div class="tree-level"><div class="tree-level-title">Level 2</div>`;
-                            data.level2.forEach(function(agent) {
-                                const salesDisplay = agent.sales_count > 0 ? 
-                                    `<span class="agent-sales-count">${agent.sales_count} sales</span>` : 
-                                    `<span class="no-sales">No sales yet</span>`;
-                                html += `
-                                    <div class="agent-card">
-                                        <div>
-                                            <span class="agent-name">${agent.full_name}</span>
-                                            <span class="agent-rank">${agent.rank}</span>
-                                        </div>
-                                        <div class="agent-stats">
-                                            <span>Sales: ${agent.total_sales}</span>
-                                            <span>₦${(agent.total_commission || 0).toLocaleString()}</span>
-                                            ${salesDisplay}
-                                        </div>
-                                    </div>
-                                `;
-                            });
-                            html += `</div>`;
-                        }
-
-                        if (data.level3.length > 0) {
-                            html += `<div class="tree-level"><div class="tree-level-title">Level 3</div>`;
-                            data.level3.forEach(function(agent) {
-                                const salesDisplay = agent.sales_count > 0 ? 
-                                    `<span class="agent-sales-count">${agent.sales_count} sales</span>` : 
-                                    `<span class="no-sales">No sales yet</span>`;
-                                html += `
-                                    <div class="agent-card">
-                                        <div>
-                                            <span class="agent-name">${agent.full_name}</span>
-                                            <span class="agent-rank">${agent.rank}</span>
-                                        </div>
-                                        <div class="agent-stats">
-                                            <span>Sales: ${agent.total_sales}</span>
-                                            <span>₦${(agent.total_commission || 0).toLocaleString()}</span>
-                                            ${salesDisplay}
-                                        </div>
-                                    </div>
-                                `;
-                            });
-                            html += `</div>`;
-                        }
+                                    `;
+                                });
+                                html += `</div>`;
+                            }
+                        });
                     }
                     
                     content.innerHTML = html;
