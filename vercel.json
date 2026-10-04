@@ -56,6 +56,10 @@
       "dest": "/thank-you.html"
     },
     {
+      "src": "/faq",
+      "dest": "/faq.html"
+    },
+    {
       "src": "/blog/(.*)",
       "dest": "/blog/$1"
     },
