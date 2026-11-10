@@ -64,6 +64,26 @@
       "dest": "/blog/$1"
     },
     {
+      "src": "/blog/why-school-fees-not-paid-on-time-nigeri",
+      "dest": "/blog/why-school-fees-not-paid-on-time-nigeria.html",
+      "permanent": true
+    },
+    {
+      "src": "/blog/why-school-fees-not-paid-on-time-nigeria2",
+      "dest": "/blog/why-school-fees-not-paid-on-time-nigeria.html",
+      "permanent": true
+    },
+    {
+      "src": "/blog/why-school-fees-not-paid-on-time-nigeri.html",
+      "dest": "/blog/why-school-fees-not-paid-on-time-nigeria.html",
+      "permanent": true
+    },
+    {
+      "src": "/blog/why-school-fees-not-paid-on-time-nigeria2.html",
+      "dest": "/blog/why-school-fees-not-paid-on-time-nigeria.html",
+      "permanent": true
+    },
+    {
       "src": "/(.*)",
       "dest": "/$1"
     }
